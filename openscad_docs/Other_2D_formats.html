@@ -1,0 +1,77 @@
+<html><head><title>Other 2D formats</title><link href="./styles/style.css" rel="stylesheet"/></head><body class="mw-body" style="height:auto"><h1 class="firstHeading" id="firstHeading">Other 2D formats</h1><div id="bodyContent"><p><br/>
+Currently, OpenSCAD supports DXF only as a graphics format for 2D graphics. Other common formats are <a class="extiw" href="https://en.wikipedia.org/wiki/PostScript" title="w:PostScript">PS</a>/<a class="extiw" href="https://en.wikipedia.org/wiki/Encapsulated_Postscript" title="w:Encapsulated Postscript">EPS</a>, <a class="extiw" href="https://en.wikipedia.org/wiki/Scalable_Vector_Graphics" title="w:Scalable Vector Graphics">SVG</a> and <a class="extiw" href="https://en.wikipedia.org/wiki/Adobe_Illustrator" title="w:Adobe Illustrator">AI</a>.
+</p>
+<h3>PS/EPS</h3>
+<p>The <a class="external text" href="http://www.pstoedit.net/" rel="nofollow">pstoedit</a> program can convert between various vector graphics formats. OpenSCAD needs the <code>-polyaslines</code> option passed to the dxf output plugin to understand the file. The <code>-mm</code> option sets one mm to be one unit in the dxf; include this if you use one unit in OpenSCAD as equal to one millimeter. The <code>-dt</code> options instructs pstoedit to render texts, which is usually what you want if you include text. (If the rendered text's resolution in terms of polygon count is too low, the easiest solution is to scale up the eps before converting; if you know a more elegant solution, please add it to the example.)
+</p>
+<pre>pstoedit -dt -f "dxf: -polyaslines -mm" infile.eps outfile.dxf
+</pre>
+<h3>SVG</h3>
+<p><a class="external text" href="http://inkscape.org" rel="nofollow">Inkscape</a> can convert SVG to EPS.  Then pstoedit can convert the EPS to DXF.
+</p>
+<pre>inkscape -E intermediate.eps infile.svg
+pstoedit -dt -f dxf:-polyaslines\ -mm intermediate.eps outfile.dxf
+</pre>
+<h3>Makefile automation</h3>
+<p>The conversion can be automated using the make system; put the following lines in your <code>Makefile</code>:
+</p>
+<pre> all: my_first_file.dxf my_second_file.dxf another_file.dxf
+ 
+ %.eps: %.svg
+ 	inkscape -E $@ $&lt;
+ 
+ %.dxf: %.eps
+ 	pstoedit -dt -f dxf:-polyaslines\ -mm $&lt; $@
+</pre>
+<p>The first line specifies which dxf files are to be generated when <code>make</code> is called in the current directory. The second paragraph specifies how to convert a file ending in .svg to a file ending in .eps, and the third from .eps to .dxf.
+</p><p>A more complete makefile could autogenerate dxf files from the any svg in the folder. In which case, put the following lines into your <code>Makefile</code>:
+</p>
+<pre>SVG := $(wildcard *.svg)
+DXF := $(SVG:%.svg=%.dxf)
+EPS := $(SVG:%.svg=%.eps)
+
+.PHONY: all clean clean-eps clean-dxf
+
+all: $(DXF)
+
+%.eps: %.svg
+	inkscape -E $*.eps $*.svg
+ 
+%.dxf: %.eps
+	pstoedit -dt -f "dxf: -polyaslines -mm" $*.eps $*.dxf
+
+clean: clean-dxf clean-eps
+
+clean-dxf: 
+	rm -f $(DXF)
+
+clean-eps:
+	rm -f $(EPS)
+</pre>
+<p>It's still possible to call <code>make filename.dxf</code> to build a particular file, but this code also allows for (re)building of all dxf files in a folder just by calling <code>make</code> or <code>make all</code>.
+</p><p>This code is also universal enough that it's possible to put the code in a single file and symlink every makefile in any directory that has svg files for dxf conversion by running:
+</p>
+<pre>ln -s /path/to/this/svg_to_dxf_makefile makefile
+</pre>
+<p>in each respective directory.
+</p>
+<h3>AI (Adobe Illustrator)</h3>
+<p>Although Adobe Illustrator CC/CC.2014 allows you to export illustrations as DXF (and select DXF format versions as early as 12), it uses DXF entities that are not supported by OpenSCAD, such as <code>POLYLINE</code> and <code>SPLINE</code>. 
+</p><p>Since pstoedit does not natively support Adobe Illustrator files, one alternative is to use <a class="external text" href="http://www.baby-universe.co.jp/en/plug-in/products/exdxf-pro/" rel="nofollow">EXDXF</a>, which is an Adobe Illustrator plug-in (30 free trial exports and then you have to pay $90 to register the plugin).
+</p><p>Before exporting, it is recommended that you ensure that your Artboard is the same dimensions as the component you are exporting. Although EXDXF provides you with numerous options when exporting to DXF the most important option for OpenSCAD compliance is to set <code>Line Conversion</code> to <code>Line and Arc</code>.
+</p><p>OpenSCAD doesn't always provide information about the issues it encountered with a DXF import.  If this happens, select <code>Design | Flush Caches</code> and then <code>Design | Reload and Compile</code>.
+</p>
+<h2>Previous</h2>
+<p><a href="DXF_Extrusion.html" title="OpenSCAD User Manual/DXF Extrusion">DXF Extrusion</a>
+</p>
+<h2>Next</h2>
+<p><a class="new" href="/w/index.php?title=OpenSCAD_User_Manual/Short_and_Commented_Example_Projects&amp;action=edit&amp;redlink=1" title="OpenSCAD User Manual/Short and Commented Example Projects (does not exist)">Short and Commented Example Projects</a>
+</p>
+
+
+
+
+</div><footer class="mw-body" style="font-size:13px;color:darkgray;text-align:center;margin-bottom:-1px">
+	From the WikiBooks article <a href="https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Other_2D_formats" style="color:black">Other 2D formats</a> 
+	(provided under <a href="https://creativecommons.org/licenses/by-sa/3.0/" style="color:black">
+	CC-BY-SA-3.0</a>)</footer></body></html>

@@ -1,0 +1,568 @@
+<html><head><title>Mathematical Functions</title><link href="./styles/style.css" rel="stylesheet"/></head><body class="mw-body" style="height:auto"><h1 class="firstHeading" id="firstHeading">Mathematical Functions</h1><div id="bodyContent"><table cellpadding="0" cellspacing="0" style="clear: right; margin-bottom: .5em; float: right; padding: .5em 0 .8em 1.4em; background: none; width: auto;">
+<tbody><tr>
+<td><div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2></div>
+<ul style="list-style-image:none">
+<li><a href="#Trigonometric_Functions"><span class="tocnumber">1</span> Trigonometric Functions</a>
+<ul style="list-style-image:none">
+<li><a href="#cos"><span class="tocnumber">1.1</span> cos</a></li>
+<li><a href="#sin"><span class="tocnumber">1.2</span> sin</a></li>
+<li><a href="#tan"><span class="tocnumber">1.3</span> tan</a></li>
+<li><a href="#acos"><span class="tocnumber">1.4</span> acos</a></li>
+<li><a href="#asin"><span class="tocnumber">1.5</span> asin</a></li>
+<li><a href="#atan"><span class="tocnumber">1.6</span> atan</a></li>
+<li><a href="#atan2"><span class="tocnumber">1.7</span> atan2</a></li>
+</ul>
+</li>
+<li><a href="#Other_Mathematical_Functions"><span class="tocnumber">2</span> Other Mathematical Functions</a>
+<ul style="list-style-image:none">
+<li><a href="#abs"><span class="tocnumber">2.1</span> abs</a></li>
+<li><a href="#ceil"><span class="tocnumber">2.2</span> ceil</a></li>
+<li><a href="#concat"><span class="tocnumber">2.3</span> concat</a></li>
+<li><a href="#cross"><span class="tocnumber">2.4</span> cross</a></li>
+<li><a href="#exp"><span class="tocnumber">2.5</span> exp</a></li>
+<li><a href="#floor"><span class="tocnumber">2.6</span> floor</a></li>
+<li><a href="#ln"><span class="tocnumber">2.7</span> ln</a></li>
+<li><a href="#len"><span class="tocnumber">2.8</span> len</a></li>
+<li><a href="#let"><span class="tocnumber">2.9</span> let</a></li>
+<li><a href="#log"><span class="tocnumber">2.10</span> log</a></li>
+<li><a href="#lookup"><span class="tocnumber">2.11</span> lookup</a></li>
+<li><a href="#max"><span class="tocnumber">2.12</span> max</a></li>
+<li><a href="#min"><span class="tocnumber">2.13</span> min</a></li>
+<li><a href="#norm"><span class="tocnumber">2.14</span> norm</a></li>
+<li><a href="#pow"><span class="tocnumber">2.15</span> pow</a></li>
+<li><a href="#rands"><span class="tocnumber">2.16</span> rands</a></li>
+<li><a href="#round"><span class="tocnumber">2.17</span> round</a></li>
+<li><a href="#sign"><span class="tocnumber">2.18</span> sign</a></li>
+<li><a href="#sqrt"><span class="tocnumber">2.19</span> sqrt</a></li>
+</ul>
+</li>
+<li><a href="#Infinities_and_NaNs"><span class="tocnumber">3</span> Infinities and NaNs</a></li>
+</ul>
+</div>
+
+</td></tr></tbody></table>
+
+<h2>Trigonometric Functions</h2>
+<p>The trig functions use the C Language mathematics functions, which are based in turn on Binary Floating Point mathematics, which use approximations of Real Numbers during calculation. OpenSCAD's math functions use the C++ 'double' type, inside Value.h/Value.cc, 
+</p><p>A good resource for the specifics of the C library math functions, such as valid inputs/output ranges, can be found at the Open Group website <a class="external text" href="http://pubs.opengroup.org/onlinepubs/009695399/basedefs/math.h.html" rel="nofollow">math.h</a> &amp; <a class="external text" href="http://pubs.opengroup.org/onlinepubs/009695399/functions/acos.html" rel="nofollow">acos</a>
+</p>
+<h3>cos</h3>
+<p>Mathematical <b>cosine</b> function of degrees. See <a class="extiw" href="https://en.wikipedia.org/wiki/Cosine#Sine.2C_cosine_and_tangent" title="w:Cosine">Cosine</a>
+</p><p><b>Parameters</b>
+</p>
+<dl><dt>&lt;degrees&gt;</dt>
+<dd>Decimal.  Angle in degrees.</dd></dl>
+<table width="75%">
+<tbody><tr>
+<td><b>Usage Example:</b>
+</td></tr>
+<tr>
+<td>
+<pre> for(i=[0:36])
+    translate([i*10,0,0])
+       cylinder(r=5,h=cos(i*10)*50+60);
+</pre>
+</td>
+<td><div class="thumb tright"><div class="thumbinner" style="width:222px;"><a class="image" href="./imgs/220px-OpenSCAD_Cos_Function.png"><img alt="" class="thumbimage" data-file-height="218" data-file-width="390" decoding="async" height="123" src="./imgs/220px-OpenSCAD_Cos_Function.png" width="220"/></a>  <div class="thumbcaption">OpenSCAD Cos Function‎</div></div></div>
+</td></tr></tbody></table>
+<h3>sin</h3>
+<p>Mathematical <b>sine</b> function. See <a class="extiw" href="https://en.wikipedia.org/wiki/Trigonometric_functions#Sine.2C_cosine_and_tangent" title="w:Trigonometric functions">Sine</a>
+</p><p><b>Parameters</b>
+</p>
+<dl><dt>&lt;degrees&gt;</dt>
+<dd>Decimal.  Angle in degrees.</dd></dl>
+<table width="75%">
+<tbody><tr>
+<td><b>Usage example 1:</b>
+</td></tr>
+<tr>
+<td>
+<pre> for (i = [0:5]) {
+  echo(360*i/6, sin(360*i/6)*80, cos(360*i/6)*80);
+   translate([sin(360*i/6)*80, cos(360*i/6)*80, 0 ])
+    cylinder(h = 200, r=10);
+ }
+</pre>
+</td>
+<td>
+</td></tr></tbody></table>
+<p><br/>
+</p>
+<table width="75%">
+<tbody><tr>
+<td><b>Usage example 2:</b>
+</td></tr>
+<tr>
+<td>
+<pre> for(i=[0:36])
+    translate([i*10,0,0])
+       cylinder(r=5,h=sin(i*10)*50+60);
+</pre>
+</td>
+<td><div class="thumb tright"><div class="thumbinner" style="width:222px;"><a class="image" href="./imgs/220px-OpenSCAD_Sin_Function.png"><img alt="" class="thumbimage" data-file-height="199" data-file-width="388" decoding="async" height="113" src="./imgs/220px-OpenSCAD_Sin_Function.png" width="220"/></a>  <div class="thumbcaption">OpenSCAD Sin Function</div></div></div>
+</td></tr></tbody></table>
+<p><br/>
+</p>
+<h3>tan</h3>
+<p>Mathematical <b>tangent</b> function. See <a class="extiw" href="https://en.wikipedia.org/wiki/Trigonometric_functions#Sine.2C_cosine_and_tangent" title="w:Trigonometric functions">Tangent</a>
+</p><p><b>Parameters</b>
+</p>
+<dl><dt>&lt;degrees&gt;</dt>
+<dd>Decimal.  Angle in degrees.</dd></dl>
+<table width="75%">
+<tbody><tr>
+<td><b>Usage example:</b>
+</td></tr>
+<tr>
+<td>
+<pre> for (i = [0:5]) {
+  echo(360*i/6, tan(360*i/6)*80);
+   translate([tan(360*i/6)*80, 0, 0 ])
+    cylinder(h = 200, r=10);
+ }
+</pre>
+</td>
+<td>
+</td></tr></tbody></table>
+<p><br/>
+</p>
+<h3>acos</h3>
+<p>Mathematical <b>arccosine</b>, or <b>inverse cosine</b>, expressed in degrees. See: <a class="extiw" href="https://en.wikipedia.org/wiki/Inverse_trigonometric_functions" title="w:Inverse trigonometric functions">Inverse trigonometric functions</a>
+</p>
+<h3>asin</h3>
+<p>Mathematical <b>arcsine</b>, or <b>inverse sine</b>, expressed in degrees. See: <a class="extiw" href="https://en.wikipedia.org/wiki/Inverse_trigonometric_functions" title="w:Inverse trigonometric functions">Inverse trigonometric functions</a>
+</p>
+<h3>atan</h3>
+<p>Mathematical <b>arctangent</b>, or <b>inverse tangent</b>, function. Returns the principal value of the arc tangent of x, expressed in degrees.  See: <a class="extiw" href="https://en.wikipedia.org/wiki/Inverse_trigonometric_functions" title="w:Inverse trigonometric functions">Inverse trigonometric functions</a>
+</p>
+<h3>atan2</h3>
+<p>Mathematical <b>two-argument atan</b> function atan2(y,x) that spans the full 360 degrees.  This function returns the full 
+angle (0-360) made between the x axis and the vector(x,y) expressed in degrees.  atan can not distinguish between y/x and -y/-x and returns angles from -90 to +90   See: <a class="extiw" href="https://en.wikipedia.org/wiki/Atan2" title="w:Atan2">atan2</a>
+</p><p><br/>
+<b>Usage examples:</b>
+</p>
+<pre>atan2(5.0,-5.0);     //result: 135 degrees. atan() would give -45
+atan2(y,x);          //angle between (1,0) and (x,y) = angle around z-axis
+</pre>
+<h2>Other Mathematical Functions</h2>
+<h3>abs</h3>
+<p>Mathematical <b>absolute value</b> function. Returns the positive value of a signed decimal number.
+</p><p><b>Usage examples:</b>
+</p>
+<pre>abs(-5.0);  returns 5.0
+abs(0);     returns 0.0
+abs(8.0);   returns 8.0
+</pre>
+<h3>ceil</h3>
+<p>Mathematical <b>ceiling</b> function.  
+</p><p>Returns the next highest integer value by rounding up value if necessary.
+</p><p>See: <a class="extiw" href="https://en.wikipedia.org/wiki/Ceil_function" title="w:Ceil function">Ceil Function</a>
+</p>
+<pre>echo(ceil(4.4),ceil(-4.4));     // produces ECHO: 5, -4
+</pre>
+<h3>concat</h3>
+<p><span style="font-weight: bold; font-style: normal;">[<span style="color: #A00000;">Note:</span> <span style="font-weight: normal; font-style: italic;">Requires version <span style="font-weight: bold;">2015.03</span></span>]</span>
+</p><p>Return a new vector that is the result of appending the elements of the supplied vectors.
+</p><p>Where an argument is a vector the elements of the vector are individually appended to the result vector.
+Strings are distinct from vectors in this case.
+</p><p><b>Usage examples:</b>
+</p>
+<pre>echo(concat("a","b","c","d","e","f"));          // produces ECHO: ["a", "b", "c", "d", "e", "f"]
+echo(concat(["a","b","c"],["d","e","f"]));      // produces ECHO: ["a", "b", "c", "d", "e", "f"]
+echo(concat(1,2,3,4,5,6));                      // produces ECHO: [1, 2, 3, 4, 5, 6]
+</pre>
+<p>Vector of vectors
+</p>
+<pre>echo(concat([ [1],[2] ], [ [3] ]));             // produces ECHO: [[1], [2], [3]]
+</pre>
+<p><i><b>Note:</b></i> All vectors passed to the function  lose one nesting level. When adding something like a single element [x, y, z] tuples (which are vectors, too), the tuple needs to be enclosed in a vector (i.e. an extra set of brackets) before the concatenation. in the exmple below, a fourth point is added to the polygon path, which used to resemble a triangle, making it a square now:
+</p>
+<pre>polygon(concat([[0,0],[0,5],[5,5]], [[5,0]]));
+</pre>
+<p>Contrast with strings
+</p>
+<pre>echo(concat([1,2,3],[4,5,6]));                   // produces ECHO: [1, 2, 3, 4, 5, 6]
+echo(concat("abc","def"));                       // produces ECHO: ["abc", "def"]
+echo(str("abc","def"));                          // produces ECHO: "abcdef"
+</pre>
+<h3>cross</h3>
+<p>Calculates the cross product of two vectors in 3D or 2D space. If both vectors are in the 3D, the result is a vector that is perpendicular to both of the input vectors. If both vectors are in 2D space, their cross product has the form [0,0,z] and the cross function returns just the z value of the cross product:  
+</p><p><i>cross([x,y], [u,v]) = x*v - y*u</i>
+</p><p>Note that this is the determinant of the 2x2 matrix [[x,y],[u,v]].  Using any other types, vectors with lengths different from 2 or 3, or vectors not of the same length produces 'undef'.  
+</p><p><b>Usage examples:</b>
+</p>
+<pre>echo(cross([2, 3, 4], [5, 6, 7]));     // produces ECHO: [-3, 6, -3]
+echo(cross([2, 1, -3], [0, 4, 5]));    // produces ECHO: [17, -10, 8]
+echo(cross([2, 1], [0, 4]));           // produces ECHO: 8
+echo(cross([1, -3], [4, 5]));          // produces ECHO: 17
+echo(cross([2, 1, -3], [4, 5]));       // produces ECHO: undef
+echo(cross([2, 3, 4], "5"));           // produces ECHO: undef
+</pre>
+<p>For any two vectors <i>a</i> and <i>b</i> in 2D or in 3D, the following holds:
+</p><p><i>cross(a,b) == -cross(b,a)</i>
+</p>
+<h3>exp</h3>
+<p>Mathematical <b>exp</b> function. Returns the base-e exponential function of x, which is the number e raised to the power x. See: <a class="extiw" href="https://en.wikipedia.org/wiki/Exponent" title="w:Exponent">Exponent</a>
+</p>
+<pre>echo(exp(1),exp(ln(3)*4));    // produces ECHO: 2.71828, 81
+</pre>
+<h3>floor</h3>
+<p>Mathematical <b>floor</b> function.  floor(x) =  is the largest integer not greater than x 
+</p><p>See: <a class="extiw" href="https://en.wikipedia.org/wiki/Floor_function" title="w:Floor function">Floor Function</a>
+</p>
+<pre>echo(floor(4.4),floor(-4.4));    // produces ECHO: 4, -5
+</pre>
+<h3>ln</h3>
+<p>Mathematical <b>natural logarithm</b>.  See: <a class="extiw" href="https://en.wikipedia.org/wiki/Natural_logarithm" title="w:Natural logarithm">Natural logarithm</a>
+</p>
+<h3>len</h3>
+<p>Mathematical <b>length</b> function.  Returns the length of an array, a vector or a string parameter.
+</p><p><b>Usage examples:</b>
+</p>
+<pre>str1="abcdef"; len_str1=len(str1);
+echo(str1,len_str1);
+
+a=6; len_a=len(a);
+echo(a,len_a);
+
+array1=[1,2,3,4,5,6,7,8]; len_array1=len(array1);
+echo(array1,len_array1);
+
+array2=[[0,0],[0,1],[1,0],[1,1]]; len_array2=len(array2);
+echo(array2,len_array2);
+
+len_array2_2=len(array2[2]);
+echo(array2[2],len_array2_2);
+</pre>
+<p><b>Results:</b>
+</p>
+<pre>ECHO: "abcdef", 6
+ECHO: 6, undef
+ECHO: [1, 2, 3, 4, 5, 6, 7, 8], 8
+ECHO: [[0, 0], [0, 1], [1, 0], [1, 1]], 4
+ECHO: [1, 0], 2
+</pre>
+<p><br/>
+</p><p>This function allows (e.g.) the parsing of an array, a vector or a string.
+</p><p><b>Usage examples:</b>
+</p>
+<pre>str2="4711";
+for (i=[0:len(str2)-1])
+	echo(str("digit ",i+1,"  :  ",str2[i]));
+</pre>
+<p><b>Results:</b>
+</p>
+<pre>ECHO: "digit 1  :  4"
+ECHO: "digit 2  :  7"
+ECHO: "digit 3  :  1"
+ECHO: "digit 4  :  1"
+</pre>
+<p>Note that the len() function is not defined when a simple variable is passed as the parameter. 
+</p><p>This is useful when handling parameters to a module, similar to how shapes can be defined as a single number, or as an [x,y,z] vector; i.e. cube(5) or cube([5,5,5])
+</p><p>For example
+</p>
+<pre>module doIt(size) {
+	if (len(size) == undef) {
+		// size is a number, use it for x,y &amp; z. (or could be undef)
+		do([size,size,size]);
+	} else { 
+		// size is a vector, (could be a string but that would be stupid)
+		do(size);
+	}
+ }
+ 
+doIt(5);	// equivalent to [5,5,5]
+doIt([5,5,5]);	// similar to cube(5) v's cube([5,5,5])
+</pre>
+<h3>let</h3>
+<p><span style="font-weight: bold; font-style: normal;">[<span style="color: #A00000;">Note:</span> <span style="font-weight: normal; font-style: italic;">Requires version <span style="font-weight: bold;">2015.03</span></span>]</span>
+</p><p>Sequential assignment of variables inside an expression. The following expression is evaluated in context of the let assignments and can use the variables. This is mainly useful to make complicated expressions more readable by assigning interim results to variables.
+</p><p><b>Parameters</b>
+</p>
+<pre>let (var1 = value1, var2 = f(var1), var3 = g(var1, var2)) expression
+</pre>
+<p><b>Usage Example:</b>
+</p>
+<pre>echo(let(a = 135, s = sin(a), c = cos(a)) [ s, c ]); // ECHO: [0.707107, -0.707107]
+</pre>
+<h3>log</h3>
+<p>Mathematical <b>logarithm</b> to the base 10. Example: log(1000) = 3. See: <a class="extiw" href="https://en.wikipedia.org/wiki/Logarithm" title="w:Logarithm">Logarithm</a>
+</p>
+<h3>lookup</h3>
+<p>Look up value in table, and linearly interpolate if there's no exact match.  The first argument is the value to look up.  The second is the lookup table -- a vector of key-value pairs. 
+</p><p><b>Parameters</b>
+</p>
+<dl><dt>key</dt>
+<dd>A lookup key</dd>
+<dt>&lt;key,value&gt; array</dt>
+<dd>keys and values</dd></dl>
+<table width="100%">
+<tbody><tr>
+<td><b>Notes</b>
+<p><br/> There is a bug in which out-of-range keys return the first value in the list. Newer versions of Openscad should use the top or bottom end of the table as appropriate instead.
+</p>
+</td>
+<td><b>Usage example:</b>
+<ul style="list-style-image:none"><li>Create a 3D chart made from cylinders of different heights.</li></ul>
+</td></tr>
+<tr>
+<td>
+<pre> function get_cylinder_h(p) = lookup(p, [
+ 		[ -200, 5 ],
+ 		[ -50, 20 ],
+ 		[ -20, 18 ],
+ 		[ +80, 25 ],
+ 		[ +150, 2 ]
+ 	]);
+ 
+ for (i = [-100:5:+100]) {
+ 	// echo(i, get_cylinder_h(i));
+ 	translate([ i, 0, -30 ]) cylinder(r1 = 6, r2 = 2, h = get_cylinder_h(i)*3);
+ }
+</pre>
+</td>
+<td><div class="thumb tright"><div class="thumbinner" style="width:222px;"><a class="image" href="./imgs/220px-OpenSCAD_Lookup_Function.png"><img alt="" class="thumbimage" data-file-height="222" data-file-width="386" decoding="async" height="127" src="./imgs/220px-OpenSCAD_Lookup_Function.png" width="220"/></a>  <div class="thumbcaption">OpenSCAD Lookup Function</div></div></div>
+</td></tr></tbody></table>
+<h3>max</h3>
+<p>Returns the maximum of the parameters. If a single vector is given as parameter, returns the maximum element of that vector.
+</p><p><b>Parameters</b>
+</p>
+<pre>max(n,n{,n}...)
+max(vector)
+</pre>
+<dl><dt>&lt;n&gt;</dt>
+<dd>Two or more decimals</dd>
+<dt>&lt;vector&gt;</dt>
+<dd>Single vector of decimals <span style="font-weight: bold; font-style: normal;">[<span style="color: #A00000;">Note:</span> <span style="font-weight: normal; font-style: italic;">Requires version <span style="font-weight: bold;">2014.06</span></span>]</span>.</dd></dl>
+<p><b>Usage Example:</b>
+</p>
+<pre>max(3.0,5.0)
+max(8.0,3.0,4.0,5.0)
+max([8,3,4,5])
+</pre>
+<p><b>Results:</b>
+</p>
+<pre>5
+8
+8
+</pre>
+<h3>min</h3>
+<p>Returns the minimum of the parameters. If a single vector is given as parameter, returns the minimum element of that vector.
+</p><p><b>Parameters</b>
+</p>
+<pre>min(n,n{,n}...)
+min(vector)
+</pre>
+<dl><dt>&lt;n&gt;</dt>
+<dd>Two or more decimals</dd>
+<dt>&lt;vector&gt;</dt>
+<dd>Single vector of decimals <span style="font-weight: bold; font-style: normal;">[<span style="color: #A00000;">Note:</span> <span style="font-weight: normal; font-style: italic;">Requires version <span style="font-weight: bold;">2014.06</span></span>]</span>.</dd></dl>
+<p><b>Usage Example:</b>
+</p>
+<pre>min(3.0,5.0)
+min(8.0,3.0,4.0,5.0)
+min([8,3,4,5])
+</pre>
+<p><b>Results:</b>
+</p>
+<pre>3
+3
+3
+</pre>
+<p><br/>
+<br/>
+<big><big>Looking for 
+<b>mod</b></big></big> - it's not a function, see <a href="Mathematical_Operators.html" title="OpenSCAD User Manual/Mathematical Operators">modulo operator (%)</a>
+</p>
+<h3>norm</h3>
+<dl><dd></dd></dl>
+<p>Returns the <a class="extiw" href="https://en.wikipedia.org/wiki/Norm_(mathematics)" title="w:Norm (mathematics)">euclidean norm</a> of a vector. Note this returns the actual numeric length while <b>len</b> returns the number of elements in the vector or array.
+</p><p><b>Usage examples:</b>
+</p>
+<pre>a=[1,2,3,4];
+b="abcd";
+c=[];
+d="";
+e=[[1,2,3,4],[1,2,3],[1,2],[1]];
+echo(norm(a)); //5.47723
+echo(norm(b)); //undef
+echo(norm(c)); //0
+echo(norm(d)); //undef
+echo(norm(e[0])); //5.47723
+echo(norm(e[1])); //3.74166
+echo(norm(e[2])); //2.23607
+echo(norm(e[3])); //1
+</pre>
+<p><b>Results:</b>
+</p>
+<pre>ECHO: 5.47723
+ECHO: undef
+ECHO: 0
+ECHO: undef
+ECHO: 5.47723
+ECHO: 3.74166
+ECHO: 2.23607
+ECHO: 1
+</pre>
+<h3>pow</h3>
+<p>Mathematical <b>power</b> function.
+</p><p><b>Parameters</b>
+</p>
+<dl><dt>&lt;base&gt;</dt>
+<dd>Decimal.  Base.</dd>
+<dt>&lt;exponent&gt;</dt>
+<dd>Decimal.  Exponent.</dd></dl>
+<p><b>Usage examples:</b>
+</p>
+<pre>for (i = [0:5]) {
+ translate([i*25,0,0]) {
+   cylinder(h = pow(2,i)*5, r=10);
+   echo (i, pow(2,i));
+ }
+}
+</pre>
+<pre>echo(pow(10,2)); // means 10^2 or 10*10
+// result: ECHO: 100
+
+echo(pow(10,3)); // means 10^3 or 10*10*10
+// result: ECHO: 1000
+
+echo(pow(125,1/3)); // means 125^(0.333...), which calculates the cube root of 125
+// result: ECHO: 5
+</pre>
+<h3>rands</h3>
+<p>Random number generator.
+Generates a constant vector of pseudo random numbers, much like an array. The numbers are doubles not integers.
+When generating only one number, you still call it with variable[0]
+</p><p><b>Parameters</b>
+</p>
+<dl><dt>min_value</dt>
+<dd>Minimum value of random number range</dd>
+<dt>max_value</dt>
+<dd>Maximum value of random number range</dd>
+<dt>value_count</dt>
+<dd>Number of random numbers to return as a vector</dd>
+<dt>seed_value (optional)</dt>
+<dd>Seed value for random number generator for repeatable results. On versions before late 2015, seed_value gets rounded to the nearest integer</dd></dl>
+<p><b>Usage Examples:</b>
+</p>
+<pre>// get a single number
+single_rand = rands(0,10,1)[0];
+echo(single_rand);
+</pre>
+<pre>// get a vector of 4 numbers
+seed=42;
+random_vect=rands(5,15,4,seed);
+echo( "Random Vector: ",random_vect);
+sphere(r=5);
+for(i=[0:3]) {
+ rotate(360*i/4) {
+   translate([10+random_vect[i],0,0])
+     sphere(r=random_vect[i]/2);
+ }
+}
+// ECHO: "Random Vector: ", [8.7454, 12.9654, 14.5071, 6.83435]
+</pre>
+<h3>round</h3>
+<p>The "round" operator returns the greatest or least integer part, respectively, if the numeric input is positive or negative.
+</p><p>Some examples:<br/>
+</p>
+<pre>round(x.5) = x+1.<br/>
+round(x.49) = x.<br/>
+round(-(x.5)) = -(x+1).<br/>
+round(-(x.49)) = -x.<br/>
+<br/>
+round(5.4); //-&gt; 5<br/>
+round(5.5); //-&gt; 6<br/>
+round(5.6); //-&gt; 6<br/>
+</pre>
+<h3>sign</h3>
+<p>Mathematical <b>signum</b> function. Returns a unit value that extracts the sign of a value see: <a class="extiw" href="https://en.wikipedia.org/wiki/Sign_function" title="w:Sign function">Signum function</a>
+</p><p><b>Parameters</b>
+</p>
+<dl><dt>&lt;x&gt;</dt>
+<dd>Decimal.  Value to find the sign of.</dd></dl>
+<p><b>Usage examples:</b>
+</p>
+<pre>sign(-5.0);
+sign(0);
+sign(8.0);
+</pre>
+<p><b>Results:</b>
+</p>
+<pre>-1.0
+0.0
+1.0
+</pre>
+<p><br/>
+</p>
+<h3>sqrt</h3>
+<p>Mathematical <b>square root</b> function.
+</p><p><br/>
+<b>Usage Examples:</b>
+</p>
+<pre>translate([sqrt(100),0,0])sphere(100);
+</pre>
+<h2>Infinities and NaNs</h2>
+<p>How does OpenSCAD deal with inputs like (1/0)? Basically, the behavior is inherited from the language OpenSCAD was written in, the C++ language, and its floating point number types and the associated C math library. This system allows representation of both positive and negative infinity by the special values "Inf" or "-Inf". It also allow representation of creatures like sqrt(-1) or 0/0 as "NaN", an abbreviation for "Not A Number". Some very nice explanations can be found on the web, for example the <a class="external text" href="http://pubs.opengroup.org/onlinepubs/009695399/basedefs/math.h.html" rel="nofollow">Open Group's site on math.h</a> or <a class="extiw" href="https://en.wikipedia.org/wiki/IEEE_754-1985#Representation_of_non-numbers" title="w:IEEE 754-1985"> Wikipedia's page on the IEEE 754 number format</a>. However OpenSCAD is it's own language so it may not exactly match everything that happens in C. For example, OpenSCAD uses degrees instead of radians for trigonometric functions.  Another example is that sin() does not throw a "domain error" when the input is 1/0, although it does return NaN. 
+</p><p>Here are some examples of infinite input to OpenSCAD math functions and the resulting output, taken from OpenSCAD's regression test system in late 2015.
+</p>
+<table class="wikitable">
+
+<tbody><tr>
+<td>0/0: nan</td>
+<td>sin(1/0): nan</td>
+<td>asin(1/0): nan</td>
+<td>ln(1/0): inf</td>
+<td>round(1/0): inf
+</td></tr>
+<tr>
+<td>-0/0: nan</td>
+<td>cos(1/0): nan</td>
+<td>acos(1/0): nan</td>
+<td>ln(-1/0): nan</td>
+<td>round(-1/0): -inf
+</td></tr>
+<tr>
+<td>0/-0: nan</td>
+<td>tan(1/0): nan</td>
+<td>atan(1/0): 90</td>
+<td>log(1/0): inf</td>
+<td>sign(1/0): 1
+</td></tr>
+<tr>
+<td>1/0: inf</td>
+<td>ceil(-1/0): -inf</td>
+<td>atan(-1/0): -90</td>
+<td>log(-1/0): nan</td>
+<td>sign(-1/0): -1
+</td></tr>
+<tr>
+<td>1/-0: -inf</td>
+<td>ceil(1/0): inf</td>
+<td>atan2(1/0, -1/0): 135</td>
+<td>max(-1/0, 1/0): inf</td>
+<td>sqrt(1/0): inf
+</td></tr>
+<tr>
+<td>-1/0: -inf</td>
+<td>floor(-1/0): -inf</td>
+<td>exp(1/0): inf</td>
+<td>min(-1/0, 1/0): -inf</td>
+<td>sqrt(-1/0): nan
+</td></tr>
+<tr>
+<td>-1/-0: inf</td>
+<td>floor(1/0): inf</td>
+<td>exp(-1/0): 0</td>
+<td>pow(2, 1/0): inf</td>
+<td>pow(2, -1/0): 0
+</td></tr></tbody></table>
+
+
+
+
+</div><footer class="mw-body" style="font-size:13px;color:darkgray;text-align:center;margin-bottom:-1px">
+	From the WikiBooks article <a href="https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Mathematical_Functions" style="color:black">Mathematical Functions</a> 
+	(provided under <a href="https://creativecommons.org/licenses/by-sa/3.0/" style="color:black">
+	CC-BY-SA-3.0</a>)</footer></body></html>

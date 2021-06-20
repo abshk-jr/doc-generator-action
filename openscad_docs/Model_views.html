@@ -1,0 +1,46 @@
+<html><head><title>Model views</title><link href="./styles/style.css" rel="stylesheet"/></head><body class="mw-body" style="height:auto"><h1 class="firstHeading" id="firstHeading">Model views</h1><div id="bodyContent">
+<p>The "View" menu at the top of the OpenSCAD application window provides a variety of view options in the OpenSCAD model view window.
+</p>
+<div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2></div>
+<ul style="list-style-image:none">
+<li><a href="#CGAL_surfaces"><span class="tocnumber">1</span> CGAL surfaces</a></li>
+<li><a href="#CGAL_grid_only"><span class="tocnumber">2</span> CGAL grid only</a></li>
+<li><a href="#The_OpenCSG_view"><span class="tocnumber">3</span> The OpenCSG view</a></li>
+<li><a href="#The_Thrown_Together_View"><span class="tocnumber">4</span> The Thrown Together View</a></li>
+<li><a href="#See_also"><span class="tocnumber">5</span> See also</a></li>
+<li><a href="#References"><span class="tocnumber">6</span> References</a></li>
+</ul>
+</div>
+
+<h2>CGAL surfaces</h2>
+<p>The surface view is the initial model view that appears when the model code is first rendered.
+You can get back to this view by choosing "View &gt;&gt; CGAL Surfaces".
+</p>
+<h2>CGAL grid only</h2>
+<p>Designers often choose "View &gt;&gt; CGAL Grid Only" when working with a particularly complex 3D model. The Grid Only view presents only the "scaffolding" beneath the surface, also known as a wireframe. Think of the Eiffel Tower.
+</p><p>A wireframe is a visual presentation of a three dimensional or physical object. This method of modelling consists only of lines, points and curves defining the edges of an object. Using a wireframe model allows visualization of the underlying design structure of a 3D model. Since wireframe renderings are relatively simple and fast to calculate, they are often used in cases where a higher screen frame rate is needed (for instance, when working with a particularly complex 3D model, or in real-time systems that model exterior phenomena). When greater graphical detail is desired, surface textures can be added automatically after completion of the initial rendering of the wireframe. This allows the designer to quickly review changes or rotate the object to new desired views without long delays associated with more realistic rendering. The wireframe format is also well suited and widely used in programming tool paths for DNC (Direct Numerical Control) machine tools. Wireframe models are also used as the input for CAM (computer-Aided Manufacturing). Wireframe is the most abstract and least realistic of the three main CAD views. <sup class="reference" id="cite_ref-1"><a href="#cite_note-1">[1]</a></sup>
+</p>
+<h2>The OpenCSG view</h2>
+<p>Choosing "View &gt;&gt; OpenCSG" uses the open constructive solid geometry library to generate the model view utilizing OpenGL. If the OpenCSG library is not available or the video card or drivers do not support OpenGL, then this view does not produce visible output.
+</p>
+<h2>The Thrown Together View</h2>
+<p>Choosing "View &gt;&gt; Thrown Together" overlays all the previous views together on the same screen. Importantly, objects subtracted by the <code>difference()</code> command are rendered as solid objects in green (by default).
+</p>
+<h2>See also</h2>
+<p>Previous: <a href="Changing_the_color_of_an_object.html" title="OpenSCAD User Manual/First Steps/Changing the color of an object">Changing the color of an object</a>
+</p><p>Next: <a href="Opening_an_existing_example_model.html" title="OpenSCAD User Manual/First Steps/Opening an existing example model">Opening an existing example model</a>
+</p>
+<h2>References</h2>
+<div class="reflist references" style="">
+<ol class="references">
+<li id="cite_note-1"><span class="mw-cite-backlink"><a href="#cite_ref-1">↑</a></span> <span class="reference-text"><span class="citation web"><a class="external text" href="https://en.wikipedia.org/wiki/Wire-frame_model">"Wire-frame model"</a>. Wikipedia<span class="printonly">. <a class="external free" href="https://en.wikipedia.org/wiki/Wire-frame_model">http://en.wikipedia.org/wiki/Wire-frame_model</a></span>.</span><span class="Z3988" title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.genre=bookitem&amp;rft.btitle=Wire-frame+model&amp;rft.atitle=&amp;rft.pub=Wikipedia&amp;rft_id=http%3A%2F%2Fen.wikipedia.org%2Fwiki%2FWire-frame_model&amp;rfr_id=info:sid/en.wikibooks.org:OpenSCAD_User_Manual/First_Steps/Model_views"><span style="display: none;"> </span></span></span>
+</li>
+</ol></div>
+
+
+
+
+</div><footer class="mw-body" style="font-size:13px;color:darkgray;text-align:center;margin-bottom:-1px">
+	From the WikiBooks article <a href="https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/First_Steps/Model_views" style="color:black">Model views</a> 
+	(provided under <a href="https://creativecommons.org/licenses/by-sa/3.0/" style="color:black">
+	CC-BY-SA-3.0</a>)</footer></body></html>

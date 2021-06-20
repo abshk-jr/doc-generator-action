@@ -1,0 +1,75 @@
+<html><head><title>String Functions</title><link href="./styles/style.css" rel="stylesheet"/></head><body class="mw-body" style="height:auto"><h1 class="firstHeading" id="firstHeading">String Functions</h1><div id="bodyContent">
+<div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2></div>
+<ul style="list-style-image:none">
+<li><a href="#str"><span class="tocnumber">1</span> str</a></li>
+<li><a href="#chr"><span class="tocnumber">2</span> chr</a></li>
+<li><a href="#ord"><span class="tocnumber">3</span> ord</a></li>
+<li><a href="#Also_See_search()"><span class="tocnumber">4</span> Also See search()</a></li>
+</ul>
+</div>
+
+<h3>str</h3>
+<p>Convert all arguments to strings and concatenate.
+</p><p><b>Usage examples:</b>
+</p>
+<pre>number=2;
+echo ("This is ",number,3," and that's it.");
+echo (str("This is ",number,3," and that's it."));
+</pre>
+<p><b>Results:</b>
+</p>
+<pre>ECHO: "This is ", 2, 3, " and that's it."
+ECHO: "This is 23 and that's it."
+</pre>
+<h3>chr</h3>
+<p><span style="font-weight: bold; font-style: normal;">[<span style="color: #A00000;">Note:</span> <span style="font-weight: normal; font-style: italic;">Requires version <span style="font-weight: bold;">2015.03</span></span>]</span>
+</p><p>Convert numbers to a string containing character with the corresponding code. OpenSCAD uses Unicode, so the number is interpreted as Unicode code point. Numbers outside the valid code point range produce an empty string.
+</p><p><b>Parameters</b>
+</p>
+<dl><dt>chr(Number)</dt>
+<dd>Convert one code point to a string of length 1 (number of bytes depending on UTF-8 encoding) if the code point is valid.</dd></dl>
+<dl><dt>chr(Vector)</dt>
+<dd>Convert all code points given in the argument vector to a string.</dd></dl>
+<dl><dt>chr(Range)</dt>
+<dd>Convert all code points produced by the range argument to a string.</dd></dl>
+<p><b>Examples</b>
+</p>
+<pre>echo(chr(65), chr(97));      // ECHO: "A", "a"
+echo(chr(65, 97));           // ECHO: "Aa"
+echo(chr([66, 98]));         // ECHO: "Bb"
+echo(chr([97 : 2 : 102]));   // ECHO: "ace"
+echo(chr(-3));               // ECHO: ""
+echo(chr(9786), chr(9788));  // ECHO: "☺", "☼"
+echo(len(chr(9788)));        // ECHO: 1
+</pre>
+<p>Note: When used with echo() the output to the console for character codes greater than 127 is platform dependent.
+</p>
+<h3>ord</h3>
+<p><span style="font-weight: bold; font-style: normal;">[<span style="color: #A00000;">Note:</span> <span style="font-weight: normal; font-style: italic;">Requires version <span style="font-weight: bold;">2019.05</span></span>]</span>
+</p><p>Convert a character to a number representing the <a class="external text" href="https://en.wikipedia.org/wiki/Unicode">Unicode</a> <a class="external text" href="https://en.wikipedia.org/wiki/Code_point">code point</a>. If the parameter is not a string, the <code>ord()</code> returns <code>undef</code>.
+</p><p><b>Parameters</b>
+</p>
+<dl><dt>ord(String)</dt>
+<dd>Convert the first character of the given string to a Unicode code point.</dd></dl>
+<p><b>Examples</b>
+</p>
+<pre>echo(ord("a"));
+// ECHO: 97
+
+echo(ord("BCD"));
+// ECHO: 66
+
+echo([for (c = "Hello! 🙂") ord(c)]);
+// ECHO: [72, 101, 108, 108, 111, 33, 32, 128578]
+</pre>
+<h3>Also See search()</h3>
+<p><i><a href="Other_Language_Features.html#Search" title="OpenSCAD User Manual/Other Language Features">search()</a></i> for text searching.
+</p>
+
+
+
+
+</div><footer class="mw-body" style="font-size:13px;color:darkgray;text-align:center;margin-bottom:-1px">
+	From the WikiBooks article <a href="https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/String_Functions#str" style="color:black">String Functions</a> 
+	(provided under <a href="https://creativecommons.org/licenses/by-sa/3.0/" style="color:black">
+	CC-BY-SA-3.0</a>)</footer></body></html>

@@ -1,0 +1,463 @@
+<html><head><title>Commented Example Projects</title><link href="./styles/style.css" rel="stylesheet"/></head><body class="mw-body" style="height:auto"><h1 class="firstHeading" id="firstHeading">Commented Example Projects</h1><div id="bodyContent">
+<div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2></div>
+<ul style="list-style-image:none">
+<li><a href="#Dodecahedron"><span class="tocnumber">1</span> Dodecahedron</a></li>
+<li><a href="#Icosahedron"><span class="tocnumber">2</span> Icosahedron</a></li>
+<li><a href="#Half-pyramid"><span class="tocnumber">3</span> Half-pyramid</a></li>
+<li><a href="#Bounding_Box"><span class="tocnumber">4</span> Bounding Box</a></li>
+<li><a href="#Linear_Extrude_extended_use_examples"><span class="tocnumber">5</span> Linear Extrude extended use examples</a>
+<ul style="list-style-image:none">
+<li><a href="#Linear_Extrude_with_Scale_as_an_interpolated_function"><span class="tocnumber">5.1</span> Linear Extrude with Scale as an interpolated function</a></li>
+<li><a href="#Linear_Extrude_with_Twist_as_an_interpolated_function"><span class="tocnumber">5.2</span> Linear Extrude with Twist as an interpolated function</a></li>
+<li><a href="#Linear_Extrude_with_Twist_and_Scale_as_interpolated_functions"><span class="tocnumber">5.3</span> Linear Extrude with Twist and Scale as interpolated functions</a></li>
+</ul>
+</li>
+<li><a href="#Rocket"><span class="tocnumber">6</span> Rocket</a></li>
+<li><a href="#Horns"><span class="tocnumber">7</span> Horns</a></li>
+<li><a href="#Strandbeest"><span class="tocnumber">8</span> Strandbeest</a></li>
+<li><a href="#Previous"><span class="tocnumber">9</span> Previous</a></li>
+<li><a href="#Next"><span class="tocnumber">10</span> Next</a></li>
+</ul>
+</div>
+
+<h2>Dodecahedron</h2>
+<table>
+
+<tbody><tr>
+<td>
+<pre>//create a dodecahedron by intersecting 6 boxes
+module dodecahedron(height) 
+{
+	scale([height,height,height]) //scale by height parameter
+	{
+		intersection(){
+			//make a cube
+			cube([2,2,1], center = true); 
+			intersection_for(i=[0:4]) //loop i from 0 to 4, and intersect results
+			{ 
+				//make a cube, rotate it 116.565 degrees around the X axis,
+				//then 72*i around the Z axis
+				rotate([0,0,72*i])
+					rotate([116.565,0,0])
+					cube([2,2,1], center = true); 
+			}
+		}
+	}
+}
+//create 3 stacked dodecahedra 
+//call the module with a height of 1 and move up 2
+translate([0,0,2])dodecahedron(1); 
+//call the module with a height of 2
+dodecahedron(2); 
+//call the module with a height of 4 and move down 4
+translate([0,0,-4])dodecahedron(4);
+</pre>
+</td>
+<td>
+<div class="thumb tright"><div class="thumbinner" style="width:222px;"><a class="image" href="./imgs/220px-Openscad-Dodecahedron.png"><img alt="" class="thumbimage" data-file-height="601" data-file-width="492" decoding="async" height="269" src="./imgs/220px-Openscad-Dodecahedron.png" width="220"/></a>  <div class="thumbcaption">The Dodecahedron as rendered from the example.</div></div></div>
+</td></tr></tbody></table>
+<h2>Icosahedron</h2>
+<p>An icosahedron can be created from three orthogonal <a class="extiw" href="https://en.wikipedia.org/wiki/Golden_ratio" title="w:Golden ratio">golden-ratio</a> rectangles inside a <code>hull()</code> operation, where the golden ratio is <span class="mwe-math-element"><img alt="{\displaystyle \varphi ={\frac {{\sqrt {5}}+1}{2}}}" aria-hidden="true" class="mwe-math-fallback-image-inline" src="./imgs\maths/20d43139cc688139bcc5dedc510dcb7f8fda11dc.svg" style="vertical-align: -1.838ex; width:12.556ex; height:5.843ex;"/></span>.
+</p>
+<table>
+
+<tbody><tr>
+<td>
+<pre>phi=0.5*(sqrt(5)+1); // golden ratio
+
+// create an icosahedron by intersecting 3 orthogonal golden-ratio rectangles
+module icosahedron(edge_length) {
+   st=0.0001;  // microscopic sheet thickness
+   hull() {
+       cube([edge_length*phi, edge_length, st], true);
+       rotate([90,90,0]) cube([edge_length*phi, edge_length, st], true);
+       rotate([90,0,90]) cube([edge_length*phi, edge_length, st], true);
+   }
+}
+
+// display the 3 internal sheets alongside the icosahedron
+edge=10;
+translate([-20,0,0]) union() {
+   cube([edge*phi, edge, 0.01], true);
+   rotate([90,90,0]) cube([edge*phi, edge, 0.01], true);
+   rotate([90,0,90]) cube([edge*phi, edge, 0.01], true);
+}
+
+icosahedron(edge);
+</pre>
+</td>
+<td>
+<div class="thumb tright"><div class="thumbinner" style="width:222px;"><a class="image" href="./imgs/220px-Icosahedron_OpenSCAD.png"><img alt="" class="thumbimage" data-file-height="820" data-file-width="1248" decoding="async" height="145" src="./imgs/220px-Icosahedron_OpenSCAD.png" width="220"/></a>  <div class="thumbcaption">The icosahedron and its internal structure as rendered from the example.</div></div></div>
+</td></tr></tbody></table>
+<p>This icosahedron renders in an edge-up orientation. Rotating this icosahedron by <span class="mwe-math-element"><img alt="{\displaystyle \arctan {\left({\frac {1}{\varphi }}\right)}}" aria-hidden="true" class="mwe-math-fallback-image-inline" src="./imgs\maths/bc5d7fb95b176cd48e8ae95478355555841144fa.svg" style="vertical-align: -2.505ex; width:12.631ex; height:6.176ex;"/></span> about the Y-axis results in a vertex-up orientation. Rotating by <span class="mwe-math-element"><img alt="{\displaystyle {\frac {1}{2}}\arccos {\left(-{\frac {\sqrt {5}}{3}}\right)}-90^{\circ }}" aria-hidden="true" class="mwe-math-fallback-image-inline" src="./imgs\maths/e0e5b400f2ab1abc6a1a41e97bc4b608737917a3.svg" style="vertical-align: -2.505ex; width:24.374ex; height:6.509ex;"/></span> about the X-axis results in a face-up orientation. The edge length <span class="mwe-math-element"><img alt="L" aria-hidden="true" class="mwe-math-fallback-image-inline" src="./imgs\maths/103168b86f781fe6e9a4a87b8ea1cebe0ad4ede8.svg" style="vertical-align: -0.338ex; width:1.583ex; height:2.176ex;"/></span> is related to the inner diameter <span class="mwe-math-element"><img alt="{\displaystyle D_{i}}" aria-hidden="true" class="mwe-math-fallback-image-inline" src="./imgs\maths/9f07b53d3212e08ca316a536c8aac0bbefa79ee1.svg" style="vertical-align: -0.671ex; width:2.724ex; height:2.509ex;"/></span> (distance between opposite faces) by <span class="mwe-math-element"><img alt="{\displaystyle L={\frac {D_{i}{\sqrt {3}}}{\varphi ^{2}}}}" aria-hidden="true" class="mwe-math-fallback-image-inline" src="./imgs\maths/56e12e0901a3e1957873bdd46f5a07787295e7f8.svg" style="vertical-align: -2.505ex; width:11.34ex; height:6.509ex;"/></span>.
+</p>
+<h2>Half-pyramid</h2>
+<p>An upside-down half-pyramid is a useful shape for 3D printing a support for an overhang protruding from a vertical wall. With sloping sides no steeper than 45°, no removable support structure needs to be printed.
+</p><p>While a half-pyramid can be made with a 4-sided cone (using the cylinder primitive) and subtracting a cube from half of it, the shape can be easily made in one operation by a scaled linear extrude of a rectangle having the middle of one edge on the origin.
+</p>
+<table>
+
+<tbody><tr>
+<td>
+<pre>// Create a half-pyramid from a single linear extrusion
+module halfpyramid(base, height) {
+   linear_extrude(height, scale=0.01)
+      translate([-base/2, 0, 0]) square([base, base/2]);
+}
+
+halfpyramid(20, 10);
+</pre>
+</td>
+<td>
+<div class="thumb tright"><div class="thumbinner" style="width:222px;"><a class="image" href="./imgs/220px-Halfpyramid.png"><img alt="" class="thumbimage" data-file-height="550" data-file-width="711" decoding="async" height="170" src="./imgs/220px-Halfpyramid.png" width="220"/></a>  <div class="thumbcaption">The half-pyramid as rendered from the example.</div></div></div>
+</td></tr></tbody></table>
+<h2>Bounding Box</h2>
+<table>
+
+<tbody><tr>
+<td>
+<pre>// Rather kludgy module for determining bounding box from intersecting projections
+module BoundingBox()
+{
+	intersection()
+	{
+		translate([0,0,0])
+		linear_extrude(height = 1000, center = true, convexity = 10, twist = 0) 
+		projection(cut=false) intersection()
+		{
+			rotate([0,90,0]) 
+			linear_extrude(height = 1000, center = true, convexity = 10, twist = 0) 
+			projection(cut=false) 
+			rotate([0,-90,0]) 
+			children(0);
+
+			rotate([90,0,0]) 
+			linear_extrude(height = 1000, center = true, convexity = 10, twist = 0) 
+			projection(cut=false) 
+			rotate([-90,0,0]) 
+			children(0);
+		}
+		rotate([90,0,0]) 
+		linear_extrude(height = 1000, center = true, convexity = 10, twist = 0) 
+		projection(cut=false) 
+		rotate([-90,0,0])
+		intersection()
+		{
+			rotate([0,90,0]) 
+			linear_extrude(height = 1000, center = true, convexity = 10, twist = 0) 
+			projection(cut=false) 
+			rotate([0,-90,0]) 
+			children(0);
+
+			rotate([0,0,0]) 
+			linear_extrude(height = 1000, center = true, convexity = 10, twist = 0) 
+			projection(cut=false) 
+			rotate([0,0,0]) 
+			children(0);
+		}
+	}
+}
+
+// Test module on ellipsoid
+translate([0,0,40]) scale([1,2,3]) sphere(r=5);
+BoundingBox() scale([1,2,3]) sphere(r=5);
+</pre>
+<p><br/>
+</p>
+</td>
+<td>
+<div class="thumb tright"><div class="thumbinner" style="width:222px;"><a class="image" href="./imgs/220px-Openscad-BB.png"><img alt="" class="thumbimage" data-file-height="552" data-file-width="770" decoding="async" height="158" src="./imgs/220px-Openscad-BB.png" width="220"/></a>  <div class="thumbcaption">Bounding Box applied to an Ellipsoid</div></div></div>
+</td></tr></tbody></table>
+<h2>Linear Extrude extended use examples</h2>
+<h3>Linear Extrude with Scale as an interpolated function</h3>
+<table>
+
+<tbody><tr>
+<td>
+<pre>//Linear Extrude with Scale as an interpolated function
+// This module does not need to be modified, 
+// - unless default parameters want to be changed 
+// - or additional parameters want to be forwarded (e.g. slices,...)
+module linear_extrude_fs(height=1,isteps=20,twist=0){
+ //union of piecewise generated extrudes
+ union(){ 
+   for(i = [ 0: 1: isteps-1]){
+     //each new piece needs to be adjusted for height
+     translate([0,0,i*height/isteps])
+      linear_extrude(
+       height=height/isteps,
+       twist=twist/isteps,
+       scale=f_lefs((i+1)/isteps)/f_lefs(i/isteps)
+      )
+       // if a twist constant is defined it is split into pieces
+       rotate([0,0,-(i/isteps)*twist])
+        // each new piece starts where the last ended
+        scale(f_lefs(i/isteps))
+         obj2D_lefs();
+   }
+ }
+}
+// This function defines the scale function
+// - Function name must not be modified
+// - Modify the contents/return value to define the function
+function f_lefs(x) = 
+ let(span=150,start=20,normpos=45)
+ sin(x*span+start)/sin(normpos);
+// This module defines the base 2D object to be extruded
+// - Function name must not be modified
+// - Modify the contents to define the base 2D object
+module obj2D_lefs(){ 
+ translate([-4,-3])
+  square([9,12]);
+}
+</pre>
+<pre>//Top rendered object demonstrating the interpolation steps
+translate([0,0,25])
+linear_extrude_fs(height=20,isteps=4);
+</pre>
+<pre>linear_extrude_fs(height=20);
+</pre>
+<pre>//Bottom rendered object demonstrating the inclusion of a twist
+translate([0,0,-25])
+linear_extrude_fs(height=20,twist=90,isteps=30);
+</pre>
+</td>
+<td>
+<div class="thumb tright"><div class="thumbinner" style="width:222px;"><a class="image" href="./imgs/220px-Linear_extrude_fs_example.png"><img alt="" class="thumbimage" data-file-height="724" data-file-width="1024" decoding="async" height="156" src="./imgs/220px-Linear_extrude_fs_example.png" width="220"/></a>  <div class="thumbcaption">Example Linear Extrude of a rectangle with scale following part of a sine curve function</div></div></div>
+</td></tr></tbody></table>
+<p><br/>
+</p>
+<h3>Linear Extrude with Twist as an interpolated function</h3>
+<table>
+
+<tbody><tr>
+<td>
+<pre>//Linear Extrude with Twist as an interpolated function
+// This module does not need to be modified, 
+// - unless default parameters want to be changed 
+// - or additional parameters want to be forwarded (e.g. slices,...)
+module linear_extrude_ft(height=1,isteps=20,scale=1){
+  //union of piecewise generated extrudes
+  union(){
+    for(i = [ 0: 1: isteps-1]){
+      //each new piece needs to be adjusted for height
+      translate([0,0,i*height/isteps])
+       linear_extrude(
+        height=height/isteps,
+        twist=f_left((i+1)/isteps)-f_left((i)/isteps),
+        scale=(1-(1-scale)*(i+1)/isteps)/(1-(1-scale)*i/isteps)
+       )
+        //Rotate to next start point
+        rotate([0,0,-f_left(i/isteps)])
+         //Scale to end of last piece size  
+         scale(1-(1-scale)*(i/isteps))
+          obj2D_left();
+    }
+  }
+}
+// This function defines the twist function
+// - Function name must not be modified
+// - Modify the contents/return value to define the function
+function f_left(x) = 
+  let(twist=90,span=180,start=0)
+  twist*sin(x*span+start);
+// This module defines the base 2D object to be extruded
+// - Function name must not be modified
+// - Modify the contents to define the base 2D object
+module obj2D_left(){
+  translate([-4,-3]) 
+   square([12,9]);
+}
+</pre>
+<pre>//Left rendered object demonstrating the interpolation steps
+translate([-20,0])
+linear_extrude_ft(height=30,isteps=5);
+</pre>
+<pre>linear_extrude_ft(height=30);
+</pre>
+<pre>//Right rendered object demonstrating the scale inclusion
+translate([25,0])
+linear_extrude_ft(height=30,scale=3);
+</pre>
+</td>
+<td>
+<div class="thumb tright"><div class="thumbinner" style="width:222px;"><a class="image" href="./imgs/220px-Linear_extrude_ft_example.png"><img alt="" class="thumbimage" data-file-height="724" data-file-width="1024" decoding="async" height="156" src="./imgs/220px-Linear_extrude_ft_example.png" width="220"/></a>  <div class="thumbcaption">Example Linear Extrude of a rectangle with twist following part of a sine curve function</div></div></div>
+</td></tr></tbody></table>
+<h3>Linear Extrude with Twist and Scale as interpolated functions</h3>
+<table>
+
+<tbody><tr>
+<td>
+<pre>//Linear Extrude with Twist and Scale as interpolated functions
+// This module does not need to be modified, 
+// - unless default parameters want to be changed 
+// - or additional parameters want to be forwarded
+module linear_extrude_ftfs(height=1,isteps=20,slices=0){
+  //union of piecewise generated extrudes
+  union(){ 
+   for(i=[0:1:isteps-1]){
+    translate([0,0,i*height/isteps])
+     linear_extrude(
+      height=height/isteps,
+      twist=leftfs_ftw((i+1)/isteps)-leftfs_ftw(i/isteps), 
+      scale=leftfs_fsc((i+1)/isteps)/leftfs_fsc(i/isteps),
+      slices=slices
+     )
+      rotate([0,0,-leftfs_ftw(i/isteps)])
+       scale(leftfs_fsc(i/isteps))
+        obj2D_leftfs();
+   }
+  }
+}
+// This function defines the scale function
+// - Function name must not be modified
+// - Modify the contents/return value to define the function
+function leftfs_fsc(x)=
+  let(scale=3,span=140,start=20)
+  scale*sin(x*span+start);
+// This function defines the twist function
+// - Function name must not be modified
+// - Modify the contents/return value to define the function
+function leftfs_ftw(x)=
+  let(twist=30,span=360,start=0)
+  twist*sin(x*span+start);
+// This module defines the base 2D object to be extruded
+// - Function name must not be modified
+// - Modify the contents to define the base 2D object
+module obj2D_leftfs(){
+   square([12,9]);
+}
+</pre>
+<pre>//Left rendered objects demonstrating the steps effect
+translate([0,-50,-60])
+rotate([0,0,90])
+linear_extrude_ftfs(height=50,isteps=3);
+
+translate([0,-50,0])
+linear_extrude_ftfs(height=50,isteps=3);
+</pre>
+<pre>//Center rendered objects demonstrating the slices effect
+translate([0,0,-60])
+rotate([0,0,90])
+linear_extrude_ftfs(height=50,isteps=3,slices=20);
+
+linear_extrude_ftfs(height=50,isteps=3,slices=20);
+</pre>
+<pre>//Right rendered objects with default parameters
+translate([0,50,-60])
+rotate([0,0,90])
+linear_extrude_ftfs(height=50);
+
+translate([0,50,0])
+linear_extrude_ftfs(height=50);
+</pre>
+</td>
+<td>
+<div class="thumb tright"><div class="thumbinner" style="width:222px;"><a class="image" href="./imgs/220px-Linear_extrude_ftfs_example.png"><img alt="" class="thumbimage" data-file-height="724" data-file-width="1024" decoding="async" height="156" src="./imgs/220px-Linear_extrude_ftfs_example.png" width="220"/></a>  <div class="thumbcaption">Example Linear Extrude of a rectangle with twist and scale following part of a sine curve function</div></div></div>
+</td></tr></tbody></table>
+<h2>Rocket</h2>
+<div class="thumb tright"><div class="thumbinner" style="width:222px;"><a class="image" href="./imgs/220px-Example_Rocket.png"><img alt="" class="thumbimage" data-file-height="615" data-file-width="736" decoding="async" height="184" src="./imgs/220px-Example_Rocket.png" width="220"/></a>  <div class="thumbcaption">A rocket using rotate_extrude()</div></div></div>
+<pre>// increase the visual detail
+$fn = 100;
+
+// the main body :
+// a cylinder
+rocket_d = 30; 				// 3 cm wide
+rocket_r = rocket_d / 2;
+rocket_h = 100; 			// 10 cm tall
+cylinder(d = rocket_d, h = rocket_h);
+
+// the head :
+// a cone
+head_d = 40;  				// 4 cm wide
+head_r = head_d / 2;
+head_h = 40;  				// 4 cm tall
+// prepare a triangle
+tri_base = head_r;
+tri_height = head_h;
+tri_points = [[0,			 0],
+			  [tri_base,	 0],
+			  [0,	tri_height]];
+// rotation around X-axis and then 360° around Z-axis
+// put it on top of rocket's body
+translate([0,0,rocket_h])
+rotate_extrude(angle = 360)
+	polygon(tri_points);
+
+// the wings :
+// 3x triangles
+wing_w = 2;					// 2 mm thick
+many = 3;					// 3x wings
+wing_l = 40;				// length
+wing_h = 40;				// height
+wing_points = [[0,0],[wing_l,0],[0,wing_h]];
+
+module wing() {
+	// let it a bit inside the main body
+	in_by = 1;				// 1 mm
+	// set it up on the rocket's perimeter
+	translate([rocket_r - in_by,0,0])
+	// set it upright by rotating around X-axis
+	rotate([90,0,0])
+	// set some width and center it
+	linear_extrude(height = wing_w,center = true)
+	// make a triangle
+		polygon(wing_points);
+}
+
+for (i = [0: many - 1])
+	rotate([0, 0, 360 / many * i])
+	wing();
+</pre>
+<h2>Horns</h2>
+<div class="thumb tright"><div class="thumbinner" style="width:222px;"><a class="image" href="./imgs/220px-Example_Horns__28OpenSCAD_29.png"><img alt="" class="thumbimage" data-file-height="447" data-file-width="401" decoding="async" height="245" src="./imgs/220px-Example_Horns__28OpenSCAD_29.png" width="220"/></a>  <div class="thumbcaption">Horns, by translation and twisting.</div></div></div>
+<pre>// The idea is to twist a translated circle:
+// -
+/*
+	linear_extrude(height = 10, twist = 360, scale = 0)
+	translate([1,0])
+	circle(r = 1);
+*/
+
+module horn(height = 10, radius = 3, 
+			twist = 720, $fn = 50) 
+{
+	// A centered circle translated by 1xR and 
+	// twisted by 360° degrees, covers a 2x(2xR) space.
+	// -
+	radius = radius/4;
+	// De-translate.
+	// -
+	translate([-radius,0])
+	// The actual code.
+	// -
+	linear_extrude(height = height, twist = twist, 
+				   scale=0, $fn = $fn)
+	translate([radius,0])
+	circle(r=radius);
+}
+
+translate([3,0])
+mirror()
+horn();
+
+translate([-3,0])
+horn();
+</pre>
+<h2>Strandbeest</h2>
+<p>See the Strandbeest example <a href="Strandbeest.html" title="OpenSCAD User Manual/Example/Strandbeest">here</a>.
+</p>
+<h2>Previous</h2>
+<p><a href="Other_2D_formats.html" title="OpenSCAD User Manual/Other 2D formats">Other 2D formats</a>
+</p>
+<h2>Next</h2>
+<p><a href="Paths.html" title="OpenSCAD User Manual/Paths">Paths</a>
+</p>
+
+
+
+
+</div><footer class="mw-body" style="font-size:13px;color:darkgray;text-align:center;margin-bottom:-1px">
+	From the WikiBooks article <a href="https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Commented_Example_Projects" style="color:black">Commented Example Projects</a> 
+	(provided under <a href="https://creativecommons.org/licenses/by-sa/3.0/" style="color:black">
+	CC-BY-SA-3.0</a>)</footer></body></html>

@@ -1,0 +1,39 @@
+<html><head><title>DXF Extrusion</title><link href="./styles/style.css" rel="stylesheet"/></head><body class="mw-body" style="height:auto"><h1 class="firstHeading" id="firstHeading">DXF Extrusion</h1><div id="bodyContent"><p><br/>
+With the import() and extrusion modules it is possible to convert 2D objects read from DXF files to 3D objects.
+See also <a href="2D_to_3D_Extrusion.html" title="OpenSCAD User Manual/2D to 3D Extrusion">2D to 3D Extrusion</a>.
+</p>
+<h3>Linear Extrude</h3>
+<p>Example of linear extrusion of a 2D object imported from a DXF file.
+</p>
+<pre>linear_extrude(height = fanwidth, center = true, convexity = 10)
+   import (file = "example009.dxf", layer = "fan_top");
+</pre>
+<h3>Rotate Extrude</h3>
+<p>Example of rotational extrusion of a 2D object imported from a DXF file.
+</p>
+<pre>rotate_extrude(convexity = 10)
+   import (file = "example009.dxf", layer = "fan_side", origin = fan_side_center);
+</pre>
+<h3>Getting Inkscape to work</h3>
+<p>Inkscape is an open source drawing program. Tutorials for transferring 2d DXF drawings from Inkscape to OpenSCAD are available here:
+</p>
+<ul style="list-style-image:none"><li><a class="external free" href="http://repraprip.blogspot.com/2011/05/inkscape-to-openscad-dxf-tutorial.html" rel="nofollow">http://repraprip.blogspot.com/2011/05/inkscape-to-openscad-dxf-tutorial.html</a> (Very simple, needs path segments to be straight lines)</li>
+<li><a class="external free" href="http://tonybuser.com/?tag=inkscape" rel="nofollow">http://tonybuser.com/?tag=inkscape</a> (More complicated, involves conversion to Postscript)</li>
+<li><a class="external free" href="http://bobcookdev.com/inkscape/inkscape-dxf.html" rel="nofollow">http://bobcookdev.com/inkscape/inkscape-dxf.html</a> (Better DXF Export, native support for bezier curves)</li>
+<li><a class="external free" href="http://www.bigbluesaw.com/saw/big-blue-saw-blog/general-updates/big-blue-saws-dxf-export-for-inkscape.html" rel="nofollow">http://www.bigbluesaw.com/saw/big-blue-saw-blog/general-updates/big-blue-saws-dxf-export-for-inkscape.html</a> (even better support, works as of 10/29/2014, see link below registration window. Note: As of 6/17/15 only works with version 0.48.5 or earlier of inkscape, due to a breaking change made in 0.91.)</li>
+<li><a class="external free" href="http://www.instructables.com/id/Convert-any-2D-image-to-a-3D-object-using-OpenSCAD/" rel="nofollow">http://www.instructables.com/id/Convert-any-2D-image-to-a-3D-object-using-OpenSCAD/</a> (Convert any 2D image to a 3D object using OpenSCAD)</li>
+<li><a class="external free" href="http://carrefour-numerique.cite-sciences.fr/fablab/wiki/doku.php?id=projets:de_inkscape_a_openscad" rel="nofollow">http://carrefour-numerique.cite-sciences.fr/fablab/wiki/doku.php?id=projets:de_inkscape_a_openscad</a> (French, directly exports OpenSCAD file)</li></ul>
+<h2>Previous</h2>
+<p><a href="CSG_Export.html" title="OpenSCAD User Manual/CSG Export">CSG Export</a>
+</p>
+<h2>Next</h2>
+<p><a href="Other_2D_formats.html" title="OpenSCAD User Manual/Other 2D formats">Other 2D formats</a>
+</p>
+
+
+
+
+</div><footer class="mw-body" style="font-size:13px;color:darkgray;text-align:center;margin-bottom:-1px">
+	From the WikiBooks article <a href="https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/DXF_Extrusion" style="color:black">DXF Extrusion</a> 
+	(provided under <a href="https://creativecommons.org/licenses/by-sa/3.0/" style="color:black">
+	CC-BY-SA-3.0</a>)</footer></body></html>

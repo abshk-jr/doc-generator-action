@@ -1,0 +1,68 @@
+<html><head><title>Cross-compiling for Windows on Linux or Mac OS X</title><link href="./styles/style.css" rel="stylesheet"/></head><body class="mw-body" style="height:auto"><h1 class="firstHeading" id="firstHeading">Cross-compiling for Windows on Linux or Mac OS X</h1><div id="bodyContent"><p>OpenSCAD includes convenience scripts to cross-build Windows installer binaries using the MXE system (<a class="external free" href="http://mxe.cc" rel="nofollow">http://mxe.cc</a>). If you wish to use them, you can first install the <a class="external text" href="http://mxe.cc/#requirements" rel="nofollow">MXE Requirements such as cmake, perl, scons, using your system's package manager (click to view a complete list of requirements)</a>. Then you can perform the following commands to download OpenSCAD source and build a windows installer:
+</p>
+<pre> git clone <a class="external free" href="https://github.com/openscad/openscad.git" rel="nofollow">https://github.com/openscad/openscad.git</a>
+ cd openscad
+ source ./scripts/setenv-mingw-xbuild.sh
+ ./scripts/mingw-x-build-dependencies.sh
+ ./scripts/release-common.sh mingw32
+</pre>
+<p>The x-build-dependencies process takes several hours, mostly to cross-build QT. It also requires several gigabytes of disk space. If you have multiple CPUs you can speed up things by running <b>export NUMCPU=x</b> before running the dependency build script. By default it builds the dependencies in $HOME/openscad_deps/mxe. You can override the mxe installation path by setting the BASEDIR environment variable before running the scripts. The OpenSCAD binaries are built into a separate build path, openscad/mingw32.
+</p><p>Note that if you want to then build linux binaries, you should log out of your shell, and log back in. The 'setenv' scripts, as of early 2013, required a 'clean' shell environment to work. 
+</p><p>If you wish to cross-build manually, please follow the steps below and/or consult the release-common.sh source code. 
+</p>
+<h2>Setup</h2>
+<p>The easiest way to cross-compile OpenSCAD for Windows on Linux or Mac is to use mxe (M cross environment). You must install git to get it. Once you have git, navigate to where you want to keep the mxe files in a terminal window and run:
+</p>
+<pre>git clone <a class="external free" href="git://github.com/mxe/mxe.git" rel="nofollow">git://github.com/mxe/mxe.git</a>
+</pre>
+<p>Add the following line to your <code>~/.bashrc</code> file:
+</p>
+<pre>export PATH=/&lt;where mxe is installed&gt;/usr/bin:$PATH
+</pre>
+<p>replacing <code>&lt;where mxe is installed&gt;</code> with the appropriate path.
+</p>
+<h2>Requirements</h2>
+<p>The requirements to cross-compile for Windows are just the requirements of mxe. They are listed, along with a command for installing them <a class="external text" href="http://mxe.cc/#requirements" rel="nofollow">here</a>. You don't need to type 'make'; this makes everything and take up &gt;10 GB of diskspace. You can instead follow the next step to compile only what's needed for openscad. 
+</p><p>Now that you have the requirements for mxe installed, you can build OpenSCAD's dependencies (CGAL, Opencsg, MPFR, and Eigen2). Just open a terminal window, navigate to your mxe installation and run:
+</p>
+<pre>make mpfr eigen opencsg cgal qt
+</pre>
+<p>This can take a few hours, because it has to build things like gcc, qt, and boost. Just go calibrate your printer or something while you wait. To speed things up, you might want do something like "make -j 4 JOBS=2" for parallel building. See the <a class="external text" href="http://mxe.cc/#tutorial" rel="nofollow">mxe tutorial</a> for more details.
+</p><p>Optional: If you want to build an installer, you need to install the nullsoft installer system. It should be in your package manager, called "nsis".
+</p>
+<h2>Build OpenSCAD</h2>
+<p>Now that all the requirements have been met, all that remains is to build OpenSCAD itself. Open a terminal window and enter:
+</p>
+<pre>git clone <a class="external free" href="git://github.com/openscad/openscad.git" rel="nofollow">git://github.com/openscad/openscad.git</a>
+cd openscad
+</pre>
+<p>Then get MCAD:
+</p>
+<pre>git submodule init
+git submodule update
+</pre>
+<p>You need to create a symbolic link here for the build system to find the libraries:
+</p>
+<pre>ln -s /&lt;where mxe is installed&gt;/usr/i686-pc-mingw32/ mingw-cross-env
+</pre>
+<p>again replacing <code>&lt;where mxe is installed&gt;</code> with the appropriate path
+</p><p>Now to build OpenSCAD run:
+</p>
+<pre>i686-pc-mingw32-qmake CONFIG+=mingw-cross-env openscad.pro
+make
+</pre>
+<p>This creates openscad.exe in ./release and you can build an installer with it as described in the instructions for building with Microsoft Visual C++, <a class="external text" href="Building_on_Windows.html#Building_an_installer">described here</a>. 
+</p><p>The difference is that instead of right-clicking on the *.nsi file you run:
+</p>
+<pre>makensis installer.nsis
+</pre>
+<p>Note that as of early 2013, OpenSCAD's 'scripts/release-common.sh' automatically uses the version of nsis that comes with the MXE cross build system, so you may wish to investigate the release-common.sh source code to see how it works, if you have troubles.
+</p>
+
+
+
+
+</div><footer class="mw-body" style="font-size:13px;color:darkgray;text-align:center;margin-bottom:-1px">
+	From the WikiBooks article <a href="https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Cross-compiling_for_Windows_on_Linux_or_Mac_OS_X" style="color:black">Cross-compiling for Windows on Linux or Mac OS X</a> 
+	(provided under <a href="https://creativecommons.org/licenses/by-sa/3.0/" style="color:black">
+	CC-BY-SA-3.0</a>)</footer></body></html>
