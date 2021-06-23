@@ -1,0 +1,49 @@
+<html><head><title>Using an external Editor with OpenSCAD</title><link href="./styles/style.css" rel="stylesheet"/></head><body class="mw-body" style="height:auto"><h1 class="firstHeading" id="firstHeading">Using an external Editor with OpenSCAD</h1><div id="bodyContent"><div class="thumb tright"><div class="thumbinner" style="width:222px;"><a class="image" href="./imgs/220px-Openscad_with_external_editor.png"><img alt="" class="thumbimage" data-file-height="1920" data-file-width="1209" decoding="async" height="349" src="./imgs/220px-Openscad_with_external_editor.png" width="220"/></a>  <div class="thumbcaption">OpenSCAD session using emacs as an external editor</div></div></div>
+<div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2></div>
+<ul style="list-style-image:none">
+<li><a href="#Why_use_an_external_editor"><span class="tocnumber">1</span> Why use an external editor</a></li>
+<li><a href="#How_to_use_an_external_editor"><span class="tocnumber">2</span> How to use an external editor</a></li>
+<li><a href="#Support_of_external_editors"><span class="tocnumber">3</span> Support of external editors</a></li>
+<li><a href="#Additional_benefits"><span class="tocnumber">4</span> Additional benefits</a></li>
+</ul>
+</div>
+
+<h2>Why use an external editor</h2>
+<p>Many people prefer to use a certain editor. They are used to the feature set and know the keybindings.
+OpenSCADs editor is functional and simple but might lack features people know from other editors.
+Moreover, external editor allows to use different monitors for editing and preview.
+</p>
+<h2>How to use an external editor</h2>
+<p>OpenSCAD is able to check for changes of files and automatically recompile if a file change occurs.
+To use this feature enable
+<i>"Design-&gt;Automatic Reload and Preview"</i>
+</p><p>Once the feature is activated, just load the scad file within OpenSCAD as usual (<i>"File-&gt;Open.."</i>). After that, open the scad file in your favorite editor too. Edit and work on the scad file within the external editor. Whenever the file is saved to disk (from within the external editor), OpenSCAD recognizes the file change and automatically recompiles accordingly.
+</p><p>The internal editor can be hidden by minimizing the frame with the mouse or by selecting
+<i>"View-&gt;Hide editor"</i>.
+</p>
+<h2>Support of external editors</h2>
+<p>In principle all editors can be used. Some even have extensions/modes to provide features for OpenSCAD.
+</p>
+<ul style="list-style-image:none"><li><b>Atom</b>: There is a <a class="external text" href="https://atom.io/packages/language-openscad" rel="nofollow">Language OpenSCAD package</a> for <a class="external text" href="https://atom.io" rel="nofollow">Atom</a> that provides highlighting and snippets.</li>
+<li><b>Emacs</b>: OpenSCAD provides an <a class="external text" href="https://github.com/openscad/openscad/blob/master/contrib/scad-mode.el" rel="nofollow">emacs mode</a> for OpenSCAD files. Use the link or install via emacs package management (ELPA) with the <a class="external text" href="https://melpa.org" rel="nofollow">MELPA</a> repository.</li>
+<li><b>Geany</b>: <a class="external text" href="http://www.thingiverse.com/cobra18t/overview" rel="nofollow">cobra18t</a> provides a <a class="external text" href="http://www.thingiverse.com/thing:263620" rel="nofollow">Geany syntax file</a> for OpenSCAD. See <i>Instructions</i> tab in Thingiverse to install it.</li>
+<li><b>Gedit</b>: <a class="external text" href="https://github.com/AndrewJamesTurner" rel="nofollow">Andy Turner</a> provides a <a class="external text" href="https://github.com/AndrewJamesTurner/openSCAD-lang-file" rel="nofollow">Gedit syntax file</a> for OpenSCAD.</li>
+<li><b>IntelliJ</b>: has an 'OpenSCAD Language Support' plugin.</li>
+<li><b>Kate</b>: <a class="external text" href="http://www.thingiverse.com/nerd256/overview" rel="nofollow">nerd256</a> provides a <a class="external text" href="http://www.thingiverse.com/thing:29505" rel="nofollow">kate syntax file</a> for OpenSCAD. See <i>Instructions</i> tab in Thingiverse to install it. You could create also a kate <i>External tool</i> to open OpenSCAD with the current file with script <code>openscad %directory/%filename</code></li>
+<li><b>Notepad++</b>: <a class="external text" href="http://www.thingiverse.com/TheHeadlessSourceMan/overview" rel="nofollow">TheHeadlessSourceMan</a> provides a <a class="external text" href="http://www.thingiverse.com/thing:280319" rel="nofollow">Notepad++ syntax file</a> for OpenSCAD. See <i>Instructions</i> tab in Thingiverse to install it.</li>
+<li><b>OpenSCADitor</b>: <a class="external text" href="https://www.openscad.org/" rel="nofollow">OpenSCAD-dedicated editor</a></li>
+<li><b>Sublime</b>: <a class="external text" href="http://www.thingiverse.com/thing:67566" rel="nofollow">Syntax highlighting and Customizer support</a></li>
+<li><b>Textmate</b>: <a class="external text" href="http://www.thingiverse.com/thing:67566" rel="nofollow">Syntax highlighting and Customizer support</a></li>
+<li><b>VIM</b>: vim.org provides a <a class="external text" href="http://www.vim.org/scripts/script.php?script_id=3556" rel="nofollow">VIM syntax file</a> for OpenSCAD.</li>
+<li><b>Visual Studio Code</b>: <a class="external text" href="https://code.visualstudio.com/" rel="nofollow">Free, open-source code editor</a> Install the scad extension for syntax highlighting</li></ul>
+<h2>Additional benefits</h2>
+<p>Besides using your editor of choice, these solutions enable the flexible usage of multi-monitor set-ups. One can have one monitor set up to depict the 3D object on the entire screen and a second monitor for the editor and other tools.
+</p>
+
+
+
+
+</div><footer class="mw-body" style="font-size:13px;color:darkgray;text-align:center;margin-bottom:-1px">
+	From the WikiBooks article <a href="https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Using_an_external_Editor_with_OpenSCAD" style="color:black">Using an external Editor with OpenSCAD</a> 
+	(provided under <a href="https://creativecommons.org/licenses/by-sa/3.0/" style="color:black">
+	CC-BY-SA-3.0</a>)</footer></body></html>

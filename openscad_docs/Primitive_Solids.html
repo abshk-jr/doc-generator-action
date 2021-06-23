@@ -1,0 +1,400 @@
+<html><head><title>Primitive Solids</title><link href="./styles/style.css" rel="stylesheet"/></head><body class="mw-body" style="height:auto"><h1 class="firstHeading" id="firstHeading">Primitive Solids</h1><div id="bodyContent"><div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2></div>
+<ul style="list-style-image:none">
+<li><a href="#cube"><span class="tocnumber">1</span> cube</a></li>
+<li><a href="#sphere"><span class="tocnumber">2</span> sphere</a></li>
+<li><a href="#cylinder"><span class="tocnumber">3</span> cylinder</a></li>
+<li><a href="#polyhedron"><span class="tocnumber">4</span> polyhedron</a>
+<ul style="list-style-image:none">
+<li><a href="#Debugging_polyhedra"><span class="tocnumber">4.1</span> Debugging polyhedra</a></li>
+<li><a href="#Mis-ordered_faces"><span class="tocnumber">4.2</span> Mis-ordered faces</a></li>
+<li><a href="#Point_repetitions_in_a_polyhedron_point_list"><span class="tocnumber">4.3</span> Point repetitions in a polyhedron point list</a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h3>cube</h3>
+<hr/>
+<p>Creates a cube in the first octant. When center is true, the cube is centered on the origin. Argument names are optional if given in the order shown here.
+</p>
+<pre>cube(size = [x,y,z], center = true/false);
+cube(size =  x ,     center = true/false);
+</pre>
+<dl><dd><b> parameters</b>:</dd></dl>
+<dl><dd><dl><dd><b>size</b>
+<dl><dd>single value, cube with all sides this length</dd>
+<dd>3 value array [x,y,z], cube with dimensions x, y and z.</dd></dl></dd>
+<dd><b>center</b>
+<dl><dd><b>false</b> (default), 1st (positive) octant, one corner at (0,0,0)</dd>
+<dd><b>true</b>, cube is centered at (0,0,0)</dd></dl></dd></dl></dd></dl>
+<pre>default values:  cube();   yields:  cube(size = [1, 1, 1], center = false);
+</pre>
+<dl><dd><b> examples</b>:</dd></dl>
+<p><a class="image" href="./imgs/150px-OpenSCAD_example_Cube.jpg"><img alt="OpenSCAD example Cube.jpg" data-file-height="246" data-file-width="258" decoding="async" height="143" src="./imgs/150px-OpenSCAD_example_Cube.jpg" width="150"/></a>
+</p>
+<pre>equivalent scripts for this example
+ cube(size = 18);
+ cube(18);
+ cube([18,18,18]);
+ .
+ cube(18,false);
+ cube([18,18,18],false);
+ cube([18,18,18],center=false);
+ cube(size = [18,18,18], center = false);
+ cube(center = false,size = [18,18,18] );
+</pre>
+<p><a class="image" href="./imgs/150px-OpenSCAD_example_Box.jpg"><img alt="OpenSCAD example Box.jpg" data-file-height="206" data-file-width="246" decoding="async" height="126" src="./imgs/150px-OpenSCAD_example_Box.jpg" width="150"/></a>
+</p>
+<pre>equivalent scripts for this example
+ cube([18,28,8],true);
+ box=[18,28,8];cube(box,true);
+</pre>
+<h3>sphere</h3>
+<hr/>
+<p>Creates a sphere at the origin of the coordinate system. The r argument name is optional. To use d instead of r, d must be named.
+</p><p><b>Parameters</b>
+</p>
+<dl><dt>r</dt>
+<dd>Radius.  This is the radius of the sphere.  The resolution of the sphere is based on the size of the sphere and the $fa, $fs and $fn variables. For more information on these special variables look at: <a href="Other_Language_Features.html" title="OpenSCAD User Manual/Other Language Features">OpenSCAD_User_Manual/Other_Language_Features</a></dd>
+<dt>d</dt>
+<dd>Diameter.  This is the diameter of the sphere.</dd>
+<dt>$fa</dt>
+<dd>Fragment angle in degrees</dd>
+<dt>$fs</dt>
+<dd>Fragment size in mm</dd>
+<dt>$fn</dt>
+<dd>Resolution</dd></dl>
+<pre> default values:  sphere();   yields:   sphere($fn = 0, $fa = 12, $fs = 2, r = 1);
+</pre>
+<p><b>Usage Examples</b>
+</p>
+<pre>sphere(r = 1);
+sphere(r = 5);
+sphere(r = 10);
+sphere(d = 2);
+sphere(d = 10);
+sphere(d = 20);
+</pre>
+<pre>// this creates a high resolution sphere with a 2mm radius
+sphere(2, $fn=100); 
+</pre>
+<pre>// also creates a 2mm high resolution sphere but this one 
+// does not have as many small triangles on the poles of the sphere
+sphere(2, $fa=5, $fs=0.1); 
+</pre>
+<p><a class="image" href="./imgs/OpenSCAD_sphere_in_different_sizes.png" title="Sample OpenSCAD spheres, showing clearly the difference in scale."><img alt="Sample OpenSCAD spheres, showing clearly the difference in scale." data-file-height="506" data-file-width="959" decoding="async" height="506" src="./imgs/OpenSCAD_sphere_in_different_sizes.png" width="959"/></a>
+</p>
+<h3>cylinder</h3>
+<hr/>
+<p>Creates a cylinder or cone centered about the z axis. When center is true, it is also centered vertically along the z axis.
+</p><p>Parameter names are optional if given in the order shown here. If a parameter is named, all following parameters must also be named.
+</p><p>NOTE: If r, d, d1 or d2 are used they must be named.
+</p>
+<pre>cylinder(h = height, r1 = BottomRadius, r2 = TopRadius, center = true/false);
+</pre>
+<dl><dd><b>Parameters</b></dd></dl>
+<dl><dd><dl><dd><b>h</b> : height of the cylinder or cone</dd>
+<dd><b>r </b> : radius of cylinder. r1 = r2 = r.</dd>
+<dd><b>r1</b> : radius, bottom of cone.</dd>
+<dd><b>r2</b> : radius, top of cone.</dd>
+<dd><b>d </b> : diameter of cylinder. r1 = r2 = d / 2. <span style="font-weight: bold; font-style: normal;">[<span style="color: #A00000;">Note:</span> <span style="font-weight: normal; font-style: italic;">Requires version <span style="font-weight: bold;">2014.03</span></span>]</span></dd>
+<dd><b>d1</b> : diameter, bottom of cone. r1 = d1 / 2. <span style="font-weight: bold; font-style: normal;">[<span style="color: #A00000;">Note:</span> <span style="font-weight: normal; font-style: italic;">Requires version <span style="font-weight: bold;">2014.03</span></span>]</span></dd>
+<dd><b>d2</b> : diameter, top of cone. r2 = d2 / 2. <span style="font-weight: bold; font-style: normal;">[<span style="color: #A00000;">Note:</span> <span style="font-weight: normal; font-style: italic;">Requires version <span style="font-weight: bold;">2014.03</span></span>]</span></dd>
+<dd><b>center</b>
+<dl><dd><b>false</b> (default), z ranges from 0 to h</dd>
+<dd><b>true</b>,  z ranges from -h/2 to +h/2</dd></dl></dd>
+<dd><b>$fa</b> : minimum angle (in degrees) of each fragment.</dd>
+<dd><b>$fs</b> : minimum circumferential length of each fragment.</dd>
+<dd><b>$fn</b> : <b>fixed</b> number of fragments in 360 degrees. Values of 3 or more override $fa and $fs
+<dl><dd>$fa, $fs and $fn must be named parameters. <a href="Other_Language_Features.html" title="OpenSCAD User Manual/Other Language Features">click here for more details,</a>.</dd></dl></dd></dl></dd></dl>
+<pre>defaults: cylinder();  yields: cylinder($fn = 0, $fa = 12, $fs = 2, h = 1, r1 = 1, r2 = 1, center = false);
+</pre>
+<p><a class="image" href="./imgs/200px-OpenSCAD_Cone_15x10x20.jpg"><img alt="OpenSCAD Cone 15x10x20.jpg" data-file-height="276" data-file-width="339" decoding="async" height="163" src="./imgs/200px-OpenSCAD_Cone_15x10x20.jpg" width="200"/></a>
+</p>
+<pre>equivalent scripts
+ cylinder(h=15, r1=9.5, r2=19.5, center=false);
+ cylinder(  15,    9.5,    19.5, false);
+ cylinder(  15,    9.5,    19.5);
+ cylinder(  15,    9.5, d2=39  );
+ cylinder(  15, d1=19,  d2=39  );
+ cylinder(  15, d1=19,  r2=19.5);
+</pre>
+<p><a class="image" href="./imgs/200px-OpenSCAD_Cone_15x10x0.jpg"><img alt="OpenSCAD Cone 15x10x0.jpg" data-file-height="191" data-file-width="248" decoding="async" height="154" src="./imgs/200px-OpenSCAD_Cone_15x10x0.jpg" width="200"/></a>
+</p>
+<pre>equivalent scripts
+ cylinder(h=15, r1=10, r2=0, center=true);
+ cylinder(  15,    10,    0,        true);
+ cylinder(h=15, d1=20, d2=0, center=true);
+</pre>
+<ul class="gallery mw-gallery-traditional" style="list-style-image:none">
+		<li class="gallerybox" style="width: 155px"><div style="width: 155px">
+			<div class="thumb" style="width: 150px;"><div style="margin:15px auto;"><a class="image" href="./imgs/112px-OpenSCAD_Cylinder_20x10_false.jpg"><img alt="" data-file-height="330" data-file-width="307" decoding="async" height="120" src="./imgs/112px-OpenSCAD_Cylinder_20x10_false.jpg" width="112"/></a></div></div>
+			<div class="gallerytext">
+<p>center = false
+</p>
+			</div>
+		</div></li>
+		<li class="gallerybox" style="width: 155px"><div style="width: 155px">
+			<div class="thumb" style="width: 150px;"><div style="margin:15px auto;"><a class="image" href="./imgs/100px-OpenSCAD_Cylinder_20x10_true.jpg"><img alt="" data-file-height="341" data-file-width="284" decoding="async" height="120" src="./imgs/100px-OpenSCAD_Cylinder_20x10_true.jpg" width="100"/></a></div></div>
+			<div class="gallerytext">
+<p>center = true
+</p>
+			</div>
+		</div></li>
+</ul>
+<pre>equivalent scripts
+ cylinder(h=20, r=10, center=true);
+ cylinder(  20,   10, 10,true);
+ cylinder(  20, d=20, center=true);
+ cylinder(  20,r1=10, d2=20, center=true);
+ cylinder(  20,r1=10, d2=2*10, center=true);
+</pre>
+<dl><dd><b>use of $fn</b></dd></dl>
+<p>Larger values of $fn create smoother, more circular, surfaces at the cost of longer rendering time. Some use medium values during development for the faster rendering, then change to a larger value for the final F6 rendering. 
+</p><p>However, use of small values can produce some interesting non circular objects. A few examples are show here:
+</p>
+<ul class="gallery mw-gallery-traditional" style="list-style-image:none">
+		<li class="gallerybox" style="width: 155px"><div style="width: 155px">
+			<div class="thumb" style="width: 150px;"><div style="margin:31px auto;"><a class="image" href="./imgs/120px-3_sided_fiqure.jpg"><img alt="3 sided fiqure.jpg" data-file-height="309" data-file-width="421" decoding="async" height="88" src="./imgs/120px-3_sided_fiqure.jpg" width="120"/></a></div></div>
+			<div class="gallerytext">
+			</div>
+		</div></li>
+		<li class="gallerybox" style="width: 155px"><div style="width: 155px">
+			<div class="thumb" style="width: 150px;"><div style="margin:29.5px auto;"><a class="image" href="./imgs/120px-4_sided_pyramid.jpg"><img alt="4 sided pyramid.jpg" data-file-height="264" data-file-width="348" decoding="async" height="91" src="./imgs/120px-4_sided_pyramid.jpg" width="120"/></a></div></div>
+			<div class="gallerytext">
+			</div>
+		</div></li>
+		<li class="gallerybox" style="width: 155px"><div style="width: 155px">
+			<div class="thumb" style="width: 150px;"><div style="margin:23px auto;"><a class="image" href="./imgs/120px-4_sided_part_pyramid.jpg"><img alt="4 sided part pyramid.jpg" data-file-height="297" data-file-width="343" decoding="async" height="104" src="./imgs/120px-4_sided_part_pyramid.jpg" width="120"/></a></div></div>
+			<div class="gallerytext">
+			</div>
+		</div></li>
+</ul>
+<pre>scripts for these examples
+ cylinder(20,20,20,$fn=3);
+ cylinder(20,20,00,$fn=4);
+ cylinder(20,20,10,$fn=4);
+</pre>
+<dl><dd><b>undersized holes</b></dd></dl>
+<p>Using cylinder() with difference() to place holes in objects creates undersized holes. This is because circular paths are approximated with polygons inscribed within in a circle. The points of the polygon are on the circle, but straight lines between are inside. To have all of the hole larger than the true circle, the polygon must lie wholly outside of the circle (circumscribed). <a href="undersized_circular_objects.html" title="OpenSCAD User Manual/undersized circular objects">Modules for circumscribed holes</a>
+</p>
+<ul class="gallery mw-gallery-traditional" style="list-style-image:none">
+		<li class="gallerybox" style="width: 155px"><div style="width: 155px">
+			<div class="thumb" style="width: 150px;"><div style="margin:18px auto;"><a class="image" href="./imgs/120px-OpenSCAD_Under_size_hole.jpg"><img alt="OpenSCAD Under size hole.jpg" data-file-height="465" data-file-width="488" decoding="async" height="114" src="./imgs/120px-OpenSCAD_Under_size_hole.jpg" width="120"/></a></div></div>
+			<div class="gallerytext">
+			</div>
+		</div></li>
+</ul>
+<pre>script for this example
+ poly_n = 6;
+ color("blue") translate([0, 0, 0.02]) linear_extrude(0.1) circle(10, $fn=poly_n);
+ color("green") translate([0, 0, 0.01]) linear_extrude(0.1) circle(10, $fn=360);
+ color("purple") linear_extrude(0.1) circle(10/cos(180/poly_n), $fn=poly_n);
+</pre>
+<h3>polyhedron</h3>
+<hr/>
+<p>A polyhedron is the most general 3D primitive solid. It can be used to create any regular or irregular shape including those with concave as well as convex features. Curved surfaces are approximated by a series of flat surfaces.
+</p>
+<pre>polyhedron( points = [ [X<sub>0</sub>, Y<sub>0</sub>, Z<sub>0</sub>], [X<sub>1</sub>, Y<sub>1</sub>, Z<sub>1</sub>], ... ], triangles = [ [P<sub>0</sub>, P<sub>1</sub>, P<sub>2</sub>], ... ], convexity = N);   // before 2014.03
+polyhedron( points = [ [X<sub>0</sub>, Y<sub>0</sub>, Z<sub>0</sub>], [X<sub>1</sub>, Y<sub>1</sub>, Z<sub>1</sub>], ... ], faces = [ [P<sub>0</sub>, P<sub>1</sub>, P<sub>2</sub>, P<sub>3</sub>, ...], ... ], convexity = N);   // 2014.03 &amp; later
+</pre>
+<dl><dd><b>Parameters</b>
+<dl><dd><b>points</b>
+<dl><dd>Vector of 3d points or vertices. Each point is in turn a vector, [x,y,z], of its coordinates.</dd>
+<dd>Points may be defined in any order. N points are referenced, in the order defined, as 0 to N-1.</dd></dl></dd></dl></dd></dl>
+<dl><dd><dl><dd><b>triangles</b> [<i><span style="font-weight: bold; color: #A00000;">Deprecated:</span> <b>triangles</b> will be removed in future releases. Use <b>faces</b> parameter instead</i>]
+<dl><dd>Vector of faces that collectively enclose the solid. Each face is a vector containing the indices (0 based) of 3 points from the points vector.</dd></dl></dd></dl></dd></dl>
+<dl><dd><dl><dd><b>faces</b> <span style="font-weight: bold; font-style: normal;">[<span style="color: #A00000;">Note:</span> <span style="font-weight: normal; font-style: italic;">Requires version <span style="font-weight: bold;">2014.03</span></span>]</span>
+<dl><dd>Vector of faces that collectively enclose the solid. Each face is a vector containing the indices (0 based) of 3 or more points from the points vector.</dd>
+<dd>Faces may be defined in any order. Define enough faces to fully enclose the solid, with no overlap.</dd>
+<dd>If points that describe a single face are not on the same plane, the face is automatically split into triangles as needed.</dd></dl></dd></dl></dd></dl>
+<dl><dd><dl><dd><b>convexity</b>
+<dl><dd>Integer. The convexity parameter specifies the maximum number of faces a ray intersecting the object might penetrate. This parameter is needed only for correct display of the object in OpenCSG preview mode. It has no effect on the polyhedron rendering. For display problems, setting it to 10 should work fine for most cases.</dd></dl></dd></dl></dd></dl>
+<pre> default values: polyhedron(); yields: polyhedron(points = undef, faces = undef, convexity = 1);
+</pre>
+<p><br/>
+</p><p>It is arbitrary which point you start with, but all faces must have points ordered in the same direction . OpenSCAD prefers <b>clockwise</b> when looking at each face from outside <b>inward</b>. The back is viewed from the back, the bottom from the bottom, etc. Another way to remember this ordering requirement is to use the right-hand rule. Using your right-hand, stick your thumb up and curl your fingers as if giving the thumbs-up sign, point your thumb into the face, and order the points in the direction your fingers curl.  Try this on the example below.
+</p><p><br/>
+</p>
+<dl><dd><b>Example 1</b> Using polyhedron to generate cube( [ 10, 7, 5 ] );</dd></dl>
+<div class="thumb tleft"><div class="thumbinner" style="width:311px;"><a class="image" href="./imgs/Cube_numbers.jpg"><img alt="" class="thumbimage" data-file-height="307" data-file-width="309" decoding="async" height="307" src="./imgs/Cube_numbers.jpg" width="309"/></a>  <div class="thumbcaption">point numbers for cube</div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:513px;"><a class="image" href="./imgs/Cube_flat.jpg"><img alt="" class="thumbimage" data-file-height="310" data-file-width="511" decoding="async" height="310" src="./imgs/Cube_flat.jpg" width="511"/></a>  <div class="thumbcaption">unfolded cube faces</div></div></div></div> 
+<pre>CubePoints = [
+  [  0,  0,  0 ],  //0
+  [ 10,  0,  0 ],  //1
+  [ 10,  7,  0 ],  //2
+  [  0,  7,  0 ],  //3
+  [  0,  0,  5 ],  //4
+  [ 10,  0,  5 ],  //5
+  [ 10,  7,  5 ],  //6
+  [  0,  7,  5 ]]; //7
+  
+CubeFaces = [
+  [0,1,2,3],  // bottom
+  [4,5,1,0],  // front
+  [7,6,5,4],  // top
+  [5,6,2,1],  // right
+  [6,7,3,2],  // back
+  [7,4,0,3]]; // left
+  
+polyhedron( CubePoints, CubeFaces );
+</pre>
+<pre>equivalent descriptions of the bottom face
+  [0,1,2,3],
+  [0,1,2,3,0],
+  [1,2,3,0],
+  [2,3,0,1],
+  [3,0,1,2],
+  [0,1,2],[2,3,0],   // 2 triangles with no overlap
+  [1,2,3],[3,0,1],
+  [1,2,3],[0,1,3],
+</pre>
+<dl><dd><b>Example 2</b>  A square base pyramid:</dd></dl>
+<div class="thumb tnone"><div class="thumbinner" style="width:362px;"><a class="image" href="./imgs/Openscad-polyhedron-squarebasepyramid.png"><img alt="" class="thumbimage" data-file-height="354" data-file-width="360" decoding="async" height="354" src="./imgs/Openscad-polyhedron-squarebasepyramid.png" width="360"/></a>  <div class="thumbcaption">A simple polyhedron, square base pyramid</div></div></div>
+<pre>polyhedron(
+  points=[ [10,10,0],[10,-10,0],[-10,-10,0],[-10,10,0], // the four points at base
+           [0,0,10]  ],                                 // the apex point 
+  faces=[ [0,1,4],[1,2,4],[2,3,4],[3,0,4],              // each triangle side
+              [1,0,3],[2,1,3] ]                         // two triangles for square base
+ );
+</pre>
+<dl><dd><b>Example 3</b>  A triangular prism:</dd></dl>
+<div class="thumb tnone"><div class="thumbinner" style="width:602px;"><a class="image" href="./imgs/600px-Polyhedron_Prism.png"><img alt="" class="thumbimage" data-file-height="660" data-file-width="1847" decoding="async" height="214" src="./imgs/600px-Polyhedron_Prism.png" width="600"/></a>  <div class="thumbcaption">A polyhedron triangular prism</div></div></div>
+<pre>   module prism(l, w, h){
+       polyhedron(
+               points=[[0,0,0], [l,0,0], [l,w,0], [0,w,0], [0,w,h], [l,w,h]],
+               faces=[[0,1,2,3],[5,4,3,2],[0,4,5,1],[0,3,4],[5,2,1]]
+               );
+       
+       // preview unfolded (do not include in your function
+       z = 0.08;
+       separation = 2;
+       border = .2;
+       translate([0,w+separation,0])
+           cube([l,w,z]);
+       translate([0,w+separation+w+border,0])
+           cube([l,h,z]);
+       translate([0,w+separation+w+border+h+border,0])
+           cube([l,sqrt(w*w+h*h),z]);
+       translate([l+border,w+separation+w+border+h+border,0])
+           polyhedron(
+                   points=[[0,0,0],[h,0,0],[0,sqrt(w*w+h*h),0], [0,0,z],[h,0,z],[0,sqrt(w*w+h*h),z]],
+                   faces=[[0,1,2], [3,5,4], [0,3,4,1], [1,4,5,2], [2,5,3,0]]
+                   );
+       translate([0-border,w+separation+w+border+h+border,0])
+           polyhedron(
+                   points=[[0,0,0],[0-h,0,0],[0,sqrt(w*w+h*h),0], [0,0,z],[0-h,0,z],[0,sqrt(w*w+h*h),z]],
+                   faces=[[1,0,2],[5,3,4],[0,1,4,3],[1,2,5,4],[2,0,3,5]]
+                   );
+       }
+   
+   prism(10, 5, 3);
+</pre>
+<h4>Debugging polyhedra</h4>
+<hr/>
+<p>Mistakes in defining polyhedra include not having all faces with the same order, overlap of faces and missing faces or portions of faces. As a general rule, the polyhedron faces should also satisfy manifold conditions:
+</p>
+<ul style="list-style-image:none"><li>exactly two faces should meet at any polyhedron edge.</li>
+<li>if two faces have a vertex in common, they should be in the same cycle face-edge around the vertex.</li></ul>
+<p>The first rule eliminates polyhedra like two cubes with a common edge and not watertight models; the second excludes polyhedra like two cubes with a common vertex.
+</p><p>When viewed from the outside, the points describing each face must be in the same order . OpenSCAD prefers CW, and provides a mechanism for detecting CCW.
+When the thrown together view (F12) is used with F5, CCW faces are shown in pink. Reorder the points for incorrect faces. Rotate the object to view all faces. The pink view can be turned off with F10.
+</p><p>OpenSCAD allows, temporarily, commenting out part of the face descriptions so that only the remaining faces are displayed. Use // to comment out the rest of the line. Use /* and */ to start and end a comment block. This can be part of a line or extend over several lines. Viewing only part of the faces can be helpful in determining the right points for an individual face. Note that a solid is not shown, only the faces. If using F12, all faces have one pink side. Commenting some faces helps also to show any internal face.
+</p><p><br/>
+</p>
+<div class="thumb tleft"><div class="thumbinner" style="width:185px;"><a class="image" href="./imgs/Cube_2_face.jpg"><img alt="" class="thumbimage" data-file-height="132" data-file-width="183" decoding="async" height="132" src="./imgs/Cube_2_face.jpg" width="183"/></a>  <div class="thumbcaption">example 1 showing only 2 faces</div></div></div>
+<pre>CubeFaces = [
+/* [0,1,2,3],  // bottom
+   [4,5,1,0],  // front */
+   [7,6,5,4],  // top
+/* [5,6,2,1],  // right
+   [6,7,3,2],  // back */
+   [7,4,0,3]]; // left
+</pre>
+<p><br clear="all"/>
+</p><p>After defining a polyhedron, its preview may seem correct. The polyhedron alone may even render fine. However, to be sure it is a valid manifold and that it can generate a valid STL file, union it with any cube and render it (F6). If the polyhedron disappears, it means that it is not correct. Revise the winding order of all faces and the two rules stated above.
+</p>
+<h4>Mis-ordered faces</h4>
+<hr/>
+<dl><dd><b>Example 4</b>  a more complex polyhedron with mis-ordered faces</dd></dl>
+<p>When you select 'Thrown together' from the view menu and <b>compile</b> the design
+(<b>not</b> compile and render!) the preview shows the mis-oriented polygons highlighted. Unfortunately this highlighting is not possible in the OpenCSG preview mode because it would interfere with the way the OpenCSG preview mode is implemented.)
+</p><p>Below you can see the code and the picture of such a problematic polyhedron, the bad polygons (faces or compositions of faces) are in pink.
+</p>
+<pre>// Bad polyhedron
+polyhedron
+    (points = [
+	       [0, -10, 60], [0, 10, 60], [0, 10, 0], [0, -10, 0], [60, -10, 60], [60, 10, 60], 
+	       [10, -10, 50], [10, 10, 50], [10, 10, 30], [10, -10, 30], [30, -10, 50], [30, 10, 50]
+	       ], 
+     faces = [
+		  [0,2,3],   [0,1,2],  [0,4,5],  [0,5,1],   [5,4,2],  [2,4,3],
+                  [6,8,9],  [6,7,8],  [6,10,11], [6,11,7], [10,8,11],
+		  [10,9,8], [0,3,9],  [9,0,6], [10,6, 0],  [0,4,10],
+                  [3,9,10], [3,10,4], [1,7,11],  [1,11,5], [1,7,8],  
+                  [1,8,2],  [2,8,11], [2,11,5]
+		  ]
+     );
+</pre>
+<div class="thumb tnone"><div class="thumbinner" style="width:356px;"><a class="image" href="./imgs/Openscad-bad-polyhedron.png"><img alt="" class="thumbimage" data-file-height="329" data-file-width="354" decoding="async" height="329" src="./imgs/Openscad-bad-polyhedron.png" width="354"/></a>  <div class="thumbcaption">Polyhedron with badly oriented polygons</div></div></div>
+<p>A correct polyhedron would be the following:
+</p>
+<pre>polyhedron
+    (points = [
+	       [0, -10, 60], [0, 10, 60], [0, 10, 0], [0, -10, 0], [60, -10, 60], [60, 10, 60], 
+	       [10, -10, 50], [10, 10, 50], [10, 10, 30], [10, -10, 30], [30, -10, 50], [30, 10, 50]
+	       ], 
+     faces = [
+		  [0,3,2],  [0,2,1],  [4,0,5],  [5,0,1],  [5,2,4],  [4,2,3],
+                  [6,8,9],  [6,7,8],  [6,10,11],[6,11,7], [10,8,11],
+		  [10,9,8], [3,0,9],  [9,0,6],  [10,6, 0],[0,4,10],
+                  [3,9,10], [3,10,4], [1,7,11], [1,11,5], [1,8,7],  
+                  [2,8,1],  [8,2,11], [5,11,2]
+		  ]
+     );
+</pre>
+<dl><dt>Beginner's tip</dt>
+<dd></dd></dl>
+<p>If you don't really understand "orientation", try to identify the mis-oriented pink faces and then invert the sequence of the references to the points vectors until you get it right. E.g. in the above example, the third triangle (<i>[0,4,5]</i>) was wrong and we fixed it as <i>[4,0,5]</i>. Remember that a face list is a circular list. In addition, you may select "Show Edges" from the "View Menu", print a screen capture and number both the points and the faces.  In our example, the points are annotated in black and the faces in blue. Turn the object around and make a second copy from the back if needed. This way you can keep track.
+</p>
+<dl><dt>Clockwise Technique</dt>
+<dd></dd></dl>
+<p>Orientation is determined by clockwise circular indexing. This means that if you're looking at the triangle (in this case [4,0,5]) from the outside you'll see that the path is clockwise around the center of the face. The winding order [4,0,5] is clockwise and therefore good.  The winding order [0,4,5] is counter-clockwise and therefore bad. Likewise, any other clockwise order of [4,0,5] works: [5,4,0] &amp; [0,5,4] are good too. If you use the clockwise technique, you'll always have your faces outside (outside of OpenSCAD, other programs do use counter-clockwise as the outside though).
+</p><p>Think of it as a Left Hand Rule:
+</p><p>If you place your left hand on the face with your fingers curled in the direction of the order of the points, your thumb should point outward. If your thumb points inward, you need to reverse the winding order.
+</p>
+<div class="thumb tnone"><div class="thumbinner" style="width:395px;"><a class="image" href="./imgs/Openscad-bad-polyhedron-annotated.png"><img alt="" class="thumbimage" data-file-height="355" data-file-width="393" decoding="async" height="355" src="./imgs/Openscad-bad-polyhedron-annotated.png" width="393"/></a>  <div class="thumbcaption">Polyhedron with badly oriented polygons</div></div></div>
+<p><br/>
+Succinct description of a 'Polyhedron'
+</p>
+<pre>* Points define all of the points/vertices in the shape.
+* Faces is a list of flat polygons that connect up the points/vertices. 
+</pre>
+<p>Each point, in the point list, is defined with a 3-tuple x,y,z position specification. Points in the point list are automatically enumerated starting from zero for use in the faces list (0,1,2,3,... etc).
+</p><p>Each face, in the faces list, is defined by selecting 3 or more of the points (using the point order number) out of the point list.
+</p><p>e.g. faces=[ [0,1,2] ] defines a triangle from the first point (points are zero referenced) to the second point and then to the third point.
+</p><p>When looking at any face from the outside, the face must list all points in a clockwise order.
+</p>
+<h4>Point repetitions in a polyhedron point list</h4>
+<p>The point list of the polyhedron definition may have repetitions. When two or more points have the same coordinates they are considered the same polyhedron vertex. So, the following polyhedron:
+</p>
+<pre>points = [[ 0, 0, 0], [10, 0, 0], [ 0,10, 0],
+          [ 0, 0, 0], [10, 0, 0], [ 0,10, 0],
+          [ 0,10, 0], [10, 0, 0], [ 0, 0,10],
+          [ 0, 0, 0], [ 0, 0,10], [10, 0, 0],
+          [ 0, 0, 0], [ 0,10, 0], [ 0, 0,10]];
+polyhedron(points, [[0,1,2], [3,4,5], [6,7,8], [9,10,11], [12,13,14]]);
+</pre>
+<p>define the same tetrahedron as:
+</p>
+<pre>points = [[0,0,0], [0,10,0], [10,0,0], [0,0,10]];
+polyhedron(points, [[0,2,1], [0,1,3], [1,2,3], [0,3,2]]);
+</pre>
+
+
+
+
+</div><footer class="mw-body" style="font-size:13px;color:darkgray;text-align:center;margin-bottom:-1px">
+	From the WikiBooks article <a href="https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Primitive_Solids#polyhedron" style="color:black">Primitive Solids</a> 
+	(provided under <a href="https://creativecommons.org/licenses/by-sa/3.0/" style="color:black">
+	CC-BY-SA-3.0</a>)</footer></body></html>

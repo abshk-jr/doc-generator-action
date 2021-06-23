@@ -1,0 +1,97 @@
+<html><head><title>STL Export</title><link href="./styles/style.css" rel="stylesheet"/></head><body class="mw-body" style="height:auto"><h1 class="firstHeading" id="firstHeading">STL Export</h1><div id="bodyContent"><p><br/>
+</p>
+
+<h3>Export</h3>
+<p>After rendering with F6, the "File --&gt; Export" menu can be used to export as STL, OFF, AMF, DXF, SVG, CSG OR PNG (image).
+</p><p>Be sure to check the console window for error messages.
+</p>
+<ul style="list-style-image:none"><li>STL, OFF and DXF are imported using <code>import()</code></li>
+<li>CSG can be imported using <code>include&lt;&gt;</code> or loaded like an SCAD file</li>
+<li>PNG can be imported using <code>surface()</code></li>
+<li>There are open pull requests for SVG and AMF, which require a bit more work/testing</li>
+<li>The file suffix is used to determine type</li></ul>
+<h3>STL Export</h3>
+<p>To export your design, select "Export as STL..." from the "File --&gt; Export" menu, then enter a filename in the ensuing dialog box.  Don't forget to add the ".stl" extension.
+</p><p><b>Trouble shooting</b>:
+</p><p>After <i>compile and render CGAL</i> (F6), you may see that your design is <i>simple: no</i>. That's bad news.
+</p><p>See line 8 in the following output from <i>OpenSCAD 2010.02</i>:
+</p>
+<pre>Parsing design (AST generation)...
+Compiling design (CSG Tree generation)...
+Compilation finished.
+Rendering Polygon Mesh using CGAL...
+Number of vertices currently in CGAL cache: 732
+Number of objects currently in CGAL cache: 12
+   Top level object is a 3D object:
+   Simple:         no                &lt;*****************
+   Valid:         yes
+   Vertices:       22
+   Halfedges:      70
+   Edges:          35
+   Halffacets:     32
+   Facets:         16
+   Volumes:         2
+Total rendering time: 0 hours, 0 minutes, 0 seconds
+Rendering finished.
+</pre>
+<p>When you try to export this to .STL, this message appears:
+</p>
+<pre>Object isn't a valid 2-manifold! Modify your design..
+</pre>
+<p>"Manifold" means that it is "water tight" and that there are no holes in the geometry.
+In a valid 2-manifold each edge must connect exactly two facets.  That means that the program must be able to connect a face with an object. E.g. if you use a cube of height 10 to carve out something from a wider cube of height 10, it is not clear to which cube the top or the bottom belongs. So make the small extracting cube a bit "longer" (or "shorter"):
+</p>
+<pre>difference() {
+	// original
+	cube (size = [2,2,2]);
+	// object that carves out
+	<span class="err">#</span> translate ([0.5,0.5,-0.5]) {
+	    cube (size = [1,1,3]);	
+	}
+}
+</pre>
+<div class="thumb tnone"><div class="thumbinner" style="width:364px;"><a class="image" href="./imgs/Openscad-difference-cube-example.png"><img alt="" class="thumbimage" data-file-height="336" data-file-width="362" decoding="async" height="336" src="./imgs/Openscad-difference-cube-example.png" width="362"/></a>  <div class="thumbcaption">Correct use of difference</div></div></div>
+<p>Here is a more tricky little example taken from the <a class="external text" href="http://rocklinux.net/pipermail/openscad/2009-December/000018.html" rel="nofollow">OpenSCAD</a> Forum (retrieved 15:13, 22 March 2010 (UTC)):
+</p>
+<pre>module example1() {
+		cube([20, 20, 20]);
+		translate([-20, -20, 0]) cube([20, 20, 20]);
+		cube([50, 50, 5], center = true);
+	}
+module example2() {
+		cube([20.1, 20.1, 20]);
+		translate([-20, -20, 0]) cube([20.1, 20.1, 20]);
+		cube([50, 50, 5], center = true);
+	}
+</pre>
+<p>Example1 would render like this:
+</p>
+<div class="thumb tnone"><div class="thumbinner" style="width:380px;"><a class="image" href="./imgs/Openscad-no-simple-object.png"><img alt="" class="thumbimage" data-file-height="342" data-file-width="378" decoding="async" height="342" src="./imgs/Openscad-no-simple-object.png" width="378"/></a>  <div class="thumbcaption">A not valid 2-manifold cube (simple = no)</div></div></div>
+<p>The <b>example1</b> module is not a valid 2-manifold because both cubes are
+sharing one edge. They touch each other but do not intersect.
+</p><p><b>Example2</b> is a valid 2-manifold because there is an intersection. Now the construct meets the 2-manifold constraint stipulating that <i>each edge  must connect exactly two facets.</i> 
+</p><p>Pieces you are subtracting must extend past the original part. (<a class="external text" href="http://www.iheartrobotics.com/2010/01/openscad-tip-manifold-space-and-time.html" rel="nofollow">OpenSCAD Tip: Manifold Space and Time</a>, retrieved 18:40, 22 March 2010 (UTC)).
+</p><p>For reference, another situation that causes the design to be non-exportable is when two faces that are each the result of a subtraction touch. Then the error message comes up.
+</p>
+<pre>difference () {
+   cube ([20,10,10]);
+   translate ([10,0,0]) cube (10);
+}
+difference () {
+   cube ([20,10,10]);
+   cube (10);
+}
+</pre>
+<p>simply touching surfaces is correctly handled. 
+</p>
+<pre>translate ([10,0,0]) cube (10);
+cube (10);
+</pre>
+
+
+
+
+</div><footer class="mw-body" style="font-size:13px;color:darkgray;text-align:center;margin-bottom:-1px">
+	From the WikiBooks article <a href="https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/STL_Export" style="color:black">STL Export</a> 
+	(provided under <a href="https://creativecommons.org/licenses/by-sa/3.0/" style="color:black">
+	CC-BY-SA-3.0</a>)</footer></body></html>

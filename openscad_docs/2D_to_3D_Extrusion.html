@@ -1,0 +1,258 @@
+<html><head><title>2D to 3D Extrusion</title><link href="./styles/style.css" rel="stylesheet"/></head><body class="mw-body" style="height:auto"><h1 class="firstHeading" id="firstHeading">2D to 3D Extrusion</h1><div id="bodyContent">
+<p><a class="extiw" href="https://en.wikipedia.org/wiki/Extrusion" title="w:Extrusion">Extrusion</a> is the process of creating an object with a fixed cross-sectional profile.  OpenSCAD provides two commands to create 3D solids from a 2D shape: linear_extrude() and rotate_extrude(). Linear extrusion is similar to pushing Playdoh through a press with a die of a specific shape. 
+</p>
+<div class="thumb tright"><div class="thumbinner" style="width:222px;"><a class="image" href="./imgs/220px-Playdoh.jpg"><img alt="" class="thumbimage" data-file-height="791" data-file-width="1000" decoding="async" height="174" src="./imgs/220px-Playdoh.jpg" width="220"/></a>  <div class="thumbcaption">linear_extrude() works like a Playdoh extrusion press</div></div></div>
+<p>Rotational extrusion is similar to the process of <a class="extiw" href="https://en.wikipedia.org/wiki/Turning" title="w:Turning">turning</a> or "throwing" a bowl on the <a class="extiw" href="https://en.wikipedia.org/wiki/Potter%27s_wheel" title="w:Potter's wheel">Potter's wheel</a>.
+</p>
+<div class="thumb tright"><div class="thumbinner" style="width:222px;"><a class="image" href="./imgs/220px-Potter_in_Rabka_04.JPG"><img alt="" class="thumbimage" data-file-height="2448" data-file-width="3264" decoding="async" height="165" src="./imgs/220px-Potter_in_Rabka_04.JPG" width="220"/></a>  <div class="thumbcaption">rotate_extrude() emulates throwing a vessel</div></div></div>
+<p>Both extrusion methods work on a (possibly disjointed) 2D shape which exists on the X-Y plane. While transformations that operates on both 2D shapes and 3D solids can move a shape off the X-Y plane, when the extrusion is performed the end result is not very intuitive.  What actually happens is that any information in the third coordinate (the Z coordinate) is ignored for any 2D shape, this process amounts to an implicit <a href="3D_to_2D_Projection.html" title="OpenSCAD User Manual/3D to 2D Projection">projection()</a> performed on any 2D shape before the extrusion is executed.  It is recommended to perform extrusion on shapes that remains strictly on the X-Y plane.
+</p>
+<div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2></div>
+<ul style="list-style-image:none">
+<li><a href="#Linear_Extrude"><span class="tocnumber">1</span> Linear Extrude</a>
+<ul style="list-style-image:none">
+<li><a href="#Usage"><span class="tocnumber">1.1</span> Usage</a></li>
+<li><a href="#Twist"><span class="tocnumber">1.2</span> Twist</a></li>
+<li><a href="#Center"><span class="tocnumber">1.3</span> Center</a></li>
+<li><a href="#Mesh_Refinement"><span class="tocnumber">1.4</span> Mesh Refinement</a></li>
+<li><a href="#Scale"><span class="tocnumber">1.5</span> Scale</a></li>
+</ul>
+</li>
+<li><a href="#Rotate_Extrude"><span class="tocnumber">2</span> Rotate Extrude</a></li>
+<li><a href="#Parameters"><span class="tocnumber">3</span> Parameters</a>
+<ul style="list-style-image:none">
+<li><a href="#Usage_2"><span class="tocnumber">3.1</span> Usage</a></li>
+<li><a href="#Examples"><span class="tocnumber">3.2</span> Examples</a></li>
+<li><a href="#Mesh_Refinement_2"><span class="tocnumber">3.3</span> Mesh Refinement</a></li>
+<li><a href="#Extruding_a_Polygon"><span class="tocnumber">3.4</span> Extruding a Polygon</a></li>
+</ul>
+</li>
+<li><a href="#Description_of_extrude_parameters"><span class="tocnumber">4</span> Description of extrude parameters</a>
+<ul style="list-style-image:none">
+<li><a href="#Extrude_parameters_for_all_extrusion_modes"><span class="tocnumber">4.1</span> Extrude parameters for all extrusion modes</a></li>
+<li><a href="#Extrude_parameters_for_linear_extrusion_only"><span class="tocnumber">4.2</span> Extrude parameters for linear extrusion only</a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h3>Linear Extrude</h3>
+<p>Linear Extrusion is a operation that takes a 2D object as input and generates a 3D object as a result. 
+</p><p>In OpenSCAD Extrusion is always performed on the projection (shadow) of the 2d object xy plane and along the <b>Z</b> axis; so if you rotate or apply other transformations to the 2d object before extrusion, its shadow shape is what is extruded.
+</p><p>Although the extrusion is linear along the <b>Z</b> axis, a twist parameter is available that causes the object to be rotated around the <b>Z</b> axis as it is extruding upward. This can be used to rotate the object at it's center, as if it is a spiral pillar, or produce a helical extrusion around the <b>Z</b> axis, like a pig's tail.
+</p><p>A scale parameter is also included so that the object can be expanded or contracted over the extent of the extrusion, allowing extrusions to be flared inward or outward.
+</p>
+<h4>Usage</h4>
+<pre>linear_extrude(height = 5, center = true, convexity = 10, twist = -fanrot, slices = 20, scale = 1.0, $fn = 16) {...}
+</pre>
+<p>You must use parameter names due to a backward compatibility issue.
+</p><p><code>height</code> must be positive.
+</p><p><code>$fn</code> is optional and specifies the resolution of the linear_extrude (higher number brings more "smoothness", but more computation time is needed).
+</p><p>If the extrusion fails for a non-trivial 2D shape, try setting the convexity parameter (the default is not 10, but 10 is a "good" value to try). See explanation further down.
+</p>
+<h4>Twist</h4>
+<p>Twist is the number of degrees of through which the shape is extruded. Setting the parameter twist = 360 extrudes through one revolution. The twist direction follows the left hand rule.
+</p><p><a class="image" href="./imgs/400px-Openscad_linext_01.jpg" title="twist = 0"><img alt="twist = 0" data-file-height="924" data-file-width="1232" decoding="async" height="300" src="./imgs/400px-Openscad_linext_01.jpg" width="400"/></a>
+</p><p><b>0° of Twist</b>
+</p>
+<pre>linear_extrude(height = 10, center = true, convexity = 10, twist = 0)
+translate([2, 0, 0])
+circle(r = 1);
+</pre>
+<p><a class="image" href="./imgs/400px-Openscad_linext_02.jpg" title="twist = -100"><img alt="twist = -100" data-file-height="924" data-file-width="1232" decoding="async" height="300" src="./imgs/400px-Openscad_linext_02.jpg" width="400"/></a>
+</p><p><b>-100° of Twist</b>
+</p>
+<pre>linear_extrude(height = 10, center = true, convexity = 10, twist = -100)
+translate([2, 0, 0])
+circle(r = 1);
+</pre>
+<p><a class="image" href="./imgs/400px-Openscad_linext_03.jpg" title="twist = 100"><img alt="twist = 100" data-file-height="924" data-file-width="1232" decoding="async" height="300" src="./imgs/400px-Openscad_linext_03.jpg" width="400"/></a>
+</p><p><b>100° of Twist</b>
+</p>
+<pre>linear_extrude(height = 10, center = true, convexity = 10, twist = 100)
+translate([2, 0, 0])
+circle(r = 1);
+</pre>
+<p><a class="image" href="./imgs/400px-Openscad_linext_04.jpg" title="twist = -500"><img alt="twist = -500" data-file-height="924" data-file-width="1232" decoding="async" height="300" src="./imgs/400px-Openscad_linext_04.jpg" width="400"/></a>
+</p><p><b>-500° of Twist</b>
+</p>
+<pre>linear_extrude(height = 10, center = true, convexity = 10, twist = -500)
+translate([2, 0, 0])
+circle(r = 1);
+</pre>
+<h4>Center</h4>
+<p>It is similar to the parameter center of cylinders. If <code>center</code> is false the linear extrusion Z range is from 0 to height; if it is true, the range is from -height/2 to height/2.
+</p><p><br/>
+<a class="image" href="./imgs/400px-Openscad_linext_04.jpg" title="center = true"><img alt="center = true" data-file-height="924" data-file-width="1232" decoding="async" height="300" src="./imgs/400px-Openscad_linext_04.jpg" width="400"/></a>
+</p><p><b>center = true</b>
+</p>
+<pre>linear_extrude(height = 10, center = true, convexity = 10, twist = -500)
+translate([2, 0, 0])
+circle(r = 1);
+</pre>
+<p><br/>
+<a class="image" href="./imgs/400px-Openscad_linext_05.jpg" title="center = false"><img alt="center = false" data-file-height="924" data-file-width="1232" decoding="async" height="300" src="./imgs/400px-Openscad_linext_05.jpg" width="400"/></a>
+</p><p><b>center = false</b>
+</p>
+<pre>linear_extrude(height = 10, center = false, convexity = 10, twist = -500)
+translate([2, 0, 0])
+circle(r = 1);
+</pre>
+<h4>Mesh Refinement</h4>
+<p>The slices parameter defines the number of intermediate points along the Z axis of the extrusion. Its default increases with the value of twist. Explicitly setting slices may improve the output refinement.
+</p><p><a class="image" href="./imgs/400px-Openscad_linext_06.jpg" title="slices = 100"><img alt="slices = 100" data-file-height="924" data-file-width="1232" decoding="async" height="300" src="./imgs/400px-Openscad_linext_06.jpg" width="400"/></a>
+</p>
+<pre>linear_extrude(height = 10, center = false, convexity = 10, twist = 360, slices = 100)
+translate([2, 0, 0])
+circle(r = 1);
+</pre>
+<p>The <a href="Other_Language_Features.html" title="OpenSCAD User Manual/Other Language Features">special variables</a> $fn, $fs and $fa can also be used to improve the output. If slices is not defined, its value is taken from the defined $fn value.
+</p><p><a class="image" href="./imgs/400px-Openscad_linext_07.jpg" title="$fn = 100"><img alt="$fn = 100" data-file-height="924" data-file-width="1232" decoding="async" height="300" src="./imgs/400px-Openscad_linext_07.jpg" width="400"/></a>
+</p>
+<pre>linear_extrude(height = 10, center = false, convexity = 10, twist = 360, $fn = 100)
+translate([2, 0, 0])
+circle(r = 1);
+</pre>
+<h4>Scale</h4>
+<p>Scales the 2D shape by this value over the height of the extrusion. Scale can be a scalar or a vector:
+</p>
+<pre> linear_extrude(height = 10, center = true, convexity = 10, scale=3)
+ translate([2, 0, 0])
+ circle(r = 1);
+</pre>
+<p><a class="image" href="./imgs/400px-Openscad_linext_09.png" title="OpenScad linear_extrude scale example"><img alt="OpenScad linear_extrude scale example" data-file-height="500" data-file-width="769" decoding="async" height="260" src="./imgs/400px-Openscad_linext_09.png" width="400"/></a>
+</p>
+<pre> linear_extrude(height = 10, center = true, convexity = 10, scale=[1,5], $fn=100)
+ translate([2, 0, 0])
+ circle(r = 1);
+</pre>
+<p><a class="image" href="./imgs/400px-OpenScad_linear_extrude_scale_example2.png" title="OpenScad linear_extrude scale example2"><img alt="OpenScad linear_extrude scale example2" data-file-height="627" data-file-width="646" decoding="async" height="388" src="./imgs/400px-OpenScad_linear_extrude_scale_example2.png" width="400"/></a>
+</p><p>Note that if scale is a vector, the resulting side walls may be nonplanar.  Use <code>twist=0</code> and the <code>slices</code> parameter to avoid <a class="external text" href="https://github.com/openscad/openscad/issues/1341" rel="nofollow">asymmetry</a>.
+</p>
+<pre> linear_extrude(height=10, scale=[1,0.1], slices=20, twist=0)
+ polygon(points=[[0,0],[20,10],[20,-10]]);
+</pre>
+<h3>Rotate Extrude</h3>
+<p>Rotational extrusion spins a 2D shape around the Z-axis to form a solid which has rotational symmetry.  One way to think of this operation is to imagine a Potter's wheel placed on the X-Y plane with its axis of rotation pointing up towards +Z.  Then place the to-be-made object on this virtual Potter's wheel (possibly extending down below the X-Y plane towards -Z). The to-be-made object is the cross-section of the object on the X-Y plane (keeping only the right half, X &gt;= 0).  That is the 2D shape that will be fed to rotate_extrude() as the child in order to generate this solid.  Note that the object started on the X-Y plane but is tilted up (rotated +90 degrees about the X-axis) to extrude. 
+</p><p>Since a 2D shape is rendered by OpenSCAD on the X-Y plane, an alternative way to think of this operation is as follows: spins a 2D shape around the Y-axis to form a solid.  The resultant solid is placed so that its axis of rotation lies along the Z-axis.  
+</p><p>Just like the linear_extrude, the extrusion is always performed on the projection of the 2D polygon to the XY plane. 
+Transformations like rotate, translate, etc. applied to the 2D polygon before extrusion modify the projection of the 2D polygon to the XY plane and therefore also modify the appearance of the final 3D object.
+</p>
+<ul style="list-style-image:none"><li>A translation in Z of the 2D polygon has no effect on the result (as also the projection is not affected).</li>
+<li>A translation in X increases the diameter of the final object.</li>
+<li>A translation in Y results in a shift of the final object in Z direction.</li>
+<li>A rotation about the X or Y axis distorts the cross section of the final object, as also the projection to the XY plane is distorted.</li></ul>
+<p>Don't get confused, as OpenSCAD renders 2D polygons with a certain height in the Z direction, so the 2D object (with its height) appears to have a bigger projection to the XY plane. 
+But for the projection to the XY plane and also for the later extrusion only the base polygon without height is used. 
+</p><p>It can not be used to produce a helix or screw threads.
+</p><p>The 2D shape <b>must</b> lie completely on either the right (recommended) or the left side of the Y-axis.  More precisely speaking, <b>every</b> vertex of the shape must have either x &gt;= 0 or x &lt;= 0.  If the shape spans the X axis a warning appears in the console windows and the rotate_extrude() is ignored. If the 2D shape touches the Y axis, i.e. at x=0, it <b>must</b> be a line that touches, not a point, as a point results in a zero thickness 3D object, which is invalid and results in a CGAL error. For OpenSCAD versions prior to 2016.xxxx, if the shape is in the negative axis the resulting faces are oriented inside-out, which may cause undesired effects.
+</p>
+<h3>Parameters</h3>
+<h4>Usage</h4>
+<pre>rotate_extrude(angle = 360, convexity = 2) {...}
+</pre>
+<div class="thumb tright"><div class="thumbinner" style="width:222px;"><a class="image" href="./imgs/220px-Right-hand_grip_rule.svg.png"><img alt="" class="thumbimage" data-file-height="350" data-file-width="350" decoding="async" height="220" src="./imgs/220px-Right-hand_grip_rule.svg.png" width="220"/></a>  <div class="thumbcaption">Right-hand grip rule</div></div></div>
+<p>You must use parameter names due to a backward compatibility issue.
+</p>
+<dl><dd><b>convexity</b> : If the extrusion fails for a non-trival 2D shape, try setting the convexity parameter (the default is not 10, but 10 is a "good" value to try). See explanation further down.</dd>
+<dd><b>angle</b>  <span style="font-weight: bold; font-style: normal;">[<span style="color: #A00000;">Note:</span> <span style="font-weight: normal; font-style: italic;">Requires version <span style="font-weight: bold;">2019.05</span></span>]</span> : Defaults to 360. Specifies the number of degrees to sweep, starting at the positive X axis.  The direction of the sweep follows the <a class="extiw" href="https://en.wikipedia.org/wiki/right-hand_rule" title="wikipedia:right-hand rule"> Right Hand Rule</a>, hence a negative angle sweeps clockwise.</dd>
+<dd><b>$fa</b> : minimum angle (in degrees) of each fragment.</dd>
+<dd><b>$fs</b> : minimum circumferential length of each fragment.</dd>
+<dd><b>$fn</b> : <b>fixed</b> number of fragments in 360 degrees. Values of 3 or more override $fa and $fs
+<dl><dd>$fa, $fs and $fn must be named parameters. <a href="Other_Language_Features.html" title="OpenSCAD User Manual/Other Language Features">click here for more details,</a>.</dd></dl></dd></dl>
+<h4>Examples</h4>
+<div class="floatleft"><a class="image" href="./imgs/400px-Rotate_extrude_wiki_2D.jpg"><img alt="Rotate extrude wiki 2D.jpg" data-file-height="563" data-file-width="745" decoding="async" height="302" src="./imgs/400px-Rotate_extrude_wiki_2D.jpg" width="400"/></a></div><p><big><big>→</big></big><a class="image" href="./imgs/400px-Openscad_rotext_01.jpg"><img alt="Openscad rotext 01.jpg" data-file-height="924" data-file-width="1232" decoding="async" height="300" src="./imgs/400px-Openscad_rotext_01.jpg" width="400"/></a>
+</p><p>A simple torus can be constructed using a rotational extrude.
+</p>
+<pre>rotate_extrude(convexity = 10)
+translate([2, 0, 0])
+circle(r = 1);
+</pre>
+<h4>Mesh Refinement</h4>
+<div class="floatleft"><a class="image" href="./imgs/380px-Rotate_extrude_wiki_2D_C.jpg"><img alt="Rotate extrude wiki 2D C.jpg" data-file-height="557" data-file-width="687" decoding="async" height="308" src="./imgs/380px-Rotate_extrude_wiki_2D_C.jpg" width="380"/></a></div><p><big><big>→</big></big><a class="image" href="./imgs/400px-Openscad_rotext_02.jpg"><img alt="Openscad rotext 02.jpg" data-file-height="924" data-file-width="1232" decoding="async" height="300" src="./imgs/400px-Openscad_rotext_02.jpg" width="400"/></a>
+</p><p>Increasing the number of fragments composing the 2D shape improves the quality of the mesh, but takes longer to render.
+</p>
+<pre>rotate_extrude(convexity = 10)
+translate([2, 0, 0])
+circle(r = 1, $fn = 100);
+</pre>
+<div class="floatleft"><a class="image" href="./imgs/380px-Rotate_extrude_wiki_2D_C.jpg"><img alt="Rotate extrude wiki 2D C.jpg" data-file-height="557" data-file-width="687" decoding="async" height="308" src="./imgs/380px-Rotate_extrude_wiki_2D_C.jpg" width="380"/></a></div><p><big><big>→</big></big><a class="image" href="./imgs/400px-Openscad_rotext_03.jpg"><img alt="Openscad rotext 03.jpg" data-file-height="924" data-file-width="1232" decoding="async" height="300" src="./imgs/400px-Openscad_rotext_03.jpg" width="400"/></a>
+</p><p>The number of fragments used by the extrusion can also be increased.
+</p>
+<pre>rotate_extrude(convexity = 10, $fn = 100)
+translate([2, 0, 0])
+circle(r = 1, $fn = 100);
+</pre>
+<p>Using the parameter angle (with OpenSCAD versions 2016.xx), a hook can be modeled .
+</p>
+<div class="thumb tright"><div class="thumbinner" style="width:222px;"><a class="image" href="./imgs/220px-Hook.png"><img alt="" class="thumbimage" data-file-height="496" data-file-width="809" decoding="async" height="135" src="./imgs/220px-Hook.png" width="220"/></a>  <div class="thumbcaption">OpenSCAD - a hook</div></div></div>
+<pre>translate([0,60,0])
+   rotate_extrude(angle=270, convexity=10)
+       translate([40, 0]) circle(10);
+rotate_extrude(angle=90, convexity=10)
+   translate([20, 0]) circle(10);
+translate([20,0,0]) 
+   rotate([90,0,0]) cylinder(r=10,h=80);
+</pre>
+<h4>Extruding a Polygon</h4>
+<p>Extrusion can also be performed on polygons with points chosen by the user. 
+</p><p>Here is a simple polygon and its 200 step rotational extrusion. (Note it has been rotated 90 degrees to show how the rotation appears; the <code>rotate_extrude()</code> needs it flat).
+</p>
+<pre>rotate([90,0,0])        polygon( points=[[0,0],[2,1],[1,2],[1,3],[3,4],[0,5]] );
+</pre>
+<pre>rotate_extrude($fn=200) polygon( points=[[0,0],[2,1],[1,2],[1,3],[3,4],[0,5]] );
+</pre>
+<div class="floatleft"><a class="image" href="./imgs/300px-Rotate_extrude_wiki_2D_B.jpg"><img alt="Rotate extrude wiki 2D B.jpg" data-file-height="454" data-file-width="571" decoding="async" height="239" src="./imgs/300px-Rotate_extrude_wiki_2D_B.jpg" width="300"/></a></div><p><big><big><big>→</big></big></big><a class="image" href="./imgs/300px-Openscad_polygon_extrusion_1.png"><img alt="Openscad polygon extrusion 1.png" data-file-height="418" data-file-width="499" decoding="async" height="251" src="./imgs/300px-Openscad_polygon_extrusion_1.png" width="300"/></a><big><big><big>→</big></big></big><a class="image" href="./imgs/300px-Openscad_polygon_extrusion_2.png"><img alt="Openscad polygon extrusion 2.png" data-file-height="415" data-file-width="503" decoding="async" height="248" src="./imgs/300px-Openscad_polygon_extrusion_2.png" width="300"/></a>
+</p><p>For more information on polygons, please see: <a href="2D_Primitives.html#polygon" title="OpenSCAD User Manual/2D Primitives">2D Primitives: Polygon</a>.
+</p>
+<h3>Description of extrude parameters</h3>
+<h4>Extrude parameters for all extrusion modes</h4>
+<table border="1">
+
+<tbody><tr>
+<td>convexity
+</td>
+<td>Integer. The convexity parameter specifies the maximum number of front sides (or back sides) a ray intersecting the object might penetrate.
+<p>This parameter is only needed for correctly displaying the object in OpenCSG preview mode and has no effect on the polyhedron rendering.
+</p>
+</td></tr></tbody></table>
+<p><br/>
+<a class="image" href="./imgs/400px-Openscad_convexity.jpg"><img alt="Openscad convexity.jpg" data-file-height="924" data-file-width="1232" decoding="async" height="300" src="./imgs/400px-Openscad_convexity.jpg" width="400"/></a>
+</p><p>This image shows a 2D shape with a convexity of 2, as the ray indicated in red crosses the 2D shape a maximum of 4 times (2 front sides and 2 back sides). The convexity of a 3D shape would be determined in a similar way. Setting it to 10 should work fine for most cases. Just setting high numbers in general may result in slower preview rendering.
+</p>
+<h4>Extrude parameters for linear extrusion only</h4>
+<table border="1">
+
+<tbody><tr>
+<td>height
+</td>
+<td>The extrusion height
+</td></tr>
+<tr>
+<td>center
+</td>
+<td>If true, the solid is centered after extrusion
+</td></tr>
+<tr>
+<td>twist
+</td>
+<td>The extrusion twist in degrees
+</td></tr>
+<tr>
+<td>slices
+</td>
+<td>Similar to special variable $fn without being passed down to the child 2D shape.
+</td></tr>
+<tr>
+<td>scale
+</td>
+<td>Scales the 2D shape by this value over the height of the extrusion.
+</td></tr></tbody></table>
+
+
+
+
+</div><footer class="mw-body" style="font-size:13px;color:darkgray;text-align:center;margin-bottom:-1px">
+	From the WikiBooks article <a href="https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/2D_to_3D_Extrusion#Linear_Extrude" style="color:black">2D to 3D Extrusion</a> 
+	(provided under <a href="https://creativecommons.org/licenses/by-sa/3.0/" style="color:black">
+	CC-BY-SA-3.0</a>)</footer></body></html>

@@ -1,0 +1,28 @@
+<html><head><title>Offset Extrude</title><link href="./styles/style.css" rel="stylesheet"/></head><body class="mw-body" style="height:auto"><h1 class="firstHeading" id="firstHeading">Offset Extrude</h1><div id="bodyContent"><h3>Offset Extrude</h3>
+<p>Offset Extrusion is a operation that takes a 2D object as input and generates a 3D object as a result.
+</p><p>The extrusion takes place on the Z axis by first taking an offset of the 3d object, then extruding up/down to that offset.
+</p><p>A slices parameter is also available to increase the resolution of the extrusion, increasing the number of offsets.
+</p><p>See <a href="Transformations.html#offset" title="OpenSCAD User Manual/Transformations">offset()</a> for how the offsetting works.
+</p><p><b>Usage</b>
+</p><p><code>
+offset_extrude(height, r = 1, slices = 1, center = false[, $fn, $fa, $fs]) {...}
+</code></p><p><code>offset_extrude(height, delta = 1, slices = 1, chamfer = false, center = false[, $fn, $fa, $fs]) {...}
+</code>
+</p><p><b>Parameters</b>
+</p><p><code>height</code> is the height of the extrude. It can  be positive or negative.
+</p><p><code>slices</code> is the number of slices to make, with an offset at each slice. It must be greater than or equal to 1.
+</p><p><code>r</code>, <code>delta</code>, and <code>chamfer</code> define the offset function. It works exactly the same as <a href="Transformations.html#offset" title="OpenSCAD User Manual/Transformations">offset()</a>.
+</p><p><code>center</code> defines if the extrusion should be centered on the Z-Axis at the current 2d objects height.
+</p><p><b>Possible Issues</b>
+</p><p>If an offset causes the resulting model to not generate, try increasing the number of <code>slices</code>. In many cases this will resolve any issues.
+</p><p>If an offset causes a resulting model to self-intersect, the resulting geometry may or may not be manifold.
+</p><p>There are other trivial cases where the resulting model is not valid, in which case using <code>linear_extrude</code> with scale may be a better solution.
+</p>
+
+
+
+
+</div><footer class="mw-body" style="font-size:13px;color:darkgray;text-align:center;margin-bottom:-1px">
+	From the WikiBooks article <a href="https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/WIP/Offset_Extrude" style="color:black">Offset Extrude</a> 
+	(provided under <a href="https://creativecommons.org/licenses/by-sa/3.0/" style="color:black">
+	CC-BY-SA-3.0</a>)</footer></body></html>

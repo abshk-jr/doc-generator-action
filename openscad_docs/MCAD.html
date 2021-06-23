@@ -1,0 +1,466 @@
+<html><head><title>MCAD</title><link href="./styles/style.css" rel="stylesheet"/></head><body class="mw-body" style="height:auto"><h1 class="firstHeading" id="firstHeading">MCAD</h1><div id="bodyContent"><p>NOTE: WIP
+</p><p><br/>
+</p>
+<div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2></div>
+<ul style="list-style-image:none">
+<li><a href="#Overview_of_MCAD_Library"><span class="tocnumber">1</span> Overview of MCAD Library</a></li>
+<li><a href="#Usage"><span class="tocnumber">2</span> Usage</a></li>
+<li><a href="#MCAD/regular_shapes.scad"><span class="tocnumber">3</span> MCAD/regular_shapes.scad</a>
+<ul style="list-style-image:none">
+<li><a href="#2D_regular_shapes"><span class="tocnumber">3.1</span> 2D regular shapes</a>
+<ul style="list-style-image:none">
+<li><a href="#regular_polygon(sides,_radius),_or_in_older_libraries,_reg_polygon(sides,_radius)"><span class="tocnumber">3.1.1</span> regular_polygon(sides, radius), <i>or in older libraries,</i> reg_polygon(sides, radius)</a></li>
+<li><a href="#n-gons_2D_shapes"><span class="tocnumber">3.1.2</span> n-gons 2D shapes</a>
+<ul style="list-style-image:none">
+<li><a href="#triangle(radius)"><span class="tocnumber">3.1.2.1</span> triangle(radius)</a></li>
+<li><a href="#pentagon(radius)"><span class="tocnumber">3.1.2.2</span> pentagon(radius)</a></li>
+<li><a href="#hexagon(radius)"><span class="tocnumber">3.1.2.3</span> hexagon(radius)</a></li>
+<li><a href="#heptagon(radius)"><span class="tocnumber">3.1.2.4</span> heptagon(radius)</a></li>
+<li><a href="#octagon(radius)"><span class="tocnumber">3.1.2.5</span> octagon(radius)</a></li>
+<li><a href="#nonagon(radius)"><span class="tocnumber">3.1.2.6</span> nonagon(radius)</a></li>
+<li><a href="#decagon(radius)"><span class="tocnumber">3.1.2.7</span> decagon(radius)</a></li>
+<li><a href="#hendecagon(radius)"><span class="tocnumber">3.1.2.8</span> hendecagon(radius)</a></li>
+<li><a href="#dodecagon(radius)"><span class="tocnumber">3.1.2.9</span> dodecagon(radius)</a></li>
+</ul>
+</li>
+<li><a href="#ring(inside_diameter,_thickness)"><span class="tocnumber">3.1.3</span> ring(inside_diameter, thickness)</a></li>
+<li><a href="#ellipse(width,_height)"><span class="tocnumber">3.1.4</span> ellipse(width, height)</a></li>
+<li><a href="#egg_outline(width,_length)"><span class="tocnumber">3.1.5</span> egg_outline(width, length)</a></li>
+</ul>
+</li>
+<li><a href="#3D_regular_shapes"><span class="tocnumber">3.2</span> 3D regular shapes</a>
+<ul style="list-style-image:none">
+<li><a href="#cone(height,_radius,_center_=_false)"><span class="tocnumber">3.2.1</span> cone(height, radius, center = false)</a></li>
+<li><a href="#oval_prism(height,_rx,_ry,_center_=_false)"><span class="tocnumber">3.2.2</span> oval_prism(height, rx, ry, center = false)</a></li>
+<li><a href="#oval_tube(height,_rx,_ry,_wall,_center_=_false)"><span class="tocnumber">3.2.3</span> oval_tube(height, rx, ry, wall, center = false)</a></li>
+<li><a href="#cylinder_tube(height,_radius,_wall,_center_=_false)"><span class="tocnumber">3.2.4</span> cylinder_tube(height, radius, wall, center = false)</a></li>
+<li><a href="#triangle_prism(height,radius)"><span class="tocnumber">3.2.5</span> triangle_prism(height,radius)</a></li>
+<li><a href="#triangle_tube(height,radius,wall)"><span class="tocnumber">3.2.6</span> triangle_tube(height,radius,wall)</a></li>
+<li><a href="#pentagon_prism(height,radius)"><span class="tocnumber">3.2.7</span> pentagon_prism(height,radius)</a></li>
+<li><a href="#pentagon_tube(height,radius,wall)"><span class="tocnumber">3.2.8</span> pentagon_tube(height,radius,wall)</a></li>
+<li><a href="#hexagon_prism(height,radius)"><span class="tocnumber">3.2.9</span> hexagon_prism(height,radius)</a></li>
+<li><a href="#hexagon_tube(height,radius,wall)"><span class="tocnumber">3.2.10</span> hexagon_tube(height,radius,wall)</a></li>
+<li><a href="#heptagon_prism(height,radius)"><span class="tocnumber">3.2.11</span> heptagon_prism(height,radius)</a></li>
+<li><a href="#heptagon_tube(height,radius,wall)"><span class="tocnumber">3.2.12</span> heptagon_tube(height,radius,wall)</a></li>
+<li><a href="#octagon_prism(height,radius)"><span class="tocnumber">3.2.13</span> octagon_prism(height,radius)</a></li>
+<li><a href="#octagon_tube(height,radius,wall)"><span class="tocnumber">3.2.14</span> octagon_tube(height,radius,wall)</a></li>
+<li><a href="#nonagon_prism(height,radius)"><span class="tocnumber">3.2.15</span> nonagon_prism(height,radius)</a></li>
+<li><a href="#decagon_prism(height,radius)"><span class="tocnumber">3.2.16</span> decagon_prism(height,radius)</a></li>
+<li><a href="#hendecagon_prism(height,radius)"><span class="tocnumber">3.2.17</span> hendecagon_prism(height,radius)</a></li>
+<li><a href="#dodecagon_prism(height,radius)"><span class="tocnumber">3.2.18</span> dodecagon_prism(height,radius)</a></li>
+<li><a href="#torus(outerRadius,_innerRadius)"><span class="tocnumber">3.2.19</span> torus(outerRadius, innerRadius)</a></li>
+<li><a href="#torus2(r1,_r2)"><span class="tocnumber">3.2.20</span> torus2(r1, r2)</a></li>
+<li><a href="#oval_torus(inner_radius,_thickness=[0,_0])"><span class="tocnumber">3.2.21</span> oval_torus(inner_radius, thickness=[0, 0])</a></li>
+<li><a href="#triangle_pyramid(radius)"><span class="tocnumber">3.2.22</span> triangle_pyramid(radius)</a></li>
+<li><a href="#square_pyramid(base_x,_base_y,_height)"><span class="tocnumber">3.2.23</span> square_pyramid(base_x, base_y, height)</a></li>
+<li><a href="#egg(width,_length)"><span class="tocnumber">3.2.24</span> egg(width, length)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#MCAD/involute_gears.scad"><span class="tocnumber">4</span> MCAD/involute_gears.scad</a>
+<ul style="list-style-image:none">
+<li><a href="#bevel_gear_pair()"><span class="tocnumber">4.1</span> bevel_gear_pair()</a></li>
+<li><a href="#bevel_gear()"><span class="tocnumber">4.2</span> bevel_gear()</a></li>
+<li><a href="#gear()"><span class="tocnumber">4.3</span> gear()</a></li>
+<li><a href="#Tests"><span class="tocnumber">4.4</span> Tests</a>
+<ul style="list-style-image:none">
+<li><a href="#test_gears()"><span class="tocnumber">4.4.1</span> test_gears()</a></li>
+<li><a href="#test_meshing_double_helix()"><span class="tocnumber">4.4.2</span> test_meshing_double_helix()</a></li>
+<li><a href="#test_bevel_gear()"><span class="tocnumber">4.4.3</span> test_bevel_gear()</a></li>
+<li><a href="#test_bevel_gear_pair()"><span class="tocnumber">4.4.4</span> test_bevel_gear_pair()</a></li>
+<li><a href="#test_backlash()"><span class="tocnumber">4.4.5</span> test_backlash()</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#MCAD/teardrop.scad"><span class="tocnumber">5</span> MCAD/teardrop.scad</a></li>
+<li><a href="#MCAD/stepper.scad"><span class="tocnumber">6</span> MCAD/stepper.scad</a></li>
+<li><a href="#MCAD/nuts_and_bolts.scad"><span class="tocnumber">7</span> MCAD/nuts_and_bolts.scad</a></li>
+<li><a href="#MCAD/2Dshapes.scad"><span class="tocnumber">8</span> MCAD/2Dshapes.scad</a></li>
+</ul>
+</div>
+
+<h2>Overview of MCAD Library</h2>
+<p>Download source: github dot com/openscad/MCAD
+</p><p>The MCAD library contains components commonly used in designing and making mockup mechanical designs. It is currently unfinished and you can expect some API changes, however many things are already working.
+</p><p>This library was created by various authors as named in the individual files' comments. All the files are licensed under the LGPL 2.1 (see creativecommons dot org/licenses/LGPL/2.1/ or the included file lgpl-2.1.txt), some of them allow distribution under more permissive terms (as described in the files' comments).
+</p>
+<h2>Usage</h2>
+<p>You can import these files in your scripts with use &lt;MCAD/filename.scad&gt;, where 'filename' is one of the files listed below like 'motors' or 'servos'. Some files include useful constants that are available with include &lt;MCAD/filename.scad&gt;, which should be safe to use on all included files (ie. no top level code should create geometry). (There is a bug/feature that prevents including constants from files that "include" other files - see the openscad mailing list archives for more details. Since the maintainers aren't very responsive, may have to work around this somehow)
+</p><p>If you host your project in git, you can do git submodule add URL PATH in your repo to import this library as a git submodule for easy usage. Then you need to do a git submodule update --init after cloning. When you want to update the submodule, do cd PATH; git checkout master; git pull. See git help submodule for more info.
+</p><p><u>Currently Provided Tools</u>:
+</p>
+<ul style="list-style-image:none"><li><b>regular_shapes.scad</b>
+<ul style="list-style-image:none"><li>regular polygons, ie. 2D</li>
+<li>regular polyhedrons, ie. 3D</li></ul></li>
+<li><b>involute_gears.scad</b> (<a class="external text" href="http://www.thingiverse.com/thing:3575" rel="nofollow">on Thingiverse</a>):
+<ul style="list-style-image:none"><li>gear()</li>
+<li>bevel_gear()</li>
+<li>bevel_gear_pair()</li></ul></li>
+<li><b>gears.scad</b> (Old version):
+<ul style="list-style-image:none"><li>gear(number_of_teeth, circular_pitch OR diametrial_pitch, pressure_angle OPTIONAL, clearance OPTIONAL)</li></ul></li>
+<li><b>motors.scad</b>:
+<ul style="list-style-image:none"><li>stepper_motor_mount(nema_standard, slide_distance OPTIONAL, mochup OPTIONAL)</li></ul></li></ul>
+<p><u>Tools (alpha and beta quality)</u>:
+</p>
+<ul style="list-style-image:none"><li><b>nuts_and_bolts.scad</b>: for creating metric and imperial bolt/nut holes</li>
+<li><b>bearing.scad</b>: standard/custom bearings</li>
+<li><b>screw.scad</b>: screws and augers</li>
+<li><b>materials.scad</b>: color definitions for different materials</li>
+<li><b>stepper.scad</b>: NEMA standard stepper outlines</li>
+<li><b>servos.scad</b>: servo outlines</li>
+<li><b>boxes.scad</b>: box with rounded corners</li>
+<li><b>triangles.scad</b>: simple triangles</li>
+<li><b>3d_triangle.scad</b>: more advanced triangles</li></ul>
+<p><u>Very generally useful functions and constants</u>:
+</p>
+<ul style="list-style-image:none"><li><b>math.scad</b>: general math functions</li>
+<li><b>constants.scad</b>: mathematical constants</li>
+<li><b>curves.scad</b>: mathematical functions defining curves</li>
+<li><b>units.scad</b>: easy metric units</li>
+<li><b>utilities.scad</b>: geometric funtions and misc. useful stuff</li>
+<li><b>teardrop.scad</b> (www dot thingiverse dot com/thing:3457): parametric teardrop module</li>
+<li>shapes.scad: DEPRECATED simple shapes by Catarina Mota</li>
+<li><b>polyholes.scad</b>: holes that should come out well when printed</li></ul>
+<p><u>Other</u>:
+</p>
+<ul style="list-style-image:none"><li>alphabet_block.scad</li>
+<li>bitmap.scad</li>
+<li>letter_necklace.scad</li>
+<li>name_tag.scad</li>
+<li>height_map.scad</li>
+<li>trochoids.scad</li>
+<li>libtriangles.scad</li>
+<li>layouts.scad</li>
+<li>transformations.scad</li>
+<li>2Dshapes.scad</li>
+<li>gridbeam.scad</li>
+<li>fonts.scad</li>
+<li>unregular_shapes.scad</li></ul>
+<p>Umetric_fastners.scad
+</p>
+<ul style="list-style-image:none"><li>lego_compatibility.scad</li>
+<li>multiply.scad</li>
+<li>hardware.scad</li></ul>
+<p><u>External utils that generate and process openscad code</u>:
+</p>
+<ul style="list-style-image:none"><li>openscad_testing.py: testing code, see below</li>
+<li>openscad_utils.py: code for scraping function names etc.</li></ul>
+<h2>MCAD/regular_shapes.scad</h2>
+<h3>2D regular shapes</h3>
+<h4>regular_polygon(sides, radius), <i>or in older libraries,</i> reg_polygon(sides, radius)</h4>
+<h4>n-gons 2D shapes</h4>
+<p>Example: 
+</p>
+<div class="thumb tright"><div class="thumbinner" style="width:222px;"><a class="image" href="./imgs/220px-MCAD_regular_shapes_2D_shapes.png"><img alt="" class="thumbimage" data-file-height="208" data-file-width="553" decoding="async" height="83" src="./imgs/220px-MCAD_regular_shapes_2D_shapes.png" width="220"/></a>  <div class="thumbcaption">Screenshot of regular 2D shapes with varying number of sides</div></div></div>
+<pre>use &lt;MCAD/regular_shapes.scad&gt;
+
+radius = 5;
+
+translate([00,0,0]) triangle(radius);
+translate([10,0,0]) pentagon(radius);
+translate([20,0,0]) hexagon(radius);
+translate([30,0,0]) heptagon(radius);
+translate([40,0,0]) octagon(radius);
+translate([50,0,0]) nonagon(radius);
+translate([60,0,0]) decagon(radius);
+translate([70,0,0]) hendecagon(radius);
+translate([80,0,0]) dodecagon(radius);
+</pre>
+<h5>triangle(radius)</h5>
+<h5>pentagon(radius)</h5>
+<h5>hexagon(radius)</h5>
+<h5>heptagon(radius)</h5>
+<h5>octagon(radius)</h5>
+<h5>nonagon(radius)</h5>
+<h5>decagon(radius)</h5>
+<h5>hendecagon(radius)</h5>
+<h5>dodecagon(radius)</h5>
+<h4>ring(inside_diameter, thickness)</h4><p>
+Example:  </p><div class="thumb tright"><div class="thumbinner" style="width:174px;"><a class="image" href="./imgs/MCAD_regular_shapes_ring.png"><img alt="" class="thumbimage" data-file-height="139" data-file-width="172" decoding="async" height="139" src="./imgs/MCAD_regular_shapes_ring.png" width="172"/></a>  <div class="thumbcaption">Screenshot of ring shape</div></div></div>
+<pre>use &lt;MCAD/regular_shapes.scad&gt;
+ring(10, 5);
+</pre>
+<h4>ellipse(width, height)</h4><p>
+Example: </p><div class="thumb tright"><div class="thumbinner" style="width:222px;"><a class="image" href="./imgs/220px-MCAD_regular_shapes_ellipse.png"><img alt="" class="thumbimage" data-file-height="163" data-file-width="276" decoding="async" height="130" src="./imgs/220px-MCAD_regular_shapes_ellipse.png" width="220"/></a>  <div class="thumbcaption">Screenshot of ellipse()</div></div></div>
+<pre>use &lt;MCAD/regular_shapes.scad&gt;
+ellipse(30, 15);
+</pre>
+<h4>egg_outline(width, length)</h4><p>
+Example: </p><div class="thumb tright"><div class="thumbinner" style="width:151px;"><a class="image" href="./imgs/MCAD_regular_shapes_egg_outline.png"><img alt="" class="thumbimage" data-file-height="163" data-file-width="149" decoding="async" height="163" src="./imgs/MCAD_regular_shapes_egg_outline.png" width="149"/></a>  <div class="thumbcaption">Screenshot of Egg_outline()</div></div></div>
+<pre>use &lt;MCAD/regular_shapes.scad&gt;
+egg_outline(10, 15);
+</pre>
+<h3>3D regular shapes</h3>
+<h4>cone(height, radius, center = false)</h4>
+<p>Example: 
+</p>
+<div class="thumb tright"><div class="thumbinner" style="width:215px;"><a class="image" href="./imgs/MCAD_regular_shapes_cone.png"><img alt="" class="thumbimage" data-file-height="203" data-file-width="213" decoding="async" height="203" src="./imgs/MCAD_regular_shapes_cone.png" width="213"/></a>  <div class="thumbcaption">Screenshot of cone()</div></div></div>
+<pre>use &lt;MCAD/regular_shapes.scad&gt;
+cone(20, 10);
+</pre>
+<h4>oval_prism(height, rx, ry, center = false)</h4>
+<p>Example: 
+</p>
+<div class="thumb tright"><div class="thumbinner" style="width:222px;"><a class="image" href="./imgs/220px-MCAD_regular_shapes_oval_prism.png"><img alt="" class="thumbimage" data-file-height="291" data-file-width="222" decoding="async" height="288" src="./imgs/220px-MCAD_regular_shapes_oval_prism.png" width="220"/></a>  <div class="thumbcaption">Screenshot of oval_prism()</div></div></div>
+<pre>use &lt;MCAD/regular_shapes.scad&gt;
+oval_prism(20, 15, 5);
+</pre>
+<h4>oval_tube(height, rx, ry, wall, center = false)</h4><p>
+Example: </p><div class="thumb tright"><div class="thumbinner" style="width:222px;"><a class="image" href="./imgs/220px-MCAD_regular_shapes_oval_tube.png"><img alt="" class="thumbimage" data-file-height="186" data-file-width="222" decoding="async" height="184" src="./imgs/220px-MCAD_regular_shapes_oval_tube.png" width="220"/></a>  <div class="thumbcaption">Screenshot of oval_tube()</div></div></div>
+<pre>use &lt;MCAD/regular_shapes.scad&gt;
+oval_tube(20, 10, 5, 1);
+</pre>
+<h4>cylinder_tube(height, radius, wall, center = false)</h4><p>
+Example: </p><div class="thumb tright"><div class="thumbinner" style="width:222px;"><a class="image" href="./imgs/220px-MCAD_regular_shapes_cylinder_tube.png"><img alt="" class="thumbimage" data-file-height="227" data-file-width="222" decoding="async" height="225" src="./imgs/220px-MCAD_regular_shapes_cylinder_tube.png" width="220"/></a>  <div class="thumbcaption">Screenshot of cylinder_tube()</div></div></div>
+<pre>use &lt;MCAD/regular_shapes.scad&gt;
+cylinder_tube(20, 10, 1);
+</pre>
+<h4>triangle_prism(height,radius)</h4>
+<p>Example: 
+</p>
+<div class="thumb tright"><div class="thumbinner" style="width:207px;"><a class="image" href="./imgs/MCAD_regular_shapes_triangle_prism.png"><img alt="" class="thumbimage" data-file-height="209" data-file-width="205" decoding="async" height="209" src="./imgs/MCAD_regular_shapes_triangle_prism.png" width="205"/></a>  <div class="thumbcaption">Screenshot of triangle_prism()</div></div></div>
+<pre>use &lt;MCAD/regular_shapes.scad&gt;
+triangle_prism(20,10);
+</pre>
+<h4>triangle_tube(height,radius,wall)</h4>
+<p>Example: 
+</p>
+<div class="thumb tright"><div class="thumbinner" style="width:159px;"><a class="image" href="./imgs/MCAD_regular_shapes_triangle_tube.png"><img alt="" class="thumbimage" data-file-height="180" data-file-width="157" decoding="async" height="180" src="./imgs/MCAD_regular_shapes_triangle_tube.png" width="157"/></a>  <div class="thumbcaption">Screenshot of triangle_tube()</div></div></div>
+<pre>use &lt;MCAD/regular_shapes.scad&gt;
+triangle_tube(20,10, 1);
+</pre>
+<h4>pentagon_prism(height,radius)</h4>
+<p>Solid pentagon shape
+</p>
+<h4>pentagon_tube(height,radius,wall)</h4>
+<p>Hollow pentagon shape
+</p>
+<h4>hexagon_prism(height,radius)</h4>
+<p>Similar to above
+</p>
+<h4>hexagon_tube(height,radius,wall)</h4>
+<p>Similar to above
+</p>
+<h4>heptagon_prism(height,radius)</h4>
+<p>Similar to above
+</p>
+<h4>heptagon_tube(height,radius,wall)</h4>
+<p>Similar to above
+</p>
+<h4>octagon_prism(height,radius)</h4>
+<p>Similar to above
+</p>
+<h4>octagon_tube(height,radius,wall)</h4>
+<p>Similar to above
+</p>
+<h4>nonagon_prism(height,radius)</h4>
+<p>Similar to above
+</p>
+<h4>decagon_prism(height,radius)</h4>
+<p>Similar to above
+</p>
+<h4>hendecagon_prism(height,radius)</h4>
+<p>Similar to above
+</p>
+<h4>dodecagon_prism(height,radius)</h4>
+<p>Similar to above
+</p>
+<h4>torus(outerRadius, innerRadius)</h4><p>
+Example:  </p><div class="thumb tright"><div class="thumbinner" style="width:222px;"><a class="image" href="./imgs/220px-MCAD_regular_shapes_torus.png"><img alt="" class="thumbimage" data-file-height="246" data-file-width="319" decoding="async" height="170" src="./imgs/220px-MCAD_regular_shapes_torus.png" width="220"/></a>  <div class="thumbcaption">Screenshot of torus()</div></div></div>
+<pre>use &lt;MCAD/regular_shapes.scad&gt;
+torus(30, 15);
+</pre>
+<h4>torus2(r1, r2)</h4><p>
+Example: </p><div class="thumb tright"><div class="thumbinner" style="width:222px;"><a class="image" href="./imgs/220px-MCAD_regular_shapes_torus2.png"><img alt="" class="thumbimage" data-file-height="221" data-file-width="289" decoding="async" height="168" src="./imgs/220px-MCAD_regular_shapes_torus2.png" width="220"/></a>  <div class="thumbcaption">Screenshot of torus2()</div></div></div>
+<pre>use &lt;MCAD/regular_shapes.scad&gt;
+torus2(30, 5);
+</pre>
+<h4>oval_torus(inner_radius, thickness=[0, 0])</h4><p>
+Example: </p><div class="thumb tright"><div class="thumbinner" style="width:222px;"><a class="image" href="./imgs/220px-MCAD_regular_shapes_oval_torus.png"><img alt="" class="thumbimage" data-file-height="231" data-file-width="334" decoding="async" height="152" src="./imgs/220px-MCAD_regular_shapes_oval_torus.png" width="220"/></a>  <div class="thumbcaption">Screenshot of oval_torus()</div></div></div>
+<pre>use &lt;MCAD/regular_shapes.scad&gt;
+oval_torus(20, thickness=[4, 8], $fn=50);
+</pre>
+<h4>triangle_pyramid(radius)</h4><p>
+Example: </p><div class="thumb tright"><div class="thumbinner" style="width:222px;"><a class="image" href="./imgs/220px-MCAD_regular_shapes_triangle_pyramid.png"><img alt="" class="thumbimage" data-file-height="240" data-file-width="261" decoding="async" height="202" src="./imgs/220px-MCAD_regular_shapes_triangle_pyramid.png" width="220"/></a>  <div class="thumbcaption">Screenshot of triangle_pyramid()</div></div></div>
+<pre>use &lt;MCAD/regular_shapes.scad&gt;
+triangle_pyramid(20);
+</pre>
+<h4>square_pyramid(base_x, base_y, height)</h4><p>
+Example: </p><div class="thumb tright"><div class="thumbinner" style="width:222px;"><a class="image" href="./imgs/220px-MCAD_regular_shape_square_pyramid.png"><img alt="" class="thumbimage" data-file-height="297" data-file-width="254" decoding="async" height="257" src="./imgs/220px-MCAD_regular_shape_square_pyramid.png" width="220"/></a>  <div class="thumbcaption">Screenshot of square_pyramid()</div></div></div>
+<pre>use &lt;MCAD/regular_shapes.scad&gt;
+square_pyramid(10, 20, 30);
+</pre>
+<h4>egg(width, length)</h4>
+<p>NOTE: I couldn't get egg() to work at the time of creating this document.
+</p><p><b>To Fix egg()</b>: replace 'cube(' with 'square(' at line 254 pos 40 on regular_shapes.scad
+</p>
+<h2>MCAD/involute_gears.scad</h2>
+<p>NOTE regarding bevel gears: Two bevel gears mesh when they have the same cone distance, circular pitch (measured at the cone distance), and pressure angle.
+</p>
+<h3>bevel_gear_pair()</h3>
+<pre>bevel_gear_pair (gear1_teeth = 41, gear2_teeth = 7, axis_angle = 90, outside_circular_pitch=1000)
+</pre>
+<h3>bevel_gear()</h3>
+<pre>bevel_gear (
+    number_of_teeth=11, 
+    cone_distance=100, 
+    face_width=20, 
+    outside_circular_pitch=1000, 
+    pressure_angle=30,
+    clearance = 0.2, 
+    bore_diameter=5,
+    gear_thickness = 15, 
+    backlash = 0, 
+    involute_facets=0, 
+    finish = -1) 
+</pre>
+<pre>    <u>Bevel Gear Finishing Options:</u>
+    bevel_gear_flat = 0;
+    bevel_gear_back_cone = 1;
+</pre>
+<p>More INFO:
+</p>
+<ul style="list-style-image:none"><li><b>number_of_teeth</b> number of teeth</li>
+<li><b>cone_distance</b> Important to the angle of your gear teeth. See <a class="extiw" href="https://en.wikipedia.org/wiki/List_of_gear_nomenclature#Cone_distance" title="w:List of gear nomenclature">Cone Distance</a></li>
+<li><b>pressure_angle</b> Part of the terms that, taken together, make up the gear tooth profile. See <a class="extiw" href="https://en.wikipedia.org/wiki/Pressure_angle" title="w:Pressure angle">Pressure_angle</a></li>
+<li><b>bore_diameter</b> Size of hole in middle of gear</li>
+<li><b>outside_circular_pitch</b> Roughly, this is the circumference of the gear. This is one of the most important measurements, and is worth looking up more precisely. See <a class="extiw" href="https://en.wikipedia.org/wiki/List_of_gear_nomenclature#Pitch_circle" title="w:List of gear nomenclature">Pitch_circle</a>. This indirectly controls the gear radius. Your gear's overall diameter is roughly the outside_circle_pitch / 360 * number_of_teeth. For example, 1000 / 360 * 36 would result in a gear approx 100mm in diameter.</li>
+<li><b>finish</b> Special parameter. Setting this equal to bevel_gear_flat (0) vs bevel_gear_back_cone (1) changes whether your gear looks like a flat bevel gear, or whether a back cone (similar to the 'cone' before) is used. See <a class="extiw" href="https://en.wikipedia.org/wiki/List_of_gear_nomenclature#back_cone" title="w:List of gear nomenclature">Back Cone</a></li>
+<li><b>gear_thickness</b> Bit of a misnomer. This is not the "typical" gear definition of thickness. Instead, it has nothing to do with the teeth of your gear and instead asks how tall of a cylinder the gear teeth should be placed on top oc</li></ul>
+<h3>gear()</h3>
+<pre>gear (
+    number_of_teeth=15,
+    circular_pitch=false, diametral_pitch=false,
+    pressure_angle=28,
+    clearance = 0.2,
+    gear_thickness=5,
+    rim_thickness=8,
+    rim_width=5,
+    hub_thickness=10,
+    hub_diameter=15,
+    bore_diameter=5,
+    circles=0,
+    backlash=0,
+    twist=0,
+    involute_facets=0,
+    flat=false)
+</pre>
+<p>More INFO:
+</p>
+<ul style="list-style-image:none"><li><b>number_of_teeth</b> number of teeth. Note that since circumference=2πr∝number_of_teeth the distance_between_gears∝total_number_of_teeth*pitch Basically if you have two gears, any two gears with the same sum number of teeth also fit at that distance.</li>
+<li><b>circular_pitch</b>, <b>diametral_pitch</b> proportional to the size of the teeth. (TODO proportionality constant)</li>
+<li><b>pressure_angle</b></li>
+<li><b>clearance</b></li>
+<li><b>flat</b> Makes the module a 2d object. This way you can `linear_extrude` it yourself.</li></ul>
+<p>The module has a lot of 'extra' features.
+</p>
+<ul style="list-style-image:none"><li><b>rim_thickness</b> Thickness of edges(where it contacts.</li>
+<li><b>gear_thickness</b> Thickness inside, it cuts out a circle to make the inside flatter if smaller than rim thickness.</li>
+<li><b>rim_width</b> How far from the edge the gear is made at the</li>
+<li><b>hub_thickness, hub_diameter,</b> thicker bit in the center.</li>
+<li><b>bore_diameter</b> hole in center, for an axle, for instance.=</li>
+<li><b>circles</b> Makes the given number of holes around the center to save material</li>
+<li><b>backlash</b></li>
+<li><b>twist</b> Twist in linear extruding. Used for making helical gears.  (e.g.chevron/herringbone or worm drive gears)</li>
+<li><b>involute_facets</b></li></ul>
+<p>Example:
+</p>
+<pre> gear(number_of_teeth=20, circular_pitch=200, flat=true);
+</pre>
+<h3>Tests</h3>
+<h4>test_gears()</h4><p>
+Example: </p><div class="thumb tright"><div class="thumbinner" style="width:222px;"><a class="image" href="./imgs/220px-MCAD_involute_gears_test_gears.png"><img alt="" class="thumbimage" data-file-height="348" data-file-width="554" decoding="async" height="138" src="./imgs/220px-MCAD_involute_gears_test_gears.png" width="220"/></a>  <div class="thumbcaption">Demonstration of output from test_gears()</div></div></div>
+<pre>use &lt;MCAD/involute_gears.scad&gt;
+test_gears();
+</pre>
+<h4>test_meshing_double_helix()</h4><p>
+Example: </p><div class="thumb tright"><div class="thumbinner" style="width:222px;"><a class="image" href="./imgs/220px-MCAD_involute_gears_test_meshing_double_helix.png"><img alt="" class="thumbimage" data-file-height="246" data-file-width="438" decoding="async" height="124" src="./imgs/220px-MCAD_involute_gears_test_meshing_double_helix.png" width="220"/></a>  <div class="thumbcaption">Screenshot of output of testing_meshing_double_helix()</div></div></div>
+<pre>use &lt;MCAD/involute_gears.scad&gt;
+test_meshing_double_helix();
+</pre>
+<h4>test_bevel_gear()</h4><p>
+Example: </p><div class="thumb tright"><div class="thumbinner" style="width:222px;"><a class="image" href="./imgs/220px-MCAD_test_bevel_gear.png"><img alt="" class="thumbimage" data-file-height="246" data-file-width="299" decoding="async" height="181" src="./imgs/220px-MCAD_test_bevel_gear.png" width="220"/></a>  <div class="thumbcaption">Screenshot of test_bevel_gear</div></div></div>
+<pre>use &lt;MCAD/involute_gears.scad&gt;
+test_bevel_gear();
+</pre>
+<h4>test_bevel_gear_pair()</h4><p>
+Example: </p><div class="thumb tright"><div class="thumbinner" style="width:222px;"><a class="image" href="./imgs/220px-MCAD_test_bevel_gear_pair.png"><img alt="" class="thumbimage" data-file-height="391" data-file-width="601" decoding="async" height="143" src="./imgs/220px-MCAD_test_bevel_gear_pair.png" width="220"/></a>  <div class="thumbcaption">Screenshot of test_bevel_gear_pair()</div></div></div>
+<pre>use &lt;MCAD/involute_gears.scad&gt;
+test_bevel_gear_pair();
+</pre>
+<h4>test_backlash()</h4>
+<p>Example: 
+</p>
+<div class="thumb tright"><div class="thumbinner" style="width:222px;"><a class="image" href="./imgs/220px-MCAD_test_bakclash.png"><img alt="" class="thumbimage" data-file-height="491" data-file-width="457" decoding="async" height="236" src="./imgs/220px-MCAD_test_bakclash.png" width="220"/></a>  <div class="thumbcaption">Screenshot of test_backlash()</div></div></div>
+<pre>use &lt;MCAD/involute_gears.scad&gt;
+test_backlash ();
+</pre>
+<h2>MCAD/teardrop.scad</h2>
+<p>The teardrop shape can be used to make printing vertical holes easier for the 3d printer by avoiding steep overhangs.
+</p><p>
+Example: </p><div class="thumb tright"><div class="thumbinner" style="width:222px;"><a class="image" href="./imgs/220px-Screenshot_Teardrop_MCAD.png"><img alt="" class="thumbimage" data-file-height="731" data-file-width="947" decoding="async" height="170" src="./imgs/220px-Screenshot_Teardrop_MCAD.png" width="220"/></a>  <div class="thumbcaption">Screenshot of Teardrop Shaped Cutouts</div></div></div>
+<pre> use &lt;MCAD/teardrop.scad&gt;;
+ 
+ difference() {
+     cube([5, 60, 40], center=true);
+     translate([0, -15, 0]) teardrop(radius=6, length=20, angle=90);
+     translate([0,   0, 0]) teardrop(radius=5, length=20, angle=60);
+     translate([0,  15, 0]) teardrop(radius=4, length=20, angle=45);
+ }
+</pre>
+<p><br/>
+</p>
+<h2>MCAD/stepper.scad</h2>
+<p>The stepper's shaft is pointing in negative Z-direction. 
+The stepper's round front plate is flush with the Z-Plane.
+</p><p><br/>
+</p><p>
+Example: </p><div class="thumb tright"><div class="thumbinner" style="width:222px;"><a class="image" href="./imgs/220px-OpenSCAD_MCAD_Stepper_motor.png"><img alt="" class="thumbimage" data-file-height="731" data-file-width="947" decoding="async" height="170" src="./imgs/220px-OpenSCAD_MCAD_Stepper_motor.png" width="220"/></a>  <div class="thumbcaption">Screenshot of Stepper Motors</div></div></div>
+<pre> include &lt;MCAD/stepper.scad&gt;;
+ 
+ for (size = [NemaShort, NemaMedium, NemaLong]) {  
+   translate([50, size*100,0])  motor(Nema34, size, dualAxis=false);
+   translate([150,size*100,0])  motor(Nema23, size, dualAxis=false);
+   translate([250,size*100,0])  motor(Nema17, size, dualAxis=true);
+   translate([350,size*100,0])  motor(Nema14, size, dualAxis=true);
+   translate([450,size*100,0])  motor(Nema11, size, dualAxis=true);
+   translate([550,size*100,0])  motor(Nema08, size, dualAxis=true);
+ }
+ % translate([0, 150, 0.01]) cube([600, 200, 0.1]); 
+</pre>
+<p><br/>
+</p>
+<h2>MCAD/nuts_and_bolts.scad</h2><p>
+Example: </p><div class="thumb tright"><div class="thumbinner" style="width:222px;"><a class="image" href="./imgs/220px-Screenshot_of_Nuts_and_bolts_from_MCAD_in_OpenSCAD.png"><img alt="" class="thumbimage" data-file-height="731" data-file-width="947" decoding="async" height="170" src="./imgs/220px-Screenshot_of_Nuts_and_bolts_from_MCAD_in_OpenSCAD.png" width="220"/></a>  <div class="thumbcaption">Screenshot of a M3 Bolt and Nut</div></div></div>
+<pre> use &lt;MCAD/nuts_and_bolts.scad&gt;;
+ include &lt;MCAD/units.scad&gt;;
+ 
+ $fn=50;
+ 
+ //M3 is an alias for 3 . It is defined in units.scad
+ boltHole(M3, length=10);
+ %boltHole(M3, length=10, tolerance=0.3);
+ translate([-7, 0, 0]) nutHole(M3, tolerance=0.3);
+</pre>
+<h2>MCAD/2Dshapes.scad</h2><p>
+Example: </p><div class="thumb tright"><div class="thumbinner" style="width:222px;"><a class="image" href="./imgs/220px-2D_shapes_from_MCAD_in_OpenSCAD.png"><img alt="" class="thumbimage" data-file-height="614" data-file-width="947" decoding="async" height="143" src="./imgs/220px-2D_shapes_from_MCAD_in_OpenSCAD.png" width="220"/></a>  <div class="thumbcaption">Screenshot of various 2D shapes</div></div></div>
+<pre> use &lt;MCAD/2Dshapes.scad&gt;;
+ 
+ ellipse(width=50, height=80);
+ 
+ translate([100, 0, 0]) pieSlice([50, 100], start_angle=0, end_angle=250);
+ 
+ translate([210, 0, 0]) donutSlice(20,50,0,300);
+ 
+ translate([320, 0, 0]) ngon(6, 50, center=false);
+</pre>
+
+
+
+
+</div><footer class="mw-body" style="font-size:13px;color:darkgray;text-align:center;margin-bottom:-1px">
+	From the WikiBooks article <a href="https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/MCAD" style="color:black">MCAD</a> 
+	(provided under <a href="https://creativecommons.org/licenses/by-sa/3.0/" style="color:black">
+	CC-BY-SA-3.0</a>)</footer></body></html>

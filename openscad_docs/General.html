@@ -1,0 +1,398 @@
+<html><head><title>General</title><link href="./styles/style.css" rel="stylesheet"/></head><body class="mw-body" style="height:auto"><h1 class="firstHeading" id="firstHeading">General</h1><div id="bodyContent">
+<div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2></div>
+<ul style="list-style-image:none">
+<li><a href="#Introduction"><span class="tocnumber">1</span> Introduction</a></li>
+<li><a href="#Comments"><span class="tocnumber">2</span> Comments</a></li>
+<li><a href="#Values_and_Data_Types"><span class="tocnumber">3</span> Values and Data Types</a>
+<ul style="list-style-image:none">
+<li><a href="#Numbers"><span class="tocnumber">3.1</span> Numbers</a></li>
+<li><a href="#Boolean_Values"><span class="tocnumber">3.2</span> Boolean Values</a></li>
+<li><a href="#Strings"><span class="tocnumber">3.3</span> Strings</a></li>
+<li><a href="#Ranges"><span class="tocnumber">3.4</span> Ranges</a></li>
+<li><a href="#The_Undefined_Value"><span class="tocnumber">3.5</span> The Undefined Value</a></li>
+</ul>
+</li>
+<li><a href="#Variables"><span class="tocnumber">4</span> Variables</a>
+<ul style="list-style-image:none">
+<li><a href="#Undefined_variable"><span class="tocnumber">4.1</span> Undefined variable</a></li>
+<li><a href="#Scope_of_variables"><span class="tocnumber">4.2</span> Scope of variables</a></li>
+<li><a href="#Variables_are_set_at_compile-time,_not_run-time"><span class="tocnumber">4.3</span> Variables are set at compile-time, not run-time</a></li>
+<li><a href="#Special_Variables"><span class="tocnumber">4.4</span> Special Variables</a></li>
+</ul>
+</li>
+<li><a href="#Vectors"><span class="tocnumber">5</span> Vectors</a>
+<ul style="list-style-image:none">
+<li><a href="#Indexing_elements_within_vectors"><span class="tocnumber">5.1</span> Indexing elements within vectors</a></li>
+<li><a href="#Dot_notation_indexing"><span class="tocnumber">5.2</span> Dot notation indexing</a></li>
+<li><a href="#Vector_operators"><span class="tocnumber">5.3</span> Vector operators</a>
+<ul style="list-style-image:none">
+<li><a href="#concat"><span class="tocnumber">5.3.1</span> concat</a></li>
+<li><a href="#len"><span class="tocnumber">5.3.2</span> len</a></li>
+</ul>
+</li>
+<li><a href="#Matrix"><span class="tocnumber">5.4</span> Matrix</a></li>
+</ul>
+</li>
+<li><a href="#Getting_input"><span class="tocnumber">6</span> Getting input</a></li>
+</ul>
+</div>
+
+<h3>Introduction</h3>
+<hr/>
+<p>OpenSCAD is a <a class="extiw" href="https://en.wikipedia.org/wiki/2D_computer_graphics" title="w:2D computer graphics">2D</a>/<a class="extiw" href="https://en.wikipedia.org/wiki/3D_computer_graphics_software" title="w:3D computer graphics software">3D</a> and <a class="extiw" href="https://en.wikipedia.org/wiki/Solid_modeling" title="w:Solid modeling">solid modeling</a> program which is based on a <a class="extiw" href="https://en.wikipedia.org/wiki/Functional_programming" title="w:Functional programming">Functional programming</a> <a class="extiw" href="https://en.wikipedia.org/wiki/Procedural_modeling" title="w:Procedural modeling">language</a> used to create <a class="extiw" href="https://en.wikipedia.org/wiki/Polygonal_modeling" title="w:Polygonal modeling">models</a> that are  previewed on the screen, and rendered into 3D <a class="extiw" href="https://en.wikipedia.org/wiki/Polygon_mesh" title="w:Polygon mesh">mesh</a> which allows the model to be exported in a variety of 2D/3D file formats.
+</p><p>A script in the OpenSCAD language is used to create 2D or 3D models. This script is a free format list of action statements.
+</p>
+<pre> object();
+ variable = value;
+ operator()   action();
+ operator() { action();    action(); }
+ operator()   operator() { action(); action(); }
+ operator() { operator()   action();
+              operator() { action(); action(); } }
+</pre>
+<dl><dd><b>Objects</b></dd></dl>
+<p>Objects are the building blocks for models, created by 2D and 3D primitives. Objects end in a semicolon ';'.
+</p>
+<dl><dd><b>Actions</b></dd></dl>
+<p>Action statements include creating objects using primitives and assigning values to variables. Action statements also end in a semicolon ';'.
+</p>
+<dl><dd><b>Operators</b></dd></dl>
+<p>Operators, or transformations, modify the location, color and other properties of objects. Operators use braces '{}' when their scope covers more than one action. More than one operator may be used for the same action or group of actions. Multiple operators are processed Right to Left, that is, the operator closest to the action is processed first. Operators do not end in semicolons ';', but the individual actions they contain do. 
+</p>
+<pre> Examples
+  
+   cube(5);
+   x = 4+y;
+   rotate(40) square(5,10);
+   translate([10,5]) { circle(5); square(4); }
+   rotate(60) color("red") { circle(5); square(4); }
+   color("blue") { translate([5,3,0]) sphere(5); rotate([45,0,45]) { cylinder(10); cube([5,6,7]); } }
+</pre>
+<h3>Comments</h3>
+<hr/>
+<p>Comments are a way of leaving notes within the script, or code, (either to yourself or to future programmers) describing how the code works, or what it does. Comments are not evaluated by the compiler, and should not be used to describe self-evident code. 
+</p><p>OpenSCAD uses C++-style comments:
+</p>
+<pre>// This is a comment
+  
+myvar = 10; // The rest of the line is a comment
+  
+/*
+   Multi-line comments
+   can span multiple lines.
+*/
+</pre>
+<h3>Values and Data Types</h3>
+<hr/>
+<p>A value in OpenSCAD is either a Number (like 42), a Boolean (like true), a String (like "foo"), a Range (like [0: 1: 10]), a Vector (like [1,2,3]), or the Undefined value (undef). Values can be stored in variables, passed as function arguments, and returned as function results.
+</p><p>[OpenSCAD is a dynamically typed language with a fixed set of data types. There are no type names, and no user defined types. Functions are not values. In fact, variables and functions occupy disjoint namespaces.]
+</p>
+<h4>Numbers</h4>
+<p>Numbers are the most important type of value in OpenSCAD, and they are written in the familiar decimal notation used in other languages. Eg, -1, 42, 0.5, 2.99792458e+8. [OpenSCAD does not support octal or hexadecimal notation for numbers.]
+</p><p>In additional to decimal numerals, the following names for special numbers are defined:
+</p>
+<ul style="list-style-image:none"><li>PI</li></ul>
+<p>OpenSCAD has only a single kind of number, which is a 64 bit IEEE floating point number. [OpenSCAD does not distinguish integers and floating point numbers as two different types, nor does it support complex numbers.] Because OpenSCAD uses the IEEE floating point standard, there are a few deviations from the behaviour of numbers in mathematics:
+</p>
+<ul style="list-style-image:none"><li>We use binary floating point. A fractional number is not represented exactly unless the denominator is a power of 2. For example, 0.2 (2/10) does not have an exact internal representation, but 0.25 (1/4) and 0.125 (1/8) are represented exactly.</li>
+<li>The largest representable number is about 1e308. If a numeric result is too large, then the result can be infinity (printed as inf by echo).</li>
+<li>The smallest representable number is about -1e308. If a numeric result is too small, then the result can be -infinity (printed as -inf by echo).</li>
+<li>If a numeric result is invalid, then the result can be Not A Number (printed as nan by echo).</li>
+<li>If a non-zero numeric result is too close to zero to be representable, then the result is -0 if the result is negative, otherwise it is 0. Zero (0) and negative zero (-0) are treated as two distinct numbers by some of the math operations, and are printed differently by 'echo', although they compare as equal.</li></ul>
+<p>The constants 'inf' and 'nan' are not supported as numeric constants by OpenSCAD, even though you can compute numbers that are printed this way by 'echo'. You can define variables with these values by using:
+</p>
+<pre>inf = 1e200 * 1e200;
+nan = 0 / 0;
+echo(inf,nan);
+</pre>
+<p>The value 'nan' is the only OpenSCAD value that is not equal to any other value, including itself. Although you can test if a variable 'x' has the undefined value using 'x == undef', you can't use 'x == 0/0' to test if x is Not A Number. Instead, you must use 'x != x' to test if x is nan.
+</p>
+<h4>Boolean Values</h4>
+<p>Booleans are truth values. There are two Boolean values, namely <code>true</code> and <code>false</code>. 
+A Boolean is passed as the argument to conditional statement 'if()'. conditional operator '? :', 
+and logical operators '!' (not), '&amp;&amp;' (and), and '||' (or).  In all of these contexts, you can actually 
+pass any quantity. Most values are converted to 'true' in a Boolean context, the values that count as 'false' are:
+</p>
+<ul style="list-style-image:none"><li>false</li>
+<li>0 and -0</li>
+<li>""</li>
+<li>[]</li>
+<li>undef</li></ul>
+<p>Note that <code>"false"</code> (the string), <code>[0]</code> (a numeric vector), 
+<code>[ [] ]</code> (a vector containing an empty vector), <code>[false]</code> 
+(a vector containing the Boolean value false) and 0/0 (Not A Number) all count as true.
+</p>
+<h4>Strings</h4>
+<p>A string is a sequence of zero or more unicode characters. String values are used to specify file names when importing a file, and to display text for debugging purposes when using echo(). Strings can also be used with the <a href="Text.html" title="OpenSCAD User Manual/Text">new <b>text()</b> primitive</a> added in <b>2015.03</b>.
+</p><p>A string literal is written as a sequence of characters enclosed in quotation marks <code>"</code>, like this: <code>""</code> (an empty string), or <code>"this is a string"</code>.
+</p><p>To include a <code>"</code> character in a string literal, use <code>\"</code>. To include a <code>\</code> character in a string literal, use <code>\\</code>. The following escape sequences beginning with <code>\</code> can be used within string literals:
+</p>
+<ul style="list-style-image:none"><li>\" → "</li>
+<li>\\ → \</li>
+<li>\t → tab</li>
+<li>\n → newline</li>
+<li>\r → carriage return</li>
+<li>\u03a9 → Ω - see <b>text()</b> for further information on unicode characters</li></ul>
+<p>Note: This behavior is new since OpenSCAD-2011.04. You can upgrade old files using the following sed command: <tt>sed 's/\\/\\\\/g' non-escaped.scad &gt; escaped.scad</tt>
+</p>
+<pre> <b>Example:</b>
+  
+ echo("The quick brown fox \tjumps \"over\" the lazy dog.\rThe quick brown fox.\nThe \\lazy\\ dog.");
+  
+ <b>result</b><br/>
+   ECHO: "The quick brown fox     jumps "over" the lazy dog.
+   The quick brown fox.
+   The \lazy\ dog."
+  
+ <b>old result</b>
+   ECHO: "The quick brown fox \tjumps \"over\" the lazy dog.
+   The quick brown fox.\nThe \\lazy\\ dog."
+</pre>
+<h4>Ranges</h4>
+<p>Ranges are used by <a href="Conditional_and_Iterator_Functions.html#For_Loop" title="OpenSCAD User Manual/Conditional and Iterator Functions"> for() loops</a> and <a href="User-Defined_Functions_and_Modules.html#Children" title="OpenSCAD User Manual/User-Defined Functions and Modules">children()</a>. They have 2 varieties:
+</p>
+<dl><dd>[&lt;<i>start</i>&gt;:&lt;<i>end</i>&gt;]</dd>
+<dd>[&lt;<i>start</i>&gt;:&lt;<i>increment</i>&gt;:&lt;<i>end</i>&gt;]</dd></dl>
+<p>Although enclosed in square brackets [] , they are not vectors. They use colons : for separators rather than commas.
+</p>
+<pre>r1 = [0:10];
+r2 = [0.5:2.5:20];
+echo(r1); // ECHO: [0: 1: 10]
+echo(r2); // ECHO: [0.5: 2.5: 20]
+</pre>
+<p>You should avoid step values that cannot be represented exactly as binary floating point numbers. Integers are okay, as are fractional values whose denominator is a power of two. For example, 0.25 (1/4) and 0.125 (1/8) are safe, but 0.2 (2/10) should be avoided. The problem with these step values is that your range may have too many or too few elements, due to inexact arithmetic.
+</p><p>A missing &lt;<i>increment</i>&gt; defaults to 1. A range in the form  [&lt;<i>start</i>&gt;:&lt;<i>end</i>&gt;] with &lt;<i>start</i>&gt; greater than &lt;<i>end</i>&gt; generates a warning and is equivalent to [&lt;<i>end</i>&gt;: 1: &lt;<i>start</i>&gt;]. A range in the form  [&lt;<i>start</i>&gt;:1:&lt;<i>end</i>&gt;] with &lt;<i>start</i>&gt; greater than &lt;<i>end</i>&gt; does not generate a warning and is equivalent to []. The &lt;<i>increment</i>&gt; in a range may be negative (for versions after 2014).
+</p>
+<h4>The Undefined Value</h4>
+<p>The undefined value is a special value written as <b>undef</b>. It's the initial value of a variable that hasn't been assigned a value, and it is often returned as a result by functions or operations that are passed illegal arguments. Finally, <code>undef</code> can be used as a null value, equivalent to <code>null</code> or <code>NULL</code> in other programming languages.
+</p><p>All arithmetic expressions containing <code>undef</code> values evaluate as <code>undef</code>. In logical expressions, <code>undef</code> is equivalent to <code>false</code>. Relational operator expressions with <code>undef</code> evaluate as <code>false</code> except for <code>undef==undef</code> which is <code>true</code>.
+</p><p>Note that numeric operations may also return 'nan' (not-a-number) to indicate an illegal argument. For example, <code>0/false</code> is <code>undef</code>, but <code>0/0</code> is 'nan'. Relational operators like &lt; and &gt; return <code>false</code> if passed illegal arguments. Although <code>undef</code> is a language value, 'nan' is not.
+</p>
+<h3>Variables</h3>
+<hr/>
+<p>OpenSCAD variables are created by a statement with a name or <a class="extiw" href="https://en.wikipedia.org/wiki/Identifier_(computer_programming)" title="w:Identifier (computer programming)">identifier</a>, assignment via an expression and a semicolon. The role of arrays, found in many imperative languages, is handled in OpenSCAD via vectors.
+</p>
+<pre>var = 25;
+xx = 1.25 * cos(50);
+y = 2*xx+var;
+logic = true;
+MyString = "This is a string";
+a_vector = [1,2,3];
+rr = a_vector[2];      // member of vector
+range1 = [-1.5:0.5:3]; // for() loop range
+xx = [0:5];            // alternate for() loop range
+</pre>
+<p>OpenSCAD is a <a class="extiw" href="https://en.wikipedia.org/wiki/Functional_programming" title="w:Functional programming"> Functional</a> programming language, as such <a class="extiw" href="https://en.wikipedia.org/wiki/Variable_(computer_science))" title="w:Variable (computer science))">variables</a> are bound to expressions and keep a single value during their entire lifetime due to the requirements of <a class="extiw" href="https://en.wikipedia.org/wiki/Referential_transparency_(computer_science)" title="w:Referential transparency (computer science)">referential transparency</a>. In <a class="extiw" href="https://en.wikipedia.org/wiki/Imperative_programming" title="w:Imperative programming">imperative languages</a>, such as C, the same behavior is seen as constants, which are typically contrasted with normal variables. 
+</p><p>In other words OpenSCAD variables are more like constants, but with an important difference. If variables are assigned a value multiple times, only the last assigned value is used in all places in the code. See further discussion at <a href="#Variables_are_set_at_compile-time,_not_run-time">Variables are set at compile-time, not run-time</a>.  This behavior is due to the need to supply variable input on the <a href="Using_OpenSCAD_in_a_command_line_environment.html" title="OpenSCAD User Manual/Using OpenSCAD in a command line environment">command line</a>, via the use of <i>-D variable=value</i> option. OpenSCAD currently places that assignment at the end of the source code, and thus must allow a variable's value to be changed for this purpose.
+</p><p>Values cannot be modified during run time; all variables are effectively constants that do not change. Each variable retains its last assigned value at compile time, in line with <a class="extiw" href="https://en.wikipedia.org/wiki/Functional_programming" title="w:Functional programming">Functional</a> programming languages. Unlike <a class="extiw" href="https://en.wikipedia.org/wiki/Imperative_programming" title="w:Imperative programming">Imperative</a> languages, such as C, OpenSCAD is not an iterative language, and as such the concept of <i>x = x + 1</i> is not valid. Understanding this concept leads to understanding the beauty of OpenSCAD.
+</p>
+<dl><dd><b>Before version 2015.03</b></dd></dl>
+<p>It was not possible to do assignments at any place except the file top-level and module top-level. Inside an <i>if/else</i>  or <i>for</i>  loop, assign() was needed.
+</p>
+<dl><dd><b>Since version 2015.03</b></dd></dl>
+<p>Variables can now be assigned in any scope. Note that assignments are only valid within the scope in which they are defined - you are still not allowed to leak values to an outer scope. See <a href="#Scope_of_variables">Scope of variables</a> for more details.
+</p>
+<pre>a=0;
+if (a==0) 
+  {
+ a=1; //  before 2015.03 this line would generate a Compile Error
+      //  since 2015.03  no longer an error, but the value a=1 is confined to within the braces {}
+  }
+</pre>
+<h4>Undefined variable</h4>
+<p>A non assigned variable has the special value <b>undef</b>.
+It could be tested in conditional expression, and returned by a function.
+</p>
+<pre> <b>Example</b>
+  
+ echo("Variable a is ", a);                // Variable a is undef
+ if (a==undef) {
+   echo("Variable a is tested undefined"); // Variable a is tested undefined
+ }
+</pre>
+<h4>Scope of variables</h4>
+<p>When operators such as translate() and color() need to encompass more than one action ( actions end in ;), braces {} are needed to group the actions, creating a new, inner scope.
+When there is only one semicolon, braces are usually optional.
+</p><p>Each pair of braces creates a new scope inside the scope where they were used. <b>Since 2015.03</b>, new variables can be created within this new scope. New values can be given to variables which were created in an outer scope . 
+These variables and their values are also available to further inner scopes created within this scope, but are <b>not available</b> to any thing outside this scope. Variables still have only the last value assigned within a scope.
+</p>
+<pre>                       // scope 1
+ a = 6;                // create a
+ echo(a,b);            //                6, undef
+ translate([5,0,0]){   // scope 1.1
+   a= 10;
+   b= 16;              // create b
+   echo(a,b);          //              100, 16   a=10; was overridden by later a=100;
+   color("blue") {     // scope 1.1.1
+     echo(a,b);        //              100, 20
+     cube();
+     b=20;
+   }                   // back to 1.1
+   echo(a,b);          //              100, 16
+   a=100;              // override a in 1.1
+ }                     // back to 1   
+ echo(a,b);            //                6, undef
+ color("red"){         // scope 1.2
+   cube();
+   echo(a,b);          //                6, undef
+ }                     // back to 1
+ echo(a,b);            //                6, undef
+  
+ //In this example, scopes 1 and 1.1 are outer scopes to 1.1.1 but 1.2 is not.
+</pre>
+<dl><dd><b>Anonymous scopes</b> are not considered scopes:</dd></dl>
+<pre> {
+   angle = 45;
+ }
+ rotate(angle) square(10);
+</pre>
+<p>For() loops are not an exception to the rule about variables having only one value within a scope. A copy of loop contents is created for each pass. Each pass is given its own scope, allowing any variables to have unique values for that pass. No, you still can't do a=a+1;
+</p>
+<h4>Variables are set at compile-time, not run-time</h4>
+<p>Because OpenSCAD calculates its variable values at compile-time, not run-time, the last variable assignment, within a scope apply everywhere  in that scope, or inner scopes thereof. It may be helpful to think of them as override-able constants rather than as variables. 
+</p>
+<pre>// The value of 'a' reflects only the last set value
+   a = 0;
+   echo(a);  // 5
+   a = 3;
+   echo(a);  // 5
+   a = 5;
+</pre>
+<p>While this appears to be counter-intuitive, it allows you to do some interesting things: for instance, if you set up your shared library files to have default values defined as variables at their root level, when you include that file in your own code, you can 're-define' or override those constants by simply assigning a new value to them. So changing constant values gives you more flexibility. If constants would never change, of course, you always can be sure having the value you see in any constant definition. Not so here, if you see a constant value definition at any other place this value could be different. Very flexible.
+</p>
+<h4>Special Variables</h4>
+<p>Special variables provide an alternate means of passing arguments to modules and functions.
+All variables starting with a '$' are special variables, similar to special variables in lisp.
+As such they are more dynamic than regular variables.
+(for more details see <a href="Other_Language_Features.html#Special_variables" title="OpenSCAD User Manual/Other Language Features">Other Language Features</a>)
+</p>
+<h3>Vectors</h3>
+<hr/>
+<p>A vector or list is a sequence of zero or more OpenSCAD values. Vectors are a collection of numeric or boolean values, variables, vectors, strings or any combination thereof. They can also be expressions which evaluate to one of these. Vectors handle the role of arrays found in many imperative languages.
+The information here also applies to lists and tables which use vectors for their data.
+</p><p>A vector has square brackets, [] enclosing zero or more items (elements or members), separated by commas. A vector can contain vectors, which contain vectors, etc.
+</p><p><br/>
+</p>
+<dl><dd><b>examples</b></dd></dl>
+<pre>   [1,2,3]
+   [a,5,b]
+   []
+   [5.643]
+   ["a","b","string"]
+   [[1,r],[x,y,z,4,5]]
+   [3, 5, [6,7], [[8,9],[10,[11,12],13], c, "string"]
+   [4/3, 6*1.5, cos(60)]
+</pre>
+<p>use in OpenSCAD:
+</p>
+<pre>  cube( [width,depth,height] );           // optional spaces shown for clarity
+  translate( [x,y,z] )
+  polygon( [ [x<sub>0</sub>,y<sub>0</sub>],  [x<sub>1</sub>,y<sub>1</sub>],  [x<sub>2</sub>,y<sub>2</sub>] ] );
+</pre>
+<dl><dd><b>creation</b></dd></dl>
+<p>Vectors are created by writing the list of elements, separated by commas, and enclosed in square brackets. Variables are replaced by their values.
+</p>
+<pre>  cube([10,15,20]);
+  a1 = [1,2,3];
+  a2 = [4,5];
+  a3 = [6,7,8,9];
+  b  = [a1,a2,a3];    // [ [1,2,3], [4,5], [6,7,8,9] ]  note increased nesting depth
+</pre>
+<h5>Indexing elements within vectors</h5>
+<hr/>
+<p>Elements within vectors are numbered from 0 to n-1 where n is the length returned by <a href="#len">len()</a>.
+Address elements within vectors with the following notation:
+</p>
+<pre>e[5]           // element no 5 (sixth) at   1st nesting level
+e[5][2]        // element 2 of element 5    2nd nesting level
+e[5][2][0]     // element 0 of 2 of 5       3rd nesting level
+e[5][2][0][1]  // element 1 of 0 of 2 of 5  4th nesting level
+</pre>
+<div id="example1"> example elements with lengths from len()</div>
+<pre>e = [ [1], [], [3,4,5], "string", "x", [[10,11],[12,13,14],[[15,16],[17]]] ];  // length 6
+
+address       length  element
+e[0]          1       [1]
+e[1]          0       []
+e[5]          3       [ [10,11], [12,13,14], [[15,16],[17]] ]
+e[5][1]       3       [ 12, 13, 14 ]
+e[5][2]       2       [ [15,16], [17] ]
+e[5][2][0]    2       [ 15, 16 ]
+e[5][2][0][1] undef   16
+    
+e[3]          6       "string"
+e[3 ][2]      1       "r"
+  
+s = [2,0,5]; a = 2;
+s[a]          undef   5
+e[s[a]]       3       [ [10,11], [12,13,14], [[15,16],[17]] ]
+</pre>
+<p><br/>
+</p>
+<h5>Dot notation indexing</h5>
+<hr/>
+<p>The first three elements of a vector can be accessed with an alternate dot notation:
+</p>
+<pre>e.x    //equivalent to e[0]
+e.y    //equivalent to e[1]
+e.z    //equivalent to e[2]
+</pre>
+<h5>Vector operators</h5>
+<hr/>
+<h6>concat</h6>
+<p><span style="font-weight: bold; font-style: normal;">[<span style="color: #A00000;">Note:</span> <span style="font-weight: normal; font-style: italic;">Requires version <span style="font-weight: bold;">2015.03</span></span>]</span>
+</p><p>concat() combines the elements of 2 or more vectors into a single vector. No change in nesting level is made.
+</p>
+<pre> vector1 = [1,2,3]; vector2 = [4]; vector3 = [5,6];
+ new_vector = concat(vector1, vector2, vector3); // [1,2,3,4,5,6]
+  
+ string_vector = concat("abc","def");                 // ["abc", "def"]
+ one_string = str(string_vector[0],string_vector[1]); // "abcdef"
+</pre>
+<h6>len</h6>
+<p>len() is a function which returns the length of vectors or strings. 
+Indices of elements are from [0] to [length-1].
+</p>
+<dl><dd><b>vector</b>
+<dl><dd>Returns the number of elements at this level.</dd>
+<dd>Single values, which are <b>not</b> vectors, return <b>undef</b>.</dd></dl></dd>
+<dd><b>string</b>
+<dl><dd>Returns the number of characters in string.</dd></dl></dd></dl>
+<pre> a = [1,2,3]; echo(len(a));   //  3
+</pre>
+<p><a href="#example1">See example elements with lengths</a>
+</p>
+<h5>Matrix</h5>
+<p>A matrix is a vector of vectors.
+</p>
+<pre>Example which defines a 2D rotation matrix
+mr = [
+     [cos(angle), -sin(angle)],
+     [sin(angle),  cos(angle)]
+    ];
+</pre>
+<h3>Getting input</h3>
+<hr/>
+<p>Now we have variables, it would be nice to be able to get input into them instead of setting the values from code. There are a few functions to read data from DXF files, or you can set a variable with the -D switch on the command line.
+</p><p><b>Getting a point from a drawing</b>
+</p><p>Getting a point is useful for reading an origin point in a 2D view in a technical drawing. The function dxf_cross reads the intersection of two lines on a layer you specify and returns the intersection point. This means that the point must be given with two lines in the DXF file, and not a point entity.
+</p>
+<pre>OriginPoint = dxf_cross(file="drawing.dxf", layer="SCAD.Origin", 
+                        origin=[0, 0], scale=1);
+</pre>
+<p><b>Getting a dimension value</b>
+</p><p>You can read dimensions from a technical drawing. This can be useful to read a rotation angle, an extrusion height, or spacing between parts. In the drawing, create a dimension that does not show the dimension value, but an identifier. To read the value, you specify this identifier from your program:
+</p>
+<pre>TotalWidth = dxf_dim(file="drawing.dxf", name="TotalWidth",
+                        layer="SCAD.Origin", origin=[0, 0], scale=1);
+</pre>
+<p>For a nice example of both functions, see Example009 and the image on the <a class="external text" href="http://www.openscad.org/" rel="nofollow">homepage of OpenSCAD</a>.
+</p>
+
+
+
+
+</div><footer class="mw-body" style="font-size:13px;color:darkgray;text-align:center;margin-bottom:-1px">
+	From the WikiBooks article <a href="https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/General#Ranges" style="color:black">General</a> 
+	(provided under <a href="https://creativecommons.org/licenses/by-sa/3.0/" style="color:black">
+	CC-BY-SA-3.0</a>)</footer></body></html>

@@ -1,0 +1,124 @@
+<html><head><title>Include Statement</title><link href="./styles/style.css" rel="stylesheet"/></head><body class="mw-body" style="height:auto"><h1 class="firstHeading" id="firstHeading">Include Statement</h1><div id="bodyContent"><p>For including code from external files in OpenSCAD, there are two commands available:
+</p>
+<ul style="list-style-image:none"><li><b><code>include &lt;<i>filename</i>&gt;</code></b> acts as if the contents of the included file were written in the including file, and</li>
+<li><b><code>use &lt;<i>filename</i>&gt;</code></b> imports modules and functions, but does not execute any commands other than those definitions.</li></ul>
+<p>Library files are searched for in the same folder as the design was open from, or in the library folder of the OpenSCAD installation. You can use a relative path specification to either. If they lie elsewhere you must give the complete path.
+Newer versions have predefined user libraries, see the <a href="Libraries.html" title="OpenSCAD User Manual/Libraries">OpenSCAD_User_Manual/Libraries</a> page, which also documents a number of library files included in OpenSCAD.
+</p><p>Wildcards (*, for e.g. <i>include &lt;MCAD/*.scad&gt;</i>) can <b>not</b> be used to include multiple files.
+</p>
+<div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2></div>
+<ul style="list-style-image:none">
+<li><a href="#Directory_separators"><span class="tocnumber">1</span> Directory separators</a></li>
+<li><a href="#Variables"><span class="tocnumber">2</span> Variables</a>
+<ul style="list-style-image:none">
+<li><a href="#Scope_of_variables"><span class="tocnumber">2.1</span> Scope of variables</a></li>
+<li><a href="#Overwriting_variables"><span class="tocnumber">2.2</span> Overwriting variables</a></li>
+</ul>
+</li>
+<li><a href='#Example_"Ring-Library"'><span class="tocnumber">3</span> Example "Ring-Library"</a></li>
+<li><a href="#Nested_Include_and_Use"><span class="tocnumber">4</span> Nested Include and Use</a></li>
+</ul>
+</div>
+
+<h4>Directory separators</h4>
+<p>Windows and Linux/Mac use different separators for directories. Windows uses <b>\</b>, e.g. directory\file.ext, while the others use <b>/</b>, e.g. directory/file.ext. This could lead to cross platform issues. However OpenSCAD on Windows correctly handles the use of <b>/</b>, so using <b>/</b> in all <b>include</b> or <b>use</b> statements work on all platforms.
+</p><p>To access the parent directory <b>../</b> can be used under Linux.
+</p>
+<h4>Variables</h4>
+<h5>Scope of variables</h5>
+<p>Using <b><code>include &lt;<i>filename</i>&gt;</code></b> allows default variables to be specified in the library. These defaults can be overridden in the main code. An OpenSCAD variable has only one value during the life of the program. When there are multiple assignments it takes the last value, but assigns when the variable is first created. This has an effect when assigning in a library, as any <i>variables</i> that you later use to change the default, must be assigned before the include statement. See the second example below.
+</p>
+<h5>Overwriting variables</h5>
+<p>Default variables in an <b><code>include</code></b> can be overridden, for example
+</p><p><b>lib.scad</b>
+</p>
+<pre>i=1;
+k=3;
+module x() {
+    echo("hello world");
+    echo("i=",i,"j=",j,"k=",k);
+}
+</pre>
+<p><b>hello.scad</b>
+</p>
+<pre>j=4;
+include &lt;lib.scad&gt;;
+x();
+i=5;
+x();
+k=j;
+x();
+
+</pre>
+<p>Produces the following
+</p>
+<pre>ECHO: "hello world"
+ECHO: "i=", 5, "j=", 4, "k=", 4
+ECHO: "hello world"
+ECHO: "i=", 5, "j=", 4, "k=", 4
+ECHO: "hello world"
+ECHO: "i=", 5, "j=", 4, "k=", 4
+</pre>
+<p>However, placing <b><code>j=4;</code></b> after the <b><code>include</code></b> fails, producing
+</p>
+<pre>ECHO: "hello world"
+ECHO: "i=", 5, "j=", 4, "k=", undef
+ECHO: "hello world"
+ECHO: "i=", 5, "j=", 4, "k=", undef
+ECHO: "hello world"
+ECHO: "i=", 5, "j=", 4, "k=", undef
+</pre>
+<h4>Example "Ring-Library"</h4>
+<p>A library file for generating rings might look like this (defining a function and providing an example):
+</p><p><b>ring.scad:</b>
+</p>
+<pre>module ring(r1, r2, h) {
+    difference() {
+        cylinder(r = r1, h = h);
+        translate([ 0, 0, -1 ]) cylinder(r = r2, h = h+2);
+    }
+}
+
+ring(5, 4, 10);
+</pre>
+<p>Including the library using
+</p>
+<pre>include &lt;ring.scad&gt;;
+rotate([90, 0, 0]) ring(10, 1, 1);
+</pre>
+<p>would result in the example ring being shown in addition to the rotated ring, but
+</p>
+<pre>use &lt;ring.scad&gt;;
+rotate([90, 0, 0]) ring(10, 1, 1);
+</pre>
+<p>shows only the rotated ring.
+</p><p>If using the use function, make sure to place the use statements at top of the file, or at least not within a module!
+</p><p>This works fine:
+</p>
+<pre> // a.scad
+ use &lt;ring.scad&gt;;
+ module a() {
+   ring();
+ }
+</pre>
+<p>but this results in an syntax error:
+</p>
+<pre> //a.scad
+ module a() {
+   use &lt;ring.scad&gt;;
+   ring();
+ }
+</pre>
+<p><br/>
+</p>
+<h4>Nested Include and Use</h4>
+<p>OpenSCAD executes nested calls to <b>include</b> and <b>use</b>. There is one caveat to this, that <b>use</b> brings functions and modules only into the local file context. As a result, nested calls to <b>use</b> have no effect on the environment of the base file; the child <b>use</b> call works in the parent <b>use</b> context, but the modules and functions so imported fall out of context before they are seen by the base context.
+</p>
+
+
+
+
+</div><footer class="mw-body" style="font-size:13px;color:darkgray;text-align:center;margin-bottom:-1px">
+	From the WikiBooks article <a href="https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Include_Statement" style="color:black">Include Statement</a> 
+	(provided under <a href="https://creativecommons.org/licenses/by-sa/3.0/" style="color:black">
+	CC-BY-SA-3.0</a>)</footer></body></html>

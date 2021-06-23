@@ -1,0 +1,258 @@
+<html><head><title>Using OpenSCAD in a command line environment</title><link href="./styles/style.css" rel="stylesheet"/></head><body class="mw-body" style="height:auto"><h1 class="firstHeading" id="firstHeading">Using OpenSCAD in a command line environment</h1><div id="bodyContent"><div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2></div>
+<ul style="list-style-image:none">
+<li><a href="#Command_line_usage"><span class="tocnumber">1</span> Command line usage</a></li>
+<li><a href="#Export_options"><span class="tocnumber">2</span> Export options</a>
+<ul style="list-style-image:none">
+<li><a href="#Camera_and_image_output"><span class="tocnumber">2.1</span> Camera and image output</a></li>
+</ul>
+</li>
+<li><a href="#Constants"><span class="tocnumber">3</span> Constants</a></li>
+<li><a href="#Command_to_build_required_files"><span class="tocnumber">4</span> Command to build required files</a></li>
+<li><a href="#Processing_all_.scad_files_in_a_folder"><span class="tocnumber">5</span> Processing all .scad files in a folder</a></li>
+<li><a href="#Makefile_example"><span class="tocnumber">6</span> Makefile example</a>
+<ul style="list-style-image:none">
+<li><a href="#Automatic_targets"><span class="tocnumber">6.1</span> Automatic targets</a></li>
+</ul>
+</li>
+<li><a href="#Windows_notes"><span class="tocnumber">7</span> Windows notes</a></li>
+<li><a href="#MacOS_notes"><span class="tocnumber">8</span> MacOS notes</a></li>
+</ul>
+</div>
+
+<h3>Command line usage</h3>
+<p>OpenSCAD can not only be used as a GUI, but also handles command line arguments. Its usage line says:
+</p><p>OpenSCAD 2019.05 has these options:
+</p>
+<pre> Usage: openscad [options] file.scad
+ Allowed options:
+   -o [ --o ] arg               output specified file instead of running the 
+                                GUI, the file extension specifies the type: stl,
+                                off, amf, 3mf, csg, dxf, svg, png, echo, ast, 
+                                term, nef3, nefdbg
+                                
+   -D [ --D ] arg               var=val -pre-define variables
+   -p [ --p ] arg               customizer parameter file
+   -P [ --P ] arg               customizer parameter set
+   -h [ --help ]                print this help message and exit
+   -v [ --version ]             print the version
+   --info                       print information about the build process
+                                
+   --camera arg                 camera parameters when exporting png: 
+                                =translate_x,y,z,rot_x,y,z,dist or 
+                                =eye_x,y,z,center_x,y,z
+   --autocenter                 adjust camera to look at object's center
+   --viewall                    adjust camera to fit object
+   --imgsize arg                =width,height of exported png
+   --render arg                 for full geometry evaluation when exporting png
+   --preview arg                [=throwntogether] -for ThrownTogether preview 
+                                png
+   --view arg                   =view options: axes | crosshairs | edges | 
+                                scales | wireframe
+   --projection arg             =(o)rtho or (p)erspective when exporting png
+   --csglimit arg               =n -stop rendering at n CSG elements when 
+                                exporting png
+   --colorscheme arg            =colorscheme: *Cornfield | Metallic | Sunset | 
+                                Starnight | BeforeDawn | Nature | DeepOcean | 
+                                Solarized | Tomorrow | Tomorrow 2 | Tomorrow 
+                                Night | Monotone
+                                
+   -d [ --d ] arg               deps_file -generate a dependency file for make
+   -m [ --m ] arg               make_cmd -runs make_cmd file if file is missing
+   -q [ --quiet ]               quiet mode (don't print anything *except* 
+                                errors)
+   --hardwarnings               Stop on the first warning
+   --check-parameters arg       =true/false, configure the parameter check for 
+                                user modules and functions
+   --check-parameter-ranges arg =true/false, configure the parameter range check
+                                for builtin modules
+   --debug arg                  special debug info
+   -s [ --s ] arg               stl_file deprecated, use -o
+   -x [ --x ] arg               dxf_file deprecated, use -o
+</pre>
+<p>OpenSCAD 2015.03-1 has these options:
+</p>
+<pre>openscad     [ -o output_file [ -d deps_file ] ]\
+             [ -m make_command ] [ -D var=val [..] ] \
+             [ --help ] print this help message and exit \
+             [ --version ] [ --info ] \
+             [ --camera=translatex,y,z,rotx,y,z,dist | \
+               --camera=eyex,y,z,centerx,y,z ] \
+             [ --autocenter ] \
+             [ --viewall ] \
+             [ --imgsize=width,height ] [ --projection=(o)rtho|(p)ersp] \
+             [ --render | --preview[=throwntogether] ] \
+             [ --colorscheme=[Cornfield|Sunset|Metallic|Starnight|BeforeDawn|Nature|DeepOcean] ] \
+             [ --csglimit=num ]\
+             filename
+</pre>
+<p>OpenSCAD 2014.03+ has these options:
+</p>
+<pre>openscad     [ -o output_file [ -d deps_file ] ]\
+             [ -m make_command ] [ -D var=val [..] ] \
+             [ --version ] [ --info ] \
+             [ --camera=translatex,y,z,rotx,y,z,dist | \
+               --camera=eyex,y,z,centerx,y,z ] \
+             [ --imgsize=width,height ] [ --projection=(o)rtho|(p)ersp] \
+             [ --render | --preview[=throwntogether] ] \
+             [ --csglimit=num ] \
+             filename
+</pre>
+<p>Openscad 2013.05 had these options:
+</p>
+<pre>openscad     [ -o output_file [ -d deps_file ] ]\
+             [ -m make_command ] [ -D var=val [..] ] [ --render ] \
+             [ --camera=translatex,y,z,rotx,y,z,dist | \
+               --camera=eyex,y,z,centerx,y,z ] \
+             [ --imgsize=width,height ] [ --projection=(o)rtho|(p)ersp] \
+             filename
+</pre>
+<p>Earlier releases had only these:
+</p>
+<pre>openscad [ -o <i>output_file</i> [ -d <i>deps_file</i> ] ] \
+         [ -m <i>make_command</i> ] [ -D <i>var</i>=<i>val</i> [..] ] <i>filename</i>
+</pre>
+<p>The usage on OpenSCAD version 2011.09.30 (now deprecated) was:
+</p>
+<pre>openscad [ { -s stl_file | -o off_file | -x dxf_file } [ -d deps_file ] ]\
+         [ -m make_command ] [ -D var=val [..] ] filename
+</pre>
+<h3>Export options</h3>
+<p>When called with the <code>-o</code> option, OpenSCAD does not start the GUI, but executes the given file and exports to the <i>output_file</i> in a format depending on the extension (<code>.stl</code> / <code>.off</code> / <code>.dxf</code>, <code>.csg</code>).  
+</p><p>Some versions use -s/-d/-o to determine the output file format instead; check with "openscad --help".
+</p><p>If the option <code>-d</code> is given in addition to an export command, all files accessed while building the mesh are written in the argument of <code>-d</code> in the syntax of a Makefile.
+</p><p>For at least 2015.03-2+, specifying the extension <code>.echo</code> causes openscad to produce a text file containing error messages and the output of all <code>echo()</code> calls in <code>filename</code> as they would appear in the console window visible in the GUI. Multiple output files are not supported, so using this option you cannot also obtain the model that would have normally been generated.
+</p>
+<h4>Camera and image output</h4>
+<p>For 2013.05+, the option to output a <code>.png</code> image was added. There are two types of cameras available for the generation of images.  
+</p><p>The first camera type is a 'gimbal' camera that uses Euler angles, translation, and a camera distance, like OpenSCAD's GUI viewport display at the bottom of the OpenSCAD window.
+</p><p>The second camera type is a 'vector' camera, with an 'eye' camera location vector and a 'lookat' center vector. 
+</p><p>--imgsize x,y chooses the .png dimensions and --projection chooses orthogonal or perspective, as in the GUI. 
+</p><p>By default, cmdline .png output uses Preview mode (f5) with OpenCSG. For some situations it may be desirable to output the full render, with CGAL. This is done by adding '--render' as an option.
+</p>
+<h3>Constants</h3>
+<p>In order to pre-define variables, use the <code>-D</code> option. It can be given repeatedly. Each occurrence of <code>-D</code> must be followed by an assignment. Unlike normal OpenSCAD assignments, these assignments don't define variables, but constants, which cannot be changed inside the program, and can thus be used to overwrite values defined in the program at export time.
+</p><p>If you want to assign the -D variable to another variable, the -D variable MUST be initialized in the main .scad program
+</p>
+<pre>param1=17;       // must be initialized
+val=param1;      // param1 passed via -D on cmd-line
+echo(val,param1); // outputs 17,17
+</pre>
+<p>without the first line, val would be undefined.
+</p><p>The right hand sides can be arbitrary OpenSCAD expressions, including mathematical operations and strings.
+</p><p>Be aware that your shell (bash, cmd, etc.) parses the arguments before passing them to <code>openscad</code>, therefore you need to properly quote or escape arguments with special characters like spaces or quotation marks. For example to assign a string <code>production</code> to a <code>quality</code> parameter one has to ensure the <code>"</code> characters OpenSCAD expects aren't stripped by the shell. In bash one could write:
+</p>
+<pre>openscad -o my_model_production.stl -D 'quality="production"' my_model.scad
+</pre>
+<p>or from the Windows prompt:
+</p>
+<pre>openscad.com -o my_model_production.stl -D "quality=""production""" my_model.scad
+</pre>
+<p>or you may need to escape the inner quotes instead:
+</p>
+<pre>openscad -o my_model_production.stl -D "quality=\"production\"" my_model.scad
+</pre>
+<p>Note that this sort of double-escaping isn't necessary when executing OpenSCAD from another process that isn't using a shell, because each argument is passed separately. For example a Java application might start a process like so:
+</p>
+<pre>   pb = new ProcessBuilder("/usr/bin/openscad",
+     "-o", "my_model_production.stl",
+     "-D", "quality=\"production\"",
+     "my_model.scad");
+</pre>
+<h3>Command to build required files</h3>
+<p>In a complex build process, some missing files required by an OpenSCAD file can be generated if they are defined in a Makefile. If OpenSCAD is given the option <code>-m make</code>, it starts <code>make <i>file</i></code> the first time it tries to access a missing <i>file</i>.
+</p>
+<h3>Processing all .scad files in a folder</h3>
+<p>Example to convert all the .scad in a folder into .stl:
+</p><p>In a folder with .scad files, make a .bat file with text:
+</p>
+<pre>   FOR %%f in (*.scad)  DO openscad -o "%%~nf.stl" "%%f" 
+</pre>
+<p>If it closes without processing, check to set the PATH by adding openscad directory to:
+</p>
+<pre>     Start - Settings - Control Panel - System - Advanced tab - Environment Variables - System Variables, select Path, then click Edit.
+</pre>
+<p>Add the openscad directory to the list
+</p><p><br/>
+</p>
+<h3>Makefile example</h3>
+<p>The <code>-d</code> and <code>-m</code> options only make sense together. (<code>-m</code> without <code>-d</code> would not consider modified dependencies when building exports, <code>-d</code> without <code>-m</code> would require the files to be already built for the first run that generates the dependencies.)
+</p><p>Here is an example of a basic Makefile that creates an .stl file from an .scad file of the same name:
+</p>
+<pre># explicit wildcard expansion suppresses errors when no files are found
+include $(wildcard *.deps)
+
+%.stl: %.scad
+	openscad -m make -o $@ -d $@.deps $&lt;
+</pre>
+<p>When <code>make my_example.stl</code> is run for the first time, it finds no .deps files, and must depend on <code>my_example.scad</code>. Because <code>my_example.stl</code> is not yet preset, it gets created unconditionally. If OpenSCAD finds missing files, it calls <code>make</code> to build them, and it lists all used files in <code>my_example.stl.deps</code>.
+</p><p>When <code>make my_example.stl</code> is called subsequently, it finds and includes <code>my_example.stl.deps</code> and check if any of the files listed there, including <code>my_example.scad</code>, changed since <code>my_example.stl</code> was built, based on their time stamps. Only if that is the case, it builds <code>my_example.stl</code> again.
+</p>
+<h4>Automatic targets</h4>
+<p>When building similar .stl files from a single .scad file, there is a way to automate that too:
+</p>
+<pre># match "module foobar() { // `make` me"
+TARGETS=$(shell sed '/^module [a-z0-9_-]*().*make..\?me.*$$/!d;s/module //;s/().*/.stl/' base.scad)
+
+all: ${TARGETS}
+
+# auto-generated .scad files with .deps make make re-build always. keeping the
+# scad files solves this problem. (<a href="/wiki/Talk:OpenSCAD_User_Manual/Using_OpenSCAD_in_a_command_line_environment" title="Talk:OpenSCAD User Manual/Using OpenSCAD in a command line environment">explanations are welcome</a>.)
+.SECONDARY: $(shell echo "${TARGETS}" | sed 's/\.stl/.scad/g')
+
+# explicit wildcard expansion suppresses errors when no files are found
+include $(wildcard *.deps)
+
+%.scad:
+	echo -ne 'use &lt;base.scad&gt;\n$*();' &gt; $@
+
+%.stl: %.scad
+	openscad -m make -o $@ -d $@.deps $&lt;
+</pre>
+<p>All objects that are supposed to be exported automatically have to be defined in <code>base.scad</code> in an own module with their future file name (without the ".stl"), and have a comment like "<code>// make me</code>" in the line of the module definition. The "<code>TARGETS=</code>" line picks these out of the base file and creates the file names. These are built when <code>make all</code> (or <code>make</code>, for short) is called.
+</p><p>As the convention from the last example is to create the .stl files from .scad files of the same base name, for each of these files, an .scad file must be generated. This is done in the "<code>%.scad:</code>" paragraph; <code>my_example.scad</code> is a simple OpenSCAD file:
+</p>
+<pre>use &lt;base.scad&gt;
+my_example();
+</pre>
+<p>The "<code>.SECONDARY</code>" line is there to keep <code>make</code> from deleting the generated .scad files. Its presence helps determine which files no longer need to be rebuilt; please post ideas about what exactly goes wrong there (or how to fix it better) on the <a href="/wiki/Talk:OpenSCAD_User_Manual/Using_OpenSCAD_in_a_command_line_environment" title="Talk:OpenSCAD User Manual/Using OpenSCAD in a command line environment">talk</a> page!
+</p>
+<h3>Windows notes</h3>
+<p>On Windows, openscad.com should be called from the command line as a wrapper for openscad.exe. This is because Openscad uses the 'devenv' solution to the Command-Line/GUI output issue. Typing 'openscad' at the cmd.exe prompt calls the .com program wrapper by default.
+</p>
+<h3>MacOS notes</h3>
+<p>On MacOS the binary is normally hidden inside the App folder. If OpenSCAD is installed in the global Applications folder, it can be called from command line like in the following example that just shows the OpenSCAD version:
+</p>
+<pre>macbook:/$ /Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD -v
+OpenSCAD version 2013.06
+</pre>
+<p>Alternatively, you may create a symbolic link to the binary to make calls from the command line easier:
+</p>
+<pre> macbook:/$ sudo ln -sf /Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD /usr/local/bin/openscad
+</pre>
+<p>Now you can call <code>openscad</code> directly without having to type in the full path.
+</p>
+<pre> macbook:/$ openscad -v
+ OpenSCAD version 2015.03-3
+</pre>
+<p>On some versions of MacOS, you might get the following error when attempting to run openscad via that link:
+</p>
+<pre> This application failed to start because it could not find or load the Qt platform plugin "cocoa".
+</pre>
+<pre> Reinstalling the application may fix this problem.
+ Abort trap: 6
+</pre>
+<p>You can fix this by creating a wrapper script to invoke the executable directly:
+</p>
+<pre> sudo rm -f /usr/local/bin/openscad
+ echo '#!/bin/sh' &gt; test
+ echo '/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD $*' &gt;&gt; test
+ chmod +x test ; sudo mv test /usr/local/bin/openscad
+</pre>
+
+
+
+
+</div><footer class="mw-body" style="font-size:13px;color:darkgray;text-align:center;margin-bottom:-1px">
+	From the WikiBooks article <a href="https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Using_OpenSCAD_in_a_command_line_environment" style="color:black">Using OpenSCAD in a command line environment</a> 
+	(provided under <a href="https://creativecommons.org/licenses/by-sa/3.0/" style="color:black">
+	CC-BY-SA-3.0</a>)</footer></body></html>

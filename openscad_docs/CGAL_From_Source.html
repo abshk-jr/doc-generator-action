@@ -1,0 +1,26 @@
+<html><head><title>CGAL From Source</title><link href="./styles/style.css" rel="stylesheet"/></head><body class="mw-body" style="height:auto"><h1 class="firstHeading" id="firstHeading">CGAL From Source</h1><div id="bodyContent"><p>This page is intended for cases where the process at <a href="UNIX.html" title="OpenSCAD User Manual/Building on Linux/UNIX">OpenSCAD_User_Manual/Building_on_Linux/UNIX</a> has failed for some reason. Please file an issue on OpenSCAD's github if the above process did not work for you. In the meantime, these instructions might provide a workaround solution for you.
+</p>
+<ul style="list-style-image:none"><li>If your system already has an outdated binary CGAL package installed (such as libcgal-dev) you best remove it with something like 'apt-get purge libcgal-dev'.</li></ul>
+<ul style="list-style-image:none"><li>If you custom-compiled BOOST, set the BOOST_ROOT environment variable to the installation location.</li></ul>
+<ul style="list-style-image:none"><li>Download CGAL from <a class="external autonumber" href="https://www.cgal.org" rel="nofollow">[1]</a> . Try to get the latest version.</li></ul>
+<ul style="list-style-image:none"><li>CGAL requires boost, cmake, mpfr, and gmp to all be installed. The process at <a href="UNIX.html" title="OpenSCAD User Manual/Building on Linux/UNIX">OpenSCAD_User_Manual/Building_on_Linux/UNIX</a> can help you install them. On Debian/Ubuntu, it the command to install the necessary components looks something like this:</li></ul>
+<pre>sudo apt-get install libboost-dev cmake libmpfr-dev libgmp3-dev
+</pre>
+<ul style="list-style-image:none"><li>Extract</li></ul>
+<pre>tar -xf CGAL-*tar*
+</pre>
+<ul style="list-style-image:none"><li>Build</li></ul>
+<pre>cd CGAL-$version
+cmake . -DCMAKE_INSTALL_PREFIX=$HOME/openscad_deps
+make
+sudo make install
+</pre>
+<ul style="list-style-image:none"><li>Note that some older systems, like NetBSD5, wont compile CGAL - either because CGAL wasn't ported to work with them or their compiler is too old or other reasons.</li></ul>
+
+
+
+
+</div><footer class="mw-body" style="font-size:13px;color:darkgray;text-align:center;margin-bottom:-1px">
+	From the WikiBooks article <a href="https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/CGAL_From_Source" style="color:black">CGAL From Source</a> 
+	(provided under <a href="https://creativecommons.org/licenses/by-sa/3.0/" style="color:black">
+	CC-BY-SA-3.0</a>)</footer></body></html>

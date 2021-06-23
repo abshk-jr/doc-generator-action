@@ -1,0 +1,218 @@
+<html><head><title>Mathematical Operators</title><link href="./styles/style.css" rel="stylesheet"/></head><body class="mw-body" style="height:auto"><h1 class="firstHeading" id="firstHeading">Mathematical Operators</h1><div id="bodyContent">
+<h3>Scalar Arithmetical Operators</h3>
+<p>The scalar arithmetical operators take numbers as operands and produce
+a new number.
+</p>
+<table class="wikitable">
+<tbody><tr>
+<td>+
+</td>
+<td>add
+</td></tr>
+<tr>
+<td>-
+</td>
+<td>subtract
+</td></tr>
+<tr>
+<td>*
+</td>
+<td>multiply
+</td></tr>
+<tr>
+<td>/
+</td>
+<td>divide
+</td></tr>
+<tr>
+<td>%
+</td>
+<td>modulo
+</td></tr>
+<tr>
+<td>^
+</td>
+<td>exponent <span style="font-weight: bold; font-style: normal;">[<span style="color: #A00000;">Note:</span> <span style="font-weight: normal; font-style: italic;">Requires version <span style="font-weight: bold;">2021.01</span></span>]</span>
+</td></tr></tbody></table>
+<p>The "-" can also be used as prefix operator to negate a number.
+</p>
+<h3>Relational Operators</h3>
+<p>Relational operators produce a Boolean result from two operands.  
+</p>
+<table class="wikitable">
+<tbody><tr>
+<td>&lt;
+</td>
+<td>less than
+</td></tr>
+<tr>
+<td>&lt;=
+</td>
+<td>less or equal
+</td></tr>
+<tr>
+<td>==
+</td>
+<td>equal
+</td></tr>
+<tr>
+<td>!=
+</td>
+<td>not equal
+</td></tr>
+<tr>
+<td>&gt;=
+</td>
+<td>greater or equal
+</td></tr>
+<tr>
+<td>&gt;
+</td>
+<td>greater than
+</td></tr></tbody></table>
+<p>If both operands are simple numbers, the meaning is self-evident.  
+</p><p>If both operands are strings, alphabetical sorting determines 
+equality and order.  E.g., "ab" &gt; "aa" &gt; "a".  
+</p><p>If both operands are Booleans, <i>true</i> &gt; <i>false</i>.  In an inequality comparison between a Boolean 
+and a number <i>true</i> is treated as 1 and <i>false</i> is treated as 0.  Other inequality tests involving Booleans 
+return false.    
+</p><p>If both operands are vectors, an equality test returns <i>true</i> when the vectors are identical and <i>false</i> otherwise.  
+Inequality tests involving one or two vectors always return <i>false</i>, so for example [1] &lt; [2] is <i>false</i>.  
+</p><p>Dissimilar types always test as unequal with '==' and '!='.   
+Inequality comparisons between dissimilar types, except for Boolean and numbers as noted above, always result in <i>false</i>.  
+Note that [1] and 1 are different types so [1] == 1 is false.  
+</p><p><i>undef</i> doesn't equal anything but <i>undef</i>.  Inequality comparisons involving <i>undef</i> result in <i>false</i>.
+</p><p><i>nan</i> doesn't equal anything (not even itself) and inequality tests all produce <i>false</i>.  See <a href="General.html#Numbers" title="OpenSCAD User Manual/General">Numbers</a>.
+</p>
+<h3>Logical Operators</h3>
+<p>All logical operators take Booleans as operands and produce a Boolean.  
+Non-Boolean quantities are converted to Booleans before the operator is
+evaluated. 
+</p>
+<table class="wikitable">
+<tbody><tr>
+<td>&amp;&amp;
+</td>
+<td>logical AND
+</td></tr>
+<tr>
+<td>||
+</td>
+<td>logical OR
+</td></tr>
+<tr>
+<td>!
+</td>
+<td>logical unary NOT
+</td></tr>
+</tbody></table>
+<p>Since <code>[false]</code> is <code>true</code>, <code>false || [false]</code> is also <code>true</code>.
+</p><p>Note that how logical operators deal with vectors is different than relational operators:
+</p><p><code>[1, 1] &gt; [0, 2]</code> is <code>false</code>, but 
+</p><p><code>[false, false] &amp;&amp; [false, false]</code> is <code>true</code>.
+</p>
+<h3>Conditional Operator</h3>
+<p>The <tt>?:</tt> operator can be used to conditionally evaluate one or another expression.
+It works like the <tt>?:</tt> operator from the family of C-like programming languages.
+</p>
+<table class="wikitable">
+<tbody><tr>
+<td> ? :
+</td>
+<td>Conditional operator
+</td></tr></tbody></table>
+<table width="75%">
+<tbody><tr>
+<td><b>Usage Example:</b>
+</td></tr>
+<tr>
+<td>
+<pre>a=1;
+b=2;
+c= a==b ? 4 : 5;
+</pre>
+<p>If a equals b, then c is set to 4, else c is set to 5.
+<br/>
+The part "a==b" must be something that evaluates to a boolean value.
+</p>
+</td></tr></tbody></table>
+<h3>Vector-Number Operators</h3>
+<p>The vector-number operators take a vector and a number as operands and produce a new vector.
+</p>
+<table class="wikitable">
+<tbody><tr>
+<td>*
+</td>
+<td>multiply all vector elements by number
+</td></tr>
+<tr>
+<td>/
+</td>
+<td>divide all vector elements by number
+</td></tr></tbody></table>
+<dl><dd><b>Example</b></dd></dl>
+<pre>L = [1, [2, [3, "a"] ] ];
+echo(5*L);
+// ECHO: [5, [10, [15, undef]]]
+</pre>
+<h3>Vector Operators</h3>
+<p>The vector operators take vectors as operands and produce a new vector.
+</p>
+<table class="wikitable">
+<tbody><tr>
+<td>+
+</td>
+<td>add element-wise
+</td></tr>
+<tr>
+<td>-
+</td>
+<td>subtract element-wise
+</td></tr></tbody></table>
+<p>The "-" can also be used as prefix operator to element-wise negate a vector.
+</p>
+<dl><dd><b>Example</b></dd></dl>
+<pre>L1 = [1, [2, [3, "a"] ] ];
+L2 = [1, [2, 3] ];
+echo(L1+L1); // ECHO: [2, [4, [6, undef]]]
+echo(L1+L2); // ECHO: [2, [4, undef]]
+</pre>
+<h3>Vector Dot-Product Operator</h3>
+<p>If both operands of multiplication are simple vectors, the result is a number 
+according to the linear algebra rule for <a class="extiw" href="https://en.wikipedia.org/wiki/Dot_product" title="w:Dot product">dot product</a>.  
+<code>c = u*v;</code> results in <span class="mwe-math-element"><img alt="{\displaystyle c=\sum u_{i}v_{i}}" aria-hidden="true" class="mwe-math-fallback-image-inline" src="./imgs\maths/62719e8c892aa5cc4d9357848a218d3c4b73654c.svg" style="vertical-align: -1.338ex; width:11.904ex; height:3.843ex;"/></span>.  If the operands' 
+sizes don't match, the result is <code>undef</code>.
+</p>
+<h3>Matrix Multiplication</h3>
+<p>If one or both operands of multiplication are matrices, the result is a simple vector or matrix
+according to the linear algebra rules for <a class="extiw" href="https://en.wikipedia.org/wiki/Matrix_multiplication#Matrix_product_.28two_matrices.29" title="w:Matrix multiplication">matrix product</a>.  
+In the following,
+<span class="texhtml" style="white-space: nowrap;">A, B, C...</span> are matrices, <span class="texhtml" style="white-space: nowrap;">u, v, w...</span> are vectors.  Subscripts <span class="texhtml" style="white-space: nowrap;">i, j</span> denote element 
+indices.  
+</p><p>For <span class="texhtml" style="white-space: nowrap;">A</span> a matrix of size <span class="texhtml" style="white-space: nowrap;">n × m</span> and 
+<span class="texhtml" style="white-space: nowrap;">B</span> a matrix of size <span class="texhtml" style="white-space: nowrap;">m × p</span>, their product
+<code>C = A*B;</code> is a matrix of size <span class="texhtml" style="white-space: nowrap;">n × p</span> with elements
+</p><p><span class="mwe-math-element"><img alt="{\displaystyle C_{ij}=\sum _{k=0}^{m-1}A_{ik}B_{kj}}" aria-hidden="true" class="mwe-math-fallback-image-inline" src="./imgs\maths/0cdb6e01b98696f33cdd13519f49a5d31a0eb5bc.svg" style="vertical-align: -3.171ex; width:17.097ex; height:7.509ex;"/></span>.
+</p><p><code>C = B*A;</code> results in <code>undef</code> unless <span class="texhtml" style="white-space: nowrap;">n</span> = <span class="texhtml" style="white-space: nowrap;">p</span>.
+</p><p>For <span class="texhtml" style="white-space: nowrap;">A</span> a matrix of size <span class="texhtml" style="white-space: nowrap;">n × m</span> and 
+<span class="texhtml" style="white-space: nowrap;">v</span> a vector of size <span class="texhtml" style="white-space: nowrap;">m</span>, their product
+<code>u = A*v;</code> is a vector of size <span class="texhtml" style="white-space: nowrap;">n</span> with elements
+</p><p><span class="mwe-math-element"><img alt="{\displaystyle u_{i}=\sum _{k=0}^{m-1}A_{ik}v_{k}}" aria-hidden="true" class="mwe-math-fallback-image-inline" src="./imgs\maths/a25ee6408c0dbf26d2ecce9c86c3214fa22e6aba.svg" style="vertical-align: -3.171ex; width:14.774ex; height:7.509ex;"/></span>. 
+</p><p>In linear algebra, this 
+is the <a class="extiw" href="https://en.wikipedia.org/wiki/Matrix_multiplication#Square_matrix_and_column_vector" title="w:Matrix multiplication">product of a matrix and a column vector</a>.
+</p><p>For <span class="texhtml" style="white-space: nowrap;">v</span> a vector of size <span class="texhtml" style="white-space: nowrap;">n</span> and 
+<span class="texhtml" style="white-space: nowrap;">A</span> a matrix of size <span class="texhtml" style="white-space: nowrap;">n × m</span>, their product
+<code>u = v*A;</code> is a vector of size <span class="texhtml" style="white-space: nowrap;">m</span> with elements
+</p><p><span class="mwe-math-element"><img alt="{\displaystyle u_{j}=\sum _{k=0}^{n-1}v_{k}A_{kj}}" aria-hidden="true" class="mwe-math-fallback-image-inline" src="./imgs\maths/7f46be5cabd3bdfc2ef5047ff3d0542bde66442c.svg" style="vertical-align: -3.171ex; width:14.806ex; height:7.509ex;"/></span>. 
+</p><p>In linear algebra, this 
+is the product of a row vector and a matrix.
+</p><p>Matrix multiplication is not commutative: <span class="mwe-math-element"><img alt="{\displaystyle AB\neq BA}" aria-hidden="true" class="mwe-math-fallback-image-inline" src="./imgs\maths/38f1a5c060698eefdb6af8dd172fd3fe7124189c.svg" style="vertical-align: -0.838ex; width:10.113ex; height:2.676ex;"/></span>,  <span class="mwe-math-element"><img alt="{\displaystyle Av\neq vA}" aria-hidden="true" class="mwe-math-fallback-image-inline" src="./imgs\maths/43b5db3b81699facd7bdf07afd0e85312fc763ee.svg" style="vertical-align: -0.838ex; width:8.84ex; height:2.676ex;"/></span>.
+</p>
+
+
+
+
+</div><footer class="mw-body" style="font-size:13px;color:darkgray;text-align:center;margin-bottom:-1px">
+	From the WikiBooks article <a href="https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Mathematical_Operators#Relational_Operators" style="color:black">Mathematical Operators</a> 
+	(provided under <a href="https://creativecommons.org/licenses/by-sa/3.0/" style="color:black">
+	CC-BY-SA-3.0</a>)</footer></body></html>

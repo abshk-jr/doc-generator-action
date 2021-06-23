@@ -1,0 +1,37 @@
+<html><head><title>3D to 2D Projection</title><link href="./styles/style.css" rel="stylesheet"/></head><body class="mw-body" style="height:auto"><h1 class="firstHeading" id="firstHeading">3D to 2D Projection</h1><div id="bodyContent"><p><br/>
+Using the <code>projection()</code> function, you can create 2d drawings from 3d models, and export them to the dxf format. It works by projecting a 3D model to the (x,y) plane, with z at 0. If <code>cut=true</code>, only points with z=0 are considered (effectively cutting the object), with <code>cut=false</code>(<i>the default</i>), points above and below the plane are considered as well (creating a proper projection).
+</p><p><b>Example</b>: Consider example002.scad, that comes with OpenSCAD. 
+</p><p><a class="image" href="./imgs/Openscad_projection_example_2x.png"><img alt="Openscad projection example 2x.png" data-file-height="286" data-file-width="482" decoding="async" height="286" src="./imgs/Openscad_projection_example_2x.png" width="482"/></a>
+</p><p>Then you can do a 'cut' projection, which gives you the 'slice' of the x-y plane with z=0. 
+</p>
+<pre>projection(cut = true) example002();
+</pre>
+<p><a class="image" href="./imgs/Openscad_projection_example_3x.png"><img alt="Openscad projection example 3x.png" data-file-height="286" data-file-width="482" decoding="async" height="286" src="./imgs/Openscad_projection_example_3x.png" width="482"/></a>
+</p><p>You can also do an 'ordinary' projection, which gives a sort of 'shadow' of the object onto the xy plane. 
+</p>
+<pre>projection(cut = false) example002();
+</pre>
+<p><a class="image" href="./imgs/Openscad_example_projection_8x.png"><img alt="Openscad example projection 8x.png" data-file-height="286" data-file-width="482" decoding="async" height="286" src="./imgs/Openscad_example_projection_8x.png" width="482"/></a>
+</p><p><b>Another Example</b>
+</p><p>You can also use projection to get a 'side view' of an object. Let's take example002, and move it up, out of the X-Y plane, and rotate it:
+</p>
+<pre>translate([0,0,25]) rotate([90,0,0]) example002();
+</pre>
+<p><a class="image" href="./imgs/Openscad_projection_example_4x.png"><img alt="Openscad projection example 4x.png" data-file-height="286" data-file-width="482" decoding="async" height="286" src="./imgs/Openscad_projection_example_4x.png" width="482"/></a>
+</p><p>Now we can get a side view with projection()
+</p>
+<pre>projection() translate([0,0,25]) rotate([90,0,0]) example002();
+</pre>
+<p><a class="image" href="./imgs/Openscad_projection_example_5x.png"><img alt="Openscad projection example 5x.png" data-file-height="286" data-file-width="482" decoding="async" height="286" src="./imgs/Openscad_projection_example_5x.png" width="482"/></a>
+</p><p>Links: 
+</p>
+<ul style="list-style-image:none"><li><a class="external text" href="http://svn.clifford.at/openscad/trunk/examples/example021.scad" rel="nofollow">example021.scad from Clifford Wolf's site</a>.</li>
+<li><a class="external text" href="http://www.gilesbathgate.com/2010/06/extracting-2d-mendel-outlines-using-openscad/" rel="nofollow">More complicated example</a> from Giles Bathgate's blog</li></ul>
+
+
+
+
+</div><footer class="mw-body" style="font-size:13px;color:darkgray;text-align:center;margin-bottom:-1px">
+	From the WikiBooks article <a href="https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/3D_to_2D_Projection" style="color:black">3D to 2D Projection</a> 
+	(provided under <a href="https://creativecommons.org/licenses/by-sa/3.0/" style="color:black">
+	CC-BY-SA-3.0</a>)</footer></body></html>

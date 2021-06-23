@@ -1,0 +1,128 @@
+<html><head><title>OpenSCAD User Manual</title><link href="./styles/style.css" rel="stylesheet"/></head><body class="mw-body" style="height:auto"><h1 class="firstHeading" id="firstHeading">OpenSCAD User Manual</h1><div id="bodyContent"><p><br/>
+</p>
+
+<div class="floatright"><a class="image" href="./imgs/200px-OpenSCAD-logo.png"><img alt="OpenSCAD-logo.png" data-file-height="567" data-file-width="688" decoding="async" height="165" src="./imgs/200px-OpenSCAD-logo.png" width="200"/></a></div>
+<div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2></div>
+<ul style="list-style-image:none">
+<li><a href="#Introduction"><span class="tocnumber">1</span> Introduction</a></li>
+<li><a href="#Additional_Resources"><span class="tocnumber">2</span> Additional Resources</a></li>
+<li><a href="#History"><span class="tocnumber">3</span> History</a></li>
+<li><a href="#The_OpenSCAD_User_Manual"><span class="tocnumber">4</span> The OpenSCAD User Manual</a></li>
+<li><a href="#The_OpenSCAD_Language_Reference"><span class="tocnumber">5</span> The OpenSCAD Language Reference</a></li>
+<li><a href="#Work_in_progress"><span class="tocnumber">6</span> Work in progress</a></li>
+</ul>
+</div>
+
+<h2>Introduction</h2>
+<p><b>OpenSCAD</b> is a software for creating solid 3D CAD objects. <br/>
+It is <a class="external text" href="https://www.gnu.org/philosophy/free-sw.html" rel="nofollow">free software</a> and available for <a class="external text" href="https://www.gnu.org/" rel="nofollow">GNU/Linux</a>, Microsoft Windows and Mac OS X.
+</p><p>Unlike most free software for creating 3D models (such as the well-known application <a class="mw-redirect" href="/wiki/Blender" title="Blender">Blender</a>), OpenSCAD does not focus on the artistic aspects of 3D modelling, but instead focuses on the <a class="extiw" href="https://en.wikipedia.org/wiki/Computer-aided_design" title="w:Computer-aided design">CAD</a> aspects. So it might be the application you are looking for when you are planning to create 3D models of machine parts, but probably is not what you are looking for when you are more interested in creating computer-animated movies or organic life-like models.
+</p><p>OpenSCAD, unlike many CAD products, is not an interactive modeler. Instead it is something like a 2D/3D-compiler that reads in a program file that describes the object and renders the model from this file. This gives you (the designer) full control over the modelling process. This enables you to easily change any step in the modelling process and make designs that are defined by configurable parameters.
+</p><p>OpenSCAD has two main operating modes, <i>Preview</i> and <i>Render</i>. Preview is relatively fast using <a class="extiw" href="https://en.wikipedia.org/wiki/Z-buffering" title="w:Z-buffering">3D graphics</a> and the <a class="extiw" href="https://en.wikipedia.org/wiki/Graphics_processing_unit" title="w:Graphics processing unit">computer's GPU</a>, but is an approximation of the model and can produce <a class="extiw" href="https://en.wikipedia.org/wiki/Z-fighting" title="w:Z-fighting">artifacts</a>; Preview uses <a class="external text" href="http://opencsg.org/" rel="nofollow">OpenCSG</a> and <a class="extiw" href="https://en.wikipedia.org/wiki/OpenGL" title="w:OpenGL">OpenGL</a>. Render generates exact geometry and a fully <a class="extiw" href="https://en.wikipedia.org/wiki/Tessellation_(computer_graphics)" title="w:Tessellation (computer graphics)">tessellated</a> <a class="extiw" href="https://en.wikipedia.org/wiki/Polygon_mesh" title="w:Polygon mesh">mesh</a>. It is not an approximation and as such it is often a lengthy process, taking minutes or hours for larger designs. Render uses <a class="extiw" href="https://en.wikipedia.org/wiki/CGAL" title="w:CGAL">CGAL</a> as its geometry engine.
+</p><p>OpenSCAD provides two types of 3D modelling:
+</p>
+<ul style="list-style-image:none"><li><a class="extiw" href="https://en.wikipedia.org/wiki/Constructive_solid_geometry" title="w:Constructive solid geometry">Constructive Solid Geometry (CSG)</a></li>
+<li>extrusion of 2D primitives into 3D space.</li></ul>
+<p>Autocad DXF files are used as the data exchange format for 2D outlines. In addition to 2D paths for extrusion it is also possible to read design parameters from DXF files. Besides DXF files, OpenSCAD can read and create 3D models in the <a class="extiw" href="https://en.wikipedia.org/wiki/STL_(file_format)" title="w:STL (file format)"> STL</a> and <a class="extiw" href="https://en.wikipedia.org/wiki/OFF_(file_format)" title="w:OFF (file format)"> OFF</a> file formats.
+</p><p>OpenSCAD can be downloaded from <a class="external free" href="https://www.openscad.org/" rel="nofollow">https://www.openscad.org/</a>. More information is available on the <a class="external text" href="https://www.openscad.org/community.html" rel="nofollow">mailing list</a>. OpenSCAD can also be tried online at <a class="external text" href="http://openscad.net/#" rel="nofollow">http://openscad.net/</a>, which is a partial port of OpenSCAD for the web.
+</p>
+<h2>Additional Resources</h2>
+<p>A clear guided introduction to using OpenSCAD and to the OpenSCAD language is available in the <a class="external text" href="https://en.wikibooks.org/wiki/OpenSCAD_Tutorial">OpenSCAD Tutorial</a>.
+</p><p>For Teachers: a basic 25-slide presentation from 2014 is available under <a class="extiw" href="https://en.wikipedia.org/wiki/GNU_Free_Documentation_License" title="w:GNU Free Documentation License">GNUFDL</a> to walk your students through the process of using OpenSCAD <a class="external text" href="http://www.appropedia.org/images/5/5f/Intro_to_OpenSCAD_2014_Long.pdf" rel="nofollow">here</a>.
+</p><p>Fablab Lannion (France) edited a nice French-language <a class="external text" href="https://static.fablab-lannion.org/tutos/openscad/" rel="nofollow">interactive tutorial</a> that you might appreciate.
+</p><p>A "<a class="external text" href="https://www.openscad.org/cheatsheet/" rel="nofollow">cheat sheet</a>" is a useful quick reference for the OpenSCAD language, with each item linking back to this Wikibook.
+</p>
+<h2>History</h2>
+<p>Periodically the two manuals below get cleaned up or have major transitions.
+Consider archiving the manuals prior to starting a major update.
+</p><p>This can be done for the two 'printable version' links below to the <a class="external text" href="https://archive.org" rel="nofollow">Internet Archive</a>
+</p>
+<ul style="list-style-image:none"><li>2018-04-25 <a class="external text" href="https://web.archive.org/web/20180425002648/https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Print_version" rel="nofollow">The OpenSCAD User Manual - Print Version</a> &amp; <a class="external text" href="https://web.archive.org/web/20180425001407/https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/The_OpenSCAD_Language" rel="nofollow">The OpenSCAD Language - Print Version</a></li>
+<li>2019-07-22 <a class="external text" href="https://web.archive.org/web/20190722042509/https://en.wikibooks.org/wiki/OpenSCAD_User_Manual" rel="nofollow">The OpenSCAD User Manual</a> Which includes links to the archives of the above two printed versions (as of this date).</li></ul>
+<p>The Wayback Machine no longer has a free user requested site archive, so below is just the two 'printable version' manuals
+</p>
+<ul style="list-style-image:none"><li>2020-12-11 <a class="external text" href="https://web.archive.org/web/20201211023636/https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Print_version" rel="nofollow">The OpenSCAD User Manual - Print Version</a> &amp; <a class="external text" href="https://web.archive.org/web/20201211023916/https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/The_OpenSCAD_Language" rel="nofollow">The OpenSCAD Language - Print Version</a></li></ul>
+<h1>The OpenSCAD User Manual</h1>
+
+<ol><li><a href="OpenSCAD_User_Manual.html#Introduction" title="OpenSCAD User Manual">Introduction</a></li>
+<li><a href="First_Steps.html" title="OpenSCAD User Manual/First Steps">First Steps</a></li>
+<li><a href="The_OpenSCAD_User_Interface.html" title="OpenSCAD User Manual/The OpenSCAD User Interface">The OpenSCAD User Interface</a></li>
+<li><a href="Input_Devices.html" title="OpenSCAD User Manual/Input Devices">Input Devices</a></li>
+<li><a href="Customizer.html" title="OpenSCAD User Manual/Customizer">Customizer</a></li>
+<li>Import - STL, 3MF, OFF, AMF, DXF, SVG, CSG
+<ol><li><a href="SVG_Import.html" title="OpenSCAD User Manual/SVG Import">SVG Import</a></li></ol></li>
+<li>Export - STL, 3MF, OFF, AMF, DXF, SVG, CSG, PNG
+<ol><li><a href="STL_Export.html" title="OpenSCAD User Manual/STL Export">STL Export</a></li>
+<li><a href="CSG_Export.html" title="OpenSCAD User Manual/CSG Export">CSG Export</a></li>
+<li><a href="DXF_Extrusion.html" title="OpenSCAD User Manual/DXF Extrusion">DXF Extrusion</a></li>
+<li><a href="Other_2D_formats.html" title="OpenSCAD User Manual/Other 2D formats">Other 2D formats</a></li></ol></li>
+<li><a href="Commented_Example_Projects.html" title="OpenSCAD User Manual/Commented Example Projects">Example Projects</a>
+<ol><li><a href="Strandbeest.html" title="OpenSCAD User Manual/Example/Strandbeest">Strandbeest</a></li></ol></li>
+<li><a href="Paths.html" title="OpenSCAD User Manual/Paths">Paths</a></li>
+<li><a href="Using_an_external_Editor_with_OpenSCAD.html" title="OpenSCAD User Manual/Using an external Editor with OpenSCAD">Using an external Editor with OpenSCAD</a></li>
+<li><a href="Integration_with_other_applications.html" title="OpenSCAD User Manual/Integration with other applications">Integration with other applications</a></li>
+<li><a href="Using_OpenSCAD_in_a_command_line_environment.html" title="OpenSCAD User Manual/Using OpenSCAD in a command line environment">Using OpenSCAD in a command line environment</a></li>
+<li><a href="Building_OpenSCAD_from_Sources.html" title="OpenSCAD User Manual/Building OpenSCAD from Sources">Building OpenSCAD from Sources</a>
+<ol><li><a href="UNIX.html" title="OpenSCAD User Manual/Building on Linux/UNIX">Building on Linux/UNIX</a></li>
+<li><a href="Cross-compiling_for_Windows_on_Linux_or_Mac_OS_X.html" title="OpenSCAD User Manual/Cross-compiling for Windows on Linux or Mac OS X">Cross-compiling for Windows on Linux or Mac OS X</a></li>
+<li><a href="Building_on_Windows.html" title="OpenSCAD User Manual/Building on Windows">Building on Windows (Outdated)</a></li>
+<li><a href="Building_on_Microsoft_Windows.html" title="OpenSCAD User Manual/Building on Microsoft Windows">Building on Windows (New)</a></li>
+<li><a href="Building_on_Mac_OS_X.html" title="OpenSCAD User Manual/Building on Mac OS X">Building on Mac OS X</a></li>
+<li><a href="Submitting_patches.html" title="OpenSCAD User Manual/Submitting patches">Submitting patches</a></li></ol></li>
+<li><a href="FAQ.html" title="OpenSCAD User Manual/FAQ">Frequently Asked Questions</a></li>
+<li><a href="Libraries.html" title="OpenSCAD User Manual/Libraries">Libraries</a></li>
+<li><a href="Tips_and_Tricks.html" title="OpenSCAD User Manual/Tips and Tricks">Tips and Tricks</a></li>
+<li><a href="Command_Glossary.html" title="OpenSCAD User Manual/Command Glossary">Command Glossary</a> - Very short name and syntax reference</li></ol>
+<h1>The OpenSCAD Language Reference</h1>
+
+<ol><li><a href="The_OpenSCAD_Language.html" title="OpenSCAD User Manual/The OpenSCAD Language">The OpenSCAD Language</a>
+<ol><li><a href="General.html" title="OpenSCAD User Manual/General">General</a> - READ THIS FIRST - <a href="General.html#Comments" title="OpenSCAD User Manual/General">comments</a>, <a href="General.html#Values_and_Data_Types" title="OpenSCAD User Manual/General">values and data types</a>, <a href="General.html#Variables" title="OpenSCAD User Manual/General">variables</a>, <a href="General.html#Vectors" title="OpenSCAD User Manual/General">vectors</a>, <a href="General.html#Getting_input" title="OpenSCAD User Manual/General">getting input</a></li></ol></li>
+<li><a href="Primitive_Solids.html" title="OpenSCAD User Manual/Primitive Solids">3D objects</a> -
+<ol><li><a href="Primitive_Solids.html" title="OpenSCAD User Manual/Primitive Solids">3D Primitive Solids</a> - <a href="Primitive_Solids.html#cube" title="OpenSCAD User Manual/Primitive Solids">cube</a>, <a href="Primitive_Solids.html#sphere" title="OpenSCAD User Manual/Primitive Solids">sphere</a>, <a href="Primitive_Solids.html#cylinder" title="OpenSCAD User Manual/Primitive Solids">cylinder</a>, <a href="Primitive_Solids.html#polyhedron" title="OpenSCAD User Manual/Primitive Solids">polyhedron</a></li>
+<li><a href="3D_to_2D_Projection.html" title="OpenSCAD User Manual/3D to 2D Projection">3D to 2D Projection</a></li></ol></li>
+<li><a href="Using_the_2D_Subsystem.html" title="OpenSCAD User Manual/Using the 2D Subsystem">2D Objects</a>
+<ol><li><a href="2D_Primitives.html" title="OpenSCAD User Manual/2D Primitives">2D Primitives</a> - <a href="2D_Primitives.html#square" title="OpenSCAD User Manual/2D Primitives">square</a>, <a href="2D_Primitives.html#circle" title="OpenSCAD User Manual/2D Primitives">circle</a>, <a href="2D_Primitives.html#polygon" title="OpenSCAD User Manual/2D Primitives">polygon</a></li>
+<li><a href="Text.html" title="OpenSCAD User Manual/Text">Text</a> - Generate text using installed or user supplied font files.</li>
+<li><a href="2D_to_3D_Extrusion.html" title="OpenSCAD User Manual/2D to 3D Extrusion">2D to 3D</a> - <a href="2D_to_3D_Extrusion.html#Linear_Extrude" title="OpenSCAD User Manual/2D to 3D Extrusion">linear_extrude</a>, <a href="2D_to_3D_Extrusion.html#Rotate_Extrude" title="OpenSCAD User Manual/2D to 3D Extrusion">rotate_extrude</a></li></ol></li>
+<li><a href="Transformations.html" title="OpenSCAD User Manual/Transformations">Transform</a>
+<ol><li><a href="Transformations.html#color" title="OpenSCAD User Manual/Transformations">color</a></li>
+<li><a href="Transformations.html#rotate" title="OpenSCAD User Manual/Transformations">rotate</a>, <a href="Transformations.html#translate" title="OpenSCAD User Manual/Transformations">translate</a>, <a href="Transformations.html#mirror" title="OpenSCAD User Manual/Transformations">mirror</a>, <a href="Transformations.html#multmatrix" title="OpenSCAD User Manual/Transformations">multmatrix</a></li>
+<li><a href="Transformations.html#scale" title="OpenSCAD User Manual/Transformations">scale</a>, <a href="Transformations.html#resize" title="OpenSCAD User Manual/Transformations">resize</a></li>
+<li><a href="Transformations.html#offset" title="OpenSCAD User Manual/Transformations">offset</a>, <a href="Transformations.html#minkowski" title="OpenSCAD User Manual/Transformations">minkowski</a>, <a href="Transformations.html#hull" title="OpenSCAD User Manual/Transformations">hull</a></li>
+<li><a href="Transformations.html#Combining_transformations" title="OpenSCAD User Manual/Transformations">Combining transformations</a></li></ol></li>
+<li><a href="CSG_Modelling.html" title="OpenSCAD User Manual/CSG Modelling">Boolean combination</a>
+<ol><li><a href="CSG_Modelling.html#union" title="OpenSCAD User Manual/CSG Modelling">union</a>, <a href="CSG_Modelling.html#difference" title="OpenSCAD User Manual/CSG Modelling">difference</a>, <a href="CSG_Modelling.html#intersection" title="OpenSCAD User Manual/CSG Modelling">intersection</a>, <a href="CSG_Modelling.html#render" title="OpenSCAD User Manual/CSG Modelling">render</a></li></ol></li>
+<li>Other Functions and Operators
+<ol><li><a href="Conditional_and_Iterator_Functions.html" title="OpenSCAD User Manual/Conditional and Iterator Functions">Conditional and Iterator Functions</a> - <a href="Conditional_and_Iterator_Functions.html#For_Loop" title="OpenSCAD User Manual/Conditional and Iterator Functions">for</a>,<a href="Conditional_and_Iterator_Functions.html#Intersection_For_Loop" title="OpenSCAD User Manual/Conditional and Iterator Functions"> intersection_for</a>, <a href="Conditional_and_Iterator_Functions.html#If_Statement" title="OpenSCAD User Manual/Conditional and Iterator Functions">if</a>, <a href="Conditional_and_Iterator_Functions.html#Conditional_?_:" title="OpenSCAD User Manual/Conditional and Iterator Functions"> conditional ? :</a>, <a href="Conditional_and_Iterator_Functions.html#Assign_Statement" title="OpenSCAD User Manual/Conditional and Iterator Functions"> assign</a></li>
+<li><a href="Mathematical_Operators.html" title="OpenSCAD User Manual/Mathematical Operators">Mathematical Operators</a> - <a href="Mathematical_Operators.html" title="OpenSCAD User Manual/Mathematical Operators">General</a>, <a href="Mathematical_Operators.html#Vector-Number_Operators" title="OpenSCAD User Manual/Mathematical Operators">Vectors</a>, <a href="Mathematical_Operators.html#Matrix_Multiplication" title="OpenSCAD User Manual/Mathematical Operators">Matrix multiplication</a></li>
+<li><a href="Mathematical_Functions.html" title="OpenSCAD User Manual/Mathematical Functions">Mathematical Functions</a>
+<ol><li><a href="Mathematical_Functions.html#Trigonometric_Functions" title="OpenSCAD User Manual/Mathematical Functions">Trigonometric</a> (cos sin tan acos asin atan atan2)</li>
+<li><a href="Mathematical_Functions.html#Other_Mathematical_Functions" title="OpenSCAD User Manual/Mathematical Functions">Other</a> (abs ceil concat cross exp floor ln len let log lookup max min norm pow rands round sign sqrt)</li></ol></li>
+<li><a href="String_Functions.html" title="OpenSCAD User Manual/String Functions">String Functions</a> - <a href="String_Functions.html#str" title="OpenSCAD User Manual/String Functions">str</a>, <a href="String_Functions.html#chr" title="OpenSCAD User Manual/String Functions">chr</a>, <a href="String_Functions.html#ord" title="OpenSCAD User Manual/String Functions">ord</a></li>
+<li><a href="Type_Test_Functions.html" title="OpenSCAD User Manual/Type Test Functions">Type Test Functions</a> - <a href="Type_Test_Functions.html#is_undef" title="OpenSCAD User Manual/Type Test Functions">is_undef</a>, <a href="Type_Test_Functions.html#is_bool" title="OpenSCAD User Manual/Type Test Functions">is_bool</a>, <a href="Type_Test_Functions.html#is_num" title="OpenSCAD User Manual/Type Test Functions">is_num</a>, <a href="Type_Test_Functions.html#is_string" title="OpenSCAD User Manual/Type Test Functions">is_string</a>, <a href="Type_Test_Functions.html#is_list" title="OpenSCAD User Manual/Type Test Functions">is_list</a></li>
+<li><a href="List_Comprehensions.html" title="OpenSCAD User Manual/List Comprehensions">List Comprehensions</a></li>
+<li><a href="Other_Language_Features.html" title="OpenSCAD User Manual/Other Language Features">Other Language Features</a> - <a href="Other_Language_Features.html#Special_variables" title="OpenSCAD User Manual/Other Language Features">Special '$' variables</a>, <a href="Other_Language_Features.html#Echo_Statements" title="OpenSCAD User Manual/Other Language Features">echo</a>, <a href="Other_Language_Features.html#Render" title="OpenSCAD User Manual/Other Language Features">render</a>, <a href="Other_Language_Features.html#Surface" title="OpenSCAD User Manual/Other Language Features">surface</a>, <a href="Other_Language_Features.html#Search" title="OpenSCAD User Manual/Other Language Features">search</a> , <a href="Other_Language_Features.html#OpenSCAD_Version" title="OpenSCAD User Manual/Other Language Features">version(), version_num()</a>, <a href="Other_Language_Features.html#parent_module.28n.29_and_.24parent_modules" title="OpenSCAD User Manual/Other Language Features">parent_module(n) and $parent_modules</a>, <a href="Other_Language_Features.html#assert" title="OpenSCAD User Manual/Other Language Features">assert</a></li></ol></li>
+<li><a href="User-Defined_Functions_and_Modules.html" title="OpenSCAD User Manual/User-Defined Functions and Modules">User-Defined Functions and Modules</a> - <a href="User-Defined_Functions_and_Modules.html#Functions" title="OpenSCAD User Manual/User-Defined Functions and Modules">Functions</a>, <a href="User-Defined_Functions_and_Modules.html#Modules" title="OpenSCAD User Manual/User-Defined Functions and Modules">Modules</a>, <a href="User-Defined_Functions_and_Modules.html#Children" title="OpenSCAD User Manual/User-Defined Functions and Modules">Children</a></li>
+<li><a href="Modifier_Characters.html" title="OpenSCAD User Manual/Modifier Characters">Debugging aids</a> -  % # ! * <a href="Other_Language_Features.html#Echo_Statements" title="OpenSCAD User Manual/Other Language Features">echo</a></li>
+<li>External libraries and code files
+<ol><li><a href="Include_Statement.html" title="OpenSCAD User Manual/Include Statement">include - SCAD, CSG</a></li>
+<li><a href="Include_Statement.html" title="OpenSCAD User Manual/Include Statement">use  - SCAD</a></li>
+<li><a href="Importing_Geometry.html" title="OpenSCAD User Manual/Importing Geometry">import - STL, OFF, DXF</a>
+<ol><li><a href="2D_Primitives.html#import_dxf" title="OpenSCAD User Manual/2D Primitives">import_dxf</a> - Deprecated</li>
+<li><a href="Importing_Geometry.html#import_stl" title="OpenSCAD User Manual/Importing Geometry">import_stl</a> - Deprecated</li></ol></li>
+<li><a href="Export.html" title="OpenSCAD User Manual/Export">export - STL, OFF, AMF, 3MF, DXF, SVG, PNG, CSG</a></li>
+<li><a href="Other_Language_Features.html#Surface" title="OpenSCAD User Manual/Other Language Features">surface</a> - PNG</li></ol></li></ol>
+<h1>Work in progress</h1>
+<p>This section contains documentation about ongoing work which is available as experimental features in snapshot versions of OpenSCAD or not yet integrated at all and pending in a <a class="external text" href="https://github.com/openscad/openscad/branches" rel="nofollow">branch</a> or <a class="external text" href="https://github.com/openscad/openscad/pulls" rel="nofollow">pull-request</a> at the <a class="external text" href="https://github.com/openscad/openscad/" rel="nofollow">OpenSCAD github repository</a>.
+</p>
+<ul style="list-style-image:none"><li><a href="WIP.html#Overview" title="OpenSCAD User Manual/WIP">Work in progress - Overview</a></li>
+<li><a class="mw-redirect" href="Inputdriver.html" title="OpenSCAD User Manual/WIP/Inputdriver">Inputdriver</a></li>
+<li><a href="Offset_Extrude.html" title="OpenSCAD User Manual/WIP/Offset Extrude">Offset Extrude</a></li></ul>
+
+
+
+
+</div><footer class="mw-body" style="font-size:13px;color:darkgray;text-align:center;margin-bottom:-1px">
+	From the WikiBooks article <a href="https://en.wikibooks.org/wiki/OpenSCAD_User_Manual" style="color:black">OpenSCAD User Manual</a> 
+	(provided under <a href="https://creativecommons.org/licenses/by-sa/3.0/" style="color:black">
+	CC-BY-SA-3.0</a>)</footer></body></html>

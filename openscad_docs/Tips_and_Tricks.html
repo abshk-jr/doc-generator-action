@@ -1,0 +1,683 @@
+<html><head><title>Tips and Tricks</title><link href="./styles/style.css" rel="stylesheet"/></head><body class="mw-body" style="height:auto"><h1 class="firstHeading" id="firstHeading">Tips and Tricks</h1><div id="bodyContent"><div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2></div>
+<ul style="list-style-image:none">
+<li><a href="#A_note_on_licensing"><span class="tocnumber">1</span> A note on licensing</a></li>
+<li><a href="#Data"><span class="tocnumber">2</span> Data</a>
+<ul style="list-style-image:none">
+<li><a href="#Map_values_from_a_list"><span class="tocnumber">2.1</span> Map values from a list</a></li>
+<li><a href="#Filter_values_in_a_list"><span class="tocnumber">2.2</span> Filter values in a list</a></li>
+<li><a href="#Add_all_values_in_a_list"><span class="tocnumber">2.3</span> Add all values in a list</a></li>
+<li><a href="#Cumulative_sum"><span class="tocnumber">2.4</span> Cumulative sum</a></li>
+<li><a href="#Count_values_in_a_list_matching_a_condition"><span class="tocnumber">2.5</span> Count values in a list matching a condition</a></li>
+<li><a href="#Find_the_index_of_the_maximum_value_in_a_list"><span class="tocnumber">2.6</span> Find the index of the maximum value in a list</a></li>
+<li><a href="#Caring_about_undef"><span class="tocnumber">2.7</span> Caring about undef</a></li>
+</ul>
+</li>
+<li><a href="#Geometry"><span class="tocnumber">3</span> Geometry</a>
+<ul style="list-style-image:none">
+<li><a href="#Stack_cylinders_on_top_of_each_other"><span class="tocnumber">3.1</span> Stack cylinders on top of each other</a></li>
+<li><a href="#Minimum_rotation_problem"><span class="tocnumber">3.2</span> Minimum rotation problem</a></li>
+<li><a href='#Drawing_"lines"_in_OpenSCAD'><span class="tocnumber">3.3</span> Drawing "lines" in OpenSCAD</a></li>
+<li><a href="#Fit_text_into_a_given_area"><span class="tocnumber">3.4</span> Fit text into a given area</a></li>
+<li><a href="#Create_a_mirrored_object_while_retaining_the_original"><span class="tocnumber">3.5</span> Create a mirrored object while retaining the original</a></li>
+<li><a href="#Arrange_parts_on_a_spatial_array"><span class="tocnumber">3.6</span> Arrange parts on a spatial array</a></li>
+<li><a href="#Rounding_polygons"><span class="tocnumber">3.7</span> Rounding polygons</a></li>
+<li><a href="#Filleting_objects"><span class="tocnumber">3.8</span> Filleting objects</a></li>
+<li><a href="#Computing_a_bounding_box"><span class="tocnumber">3.9</span> Computing a bounding box</a></li>
+<li><a href="#Data_Heightmap"><span class="tocnumber">3.10</span> Data Heightmap</a></li>
+</ul>
+</li>
+<li><a href="#Strings"><span class="tocnumber">4</span> Strings</a>
+<ul style="list-style-image:none">
+<li><a href="#Integer_from_Numeric_String_(Decimal_or_Hex)"><span class="tocnumber">4.1</span> Integer from Numeric String (Decimal or Hex)</a></li>
+</ul>
+</li>
+<li><a href="#Debug"><span class="tocnumber">5</span> Debug</a>
+<ul style="list-style-image:none">
+<li><a href="#Debug_Tap_function"><span class="tocnumber">5.1</span> Debug Tap function</a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h1>A note on licensing</h1>
+<p><big><span style="color:red">All <b>code snippets</b> shown on this page are intended to be used freely without any attribution and for any purpose, e.g. consider any code contribution here to be placed under Public Domain or CC0 license.</span> This is not meant to change the normal license of the page as a whole and/or the manual itself.</big>
+</p>
+<h1>Data</h1>
+<h2>Map values from a list</h2>
+<pre>// The function that maps input values x to output values, the
+// example uses floor() to convert floating point to integer
+// values.
+function map(x) = floor(x);
+  
+input = [58.9339, 22.9263, 19.2073, 17.8002, 40.4922, 19.7331, 38.9541, 28.9327, 18.2059, 75.5965];
+  
+// Use a list comprehension expression to call the map() function
+// for every value of the input list and put the result of the
+// function in the output list.
+output = [ for (x = input) map(x) ];
+  
+echo(output);
+// ECHO: [58, 22, 19, 17, 40, 19, 38, 28, 18, 75]
+</pre>
+<h2>Filter values in a list</h2>
+<pre>// The function that define if the input value x should be
+// included in the filtered list, the example selects
+// all even values that are greater than 6.
+function condition(x) = (x &gt;= 6) &amp;&amp; (x % 2 == 0);
+  
+input = [3, 3.3, 4, 4.1, 4.8, 5, 6, 6.3, 7, 8];
+  
+// Use a list comprehension expression to call the condition()
+// function for every value of the input list and put the value
+// in the output list if the function returns true.
+output = [ for (x = input) if (condition(x)) x ];
+  
+echo(output);
+// ECHO: [6, 8]
+</pre>
+<h2>Add all values in a list</h2>
+<pre>// Create a simple recursive function that adds the values of a list of floats;
+// the simple tail recursive structure makes it possible to
+// internally handle the calculation as loop, preventing a
+// stack overflow.
+function add(v, i = 0, r = 0) = i &lt; len(v) ? add(v, i + 1, r + v[i]) : r;
+ 
+input = [2, 3, 5, 8, 10, 12];
+ 
+output = add(input);
+
+echo(output);
+// ECHO: 40
+//------------------ add2 -----------------------
+// An even simpler non recursive code version of add explores the 
+// the matrix product operator
+function add2(v) = [for(p=v) 1]*v;
+
+echo(add2(input));
+// ECHO: 40
+
+// add2 works also with lists of vectors
+input2 = [ [2, 3] , [5, 8] , [10, 12] ];
+echo(add2(input2));
+// ECHO: [17, 23]
+echo(add(input2));
+// ECHO: undef  // Why?
+//----------------- add3 --------------------------
+// With a little more code, the function add may be used also 
+// to add any homogeneous list structure of floats
+function add3(v, i = 0, r) = 
+    i &lt; len(v) ? 
+        i == 0 ?
+            add3(v, 1, v[0]) :
+            add3(v, i + 1, r + v[i]) :
+        r;
+
+input3 = [ [[1], 1] , [[1], 2] , [[1], 3] ];
+input4 = [ 10, [[1], 1] , [[1], 2] , [[1], 3] ];
+
+echo(add3(input3));
+// ECHO: [[3], 6]
+echo(add2(input3));
+// ECHO: undef // input3 is not a list of vectors
+echo(add3(input4));
+// ECHO: undef // input4 is not a homogeneous list
+</pre>
+<h2>Cumulative sum</h2>
+<p><span style="font-weight: bold; font-style: normal;">[<span style="color: #A00000;">Note:</span> <span style="font-weight: normal; font-style: italic;">Requires version <span style="font-weight: bold;">2019.05</span></span>]</span>
+</p>
+<pre>//create a recursive cumulative-sum function using a c-style generator
+values = [1,2,65,1,4];
+
+cumsum = [ for (a=0, b=values[0]; a &lt; len(values); a= a+1, b=b+values[a]) b];
+echo(cumsum);
+
+// ECHO: [1, 3, 68, 69, 73]
+</pre>
+<p><br/>
+</p>
+<h2>Count values in a list matching a condition</h2>
+<pre>// The function that define if the input value x should be
+// included in the filtered list, the example selects
+// all even values that are greater than 6.
+function condition(x) = (x &gt;= 6) &amp;&amp; (x % 2 == 0);
+ 
+input = [3, 3.3, 4, 4.1, 4.8, 5, 6, 6.3, 7, 8];
+ 
+// Use a list comprehension expression to call the condition()
+// function for every value of the input list and put the value
+// in the output list if the function returns true.
+// Finally the count is determined simply by using len() on the
+// filtered list.
+output = len([ for (x = input) if (condition(x)) x ]);
+ 
+echo(output);
+// ECHO: 2
+</pre>
+<h2>Find the index of the maximum value in a list</h2>
+<pre>// Create a function that find the index of the maximum value
+// found in the input list of floats
+function index_max(l) = search(max(l), l)[0];
+
+input = [ 6.3, 4, 4.1, 8, 7, 3, 3.3, 4.8, 5, 6];
+
+echo(index_max(input));
+// Check it
+echo(input[index_max(input)] == max(input));
+// ECHO: 3
+// ECHO: true
+</pre>
+<h2>Caring about undef</h2>
+<p>Most illegal operations in OpenSCAD return <code>undef</code>. Some return <code>nan</code>. However, the program keeps running and <code>undef</code> values may cause unpredictable future behaviour if no precaution is taken. When a function argument is missing in a function call, an <code>undef</code> value is assigned to it in evaluating the function expression. To avoid this, a default value may be assigned to optional function arguments.
+</p>
+<pre>// add 'a' to each element of list 'L'
+function incrementBy(L, a) =  [ for(x=L) x+a ];
+
+//add 'a' to each element of list 'L'; 'a' default is 1 when missing
+function incrementByWithDefault(L, a=1) = [ for(x=L) x+a ];
+
+echo(incrementBy= incrementBy([1,2,3],2));
+echo(incrementByWithDefault= incrementByWithDefault([1,2,3],2));
+echo(incrementBy= incrementBy([1,2,3]));
+echo(incrementByWithDefault= incrementByWithDefault([1,2,3]));
+// ECHO: incrementBy= [3, 4, 5]
+// ECHO: incrementByWithDefault= [3, 4, 5]
+// ECHO: incrementBy= [undef, undef, undef]
+// ECHO: incrementByWithDefault= [2, 3, 4]
+</pre>
+<p>Sometimes the default value depends on other parameters of the call and cannot be set as before;
+a conditional expression solve this:
+</p>
+<pre>// find the sublist of 'list' with indices from 'from' to 'to' 
+function sublist(list, from=0, to) =
+    let( end = (to==undef ? len(list)-1 : to) )
+    [ for(i=[from:end]) list[i] ];
+
+echo(s0= sublist(["a", "b", "c", "d"]) );  	// from = 0, end = 3
+echo(s1= sublist(["a", "b", "c", "d"], 1, 2) ); // from = 1, end = 2
+echo(s2= sublist(["a", "b", "c", "d"], 1)); 	// from = 1, end = 3
+echo(s3= sublist(["a", "b", "c", "d"], to=2) );	// from = 0, end = 2
+// ECHO: s0 = ["a", "b", "c", "d"]
+// ECHO: s1 = ["b", "c"] 
+// ECHO: s2 = ["b", "c", "d"] 
+// ECHO: s3 = ["a", "b", "c"]
+</pre>
+<p>The function <code>sublist()</code> returns undesirable values when <code>from &gt; to</code> and generates a warning (try it!). A simple solution would be to return the empty list <code>[]</code> in this case:
+</p>
+<pre>// returns an empty list when 'from &gt; to' 
+function sublist2(list, from=0, to) =
+    from&lt;=to ?
+    	let( end = (to==undef ? len(list)-1 : to) )
+    	[ for(i=[from:end]) list[i] ] :
+	[];
+
+echo(s1= sublist2(["a", "b", "c", "d"], 3, 1));
+echo(s2= sublist2(["a", "b", "c", "d"], 1));
+echo(s3= sublist2(["a", "b", "c", "d"], to=2));
+// ECHO: s1 = []
+// ECHO: s2 = []
+// ECHO: s3 = ["a", "b", "c"]
+</pre>
+<p>The output <code>s2</code> above is the empty list because <code>to==undef</code> and the comparison of <code>from</code> and <code>to</code> evaluates as <code>false</code>: the default value of <code>to</code> has been lost.
+To overcome this it is enough to invert the test:
+</p>
+<pre>function sublist3(list, from=0, to) =
+    from&gt;to ?
+	[] :
+    	let( end = to==undef ? len(list)-1 : to )
+    	[ for(i=[from:end]) list[i] ] ;
+
+echo(s1=sublist3(["a", "b", "c", "d"], 3, 1));
+echo(s2=sublist3(["a", "b", "c", "d"], 1));
+echo(s3=sublist3(["a", "b", "c", "d"], to=2));
+// ECHO: s1 = []
+// ECHO: s2 = ["b", "c", "d"]
+// ECHO: s3 = ["a", "b", "c"]
+</pre>
+<p>Now, when <code>to</code> is undefined, the first test evaluates as false and the <code>let()</code> is executed. With careful choices of tests, we can deal with <code>undef</code> values.
+</p>
+<h1>Geometry</h1>
+<h2>Stack cylinders on top of each other</h2>
+<div class="thumb tright"><div class="thumbinner" style="width:202px;"><a class="image" href="./imgs/200px-Openscad-tips-stacked-cylinders.png"><img alt="" class="thumbimage" data-file-height="1024" data-file-width="1024" decoding="async" height="200" src="./imgs/200px-Openscad-tips-stacked-cylinders.png" width="200"/></a>  <div class="thumbcaption">OpenSCAD - Stacked Cylinders</div></div></div>
+<pre>// Define the sizes for the cylinders, first value is the
+// radius, the second is the height.
+// All cylinders are to be stacked above each other (with
+// an additional spacing of 1 unit).
+sizes = [ [ 26, 3 ], [ 20, 5 ], [ 11, 8 ],  [ 5, 10 ], [ 2, 13 ] ];
+
+// One option to solve this is by using a recursive module
+// that creates a new translated coordinate system before
+// going into the next level.
+module translated_cylinder(size_vector, idx = 0) {
+    if (idx &lt; len(size_vector)) {
+        radius = size_vector[idx][0];
+        height = size_vector[idx][1];
+
+        // Create the cylinder for the current level.
+        cylinder(r = radius, h = height);
+
+        // Recursive call generating the next cylinders
+        // translated in Z direction based on the height
+        // of the current cylinder
+        translate([0, 0, height + 1]) {
+            translated_cylinder(size_vector, idx + 1);
+        }
+    }
+}
+
+// Call the module to create the stacked cylinders.
+translated_cylinder(sizes);
+</pre>
+<h2>Minimum rotation problem</h2>
+<p>In 2D, except in very special cases, there are only two rotations that make
+a vector to align to another one. In 3D, there are infinitely many. Only one, 
+however, has the minimum rotation angle. The following function builds
+the matrix for that minimum rotation. The code is a simplification of 
+a function found in the Oskar Linde's sweep.scad.
+</p>
+<pre>// Find the unitary vector with direction v. Fails if v=[0,0,0].
+function unit(v) = norm(v)&gt;0 ? v/norm(v) : undef; 
+// Find the transpose of a rectangular matrix
+function transpose(m) = // m is any rectangular matrix of objects
+  [ for(j=[0:len(m[0])-1]) [ for(i=[0:len(m)-1]) m[i][j] ] ];
+// The identity matrix with dimension n
+function identity(n) = [for(i=[0:n-1]) [for(j=[0:n-1]) i==j ? 1 : 0] ];
+
+// computes the rotation with minimum angle that brings a to b
+// the code fails if a and b are opposed to each other
+function rotate_from_to(a,b) = 
+    let( axis = unit(cross(a,b)) )
+    axis*axis &gt;= 0.99 ? 
+        transpose([unit(b), axis, cross(axis, unit(b))]) * 
+            [unit(a), axis, cross(axis, unit(a))] : 
+        identity(3);
+</pre>
+<h2>Drawing "lines" in OpenSCAD</h2>
+<div class="thumb tright"><div class="thumbinner" style="width:202px;"><a class="image" href="./imgs/200px-Openscad-tips-knot.png"><img alt="" class="thumbimage" data-file-height="1024" data-file-width="1024" decoding="async" height="200" src="./imgs/200px-Openscad-tips-knot.png" width="200"/></a>  <div class="thumbcaption">OpenSCAD - Knot</div></div></div>
+<pre>// An application of the minimum rotation
+// Given to points p0 and p1, draw a thin cylinder with its
+// bases at p0 and p1
+module line(p0, p1, diameter=1) {
+    v = p1-p0;
+    translate(p0)
+        // rotate the cylinder so its z axis is brought to direction v
+        multmatrix(rotate_from_to([0,0,1],v))
+            cylinder(d=diameter, h=norm(v), $fn=4);
+}
+// Generate the polygonal points for the knot path 
+knot = [ for(i=[0:2:360])
+         [ (19*cos(3*i) + 40)*cos(2*i),
+           (19*cos(3*i) + 40)*sin(2*i),
+            19*sin(3*i) ] ];
+// Draw the polygonal a segment at a time
+for(i=[1:len(knot)-1]) 
+    line(knot[i-1], knot[i], diameter=5);
+// Line drawings with this function is usually excruciatingly lengthy to render
+// Use it just in preview mode to debug geometry
+</pre>
+<p>Another approach to the module line() is found in <a href="Transformations.html#Rotation_rule_help" title="OpenSCAD User Manual/Transformations">Rotation rule help</a>.
+</p>
+<h2>Fit text into a given area</h2>
+<p>There is currently no way to query the size of the geometry generated by <code>text()</code>. Depending on the model it might be possible to calculate a rough estimate of the text size and fit the text into the known area. This works using <code>resize()</code> with the assumption the length is the dominating value.
+</p>
+<div class="thumb tright"><div class="thumbinner" style="width:202px;"><a class="image" href="./imgs/200px-Openscad-tips-text-fitting.png"><img alt="" class="thumbimage" data-file-height="1024" data-file-width="1024" decoding="async" height="200" src="./imgs/200px-Openscad-tips-text-fitting.png" width="200"/></a>  <div class="thumbcaption">OpenSCAD - Fitting text into a given area</div></div></div>
+<pre>// Generate 2 random values between 10 and 30
+r = rands(10, 30, 2);
+
+// Calculate width and length from random values
+width = r[1];
+length = 3 * r[0];
+
+difference() {
+    // Create border
+    linear_extrude(2, center = true)
+        square([length + 4, width + 4], center = true);
+    // Cut the area for the text
+    linear_extrude(2)
+        square([length + 2, width + 2], center = true);
+    // Fit the text into the area based on the length
+    color("green")
+        linear_extrude(1.5, center = true, convexity = 4)
+                resize([length, 0], auto = true)
+                    text("Text goes here!", valign = "center", halign = "center");
+}
+</pre>
+<h2>Create a mirrored object while retaining the original</h2>
+<p>The <code>mirror()</code> module just transforms the existing object, so it can't be used to generate symmetrical objects. However using the <code>children()</code> module, it's easily possible define a new module <code>mirror_copy()</code> that generates the mirrored object in addition to the original one.
+</p>
+<div class="thumb tright"><div class="thumbinner" style="width:202px;"><a class="image" href="./imgs/200px-OpenSCAD-tips-mirror-copy.png"><img alt="" class="thumbimage" data-file-height="1024" data-file-width="1024" decoding="async" height="200" src="./imgs/200px-OpenSCAD-tips-mirror-copy.png" width="200"/></a>  <div class="thumbcaption">OpenSCAD - Mirror Copy</div></div></div>
+<pre>// A custom mirror module that retains the original
+// object in addition to the mirrored one.
+module mirror_copy(v = [1, 0, 0]) {
+    children();
+    mirror(v) children();
+}
+
+// Define example object.
+module object() {
+    translate([5, 5, 0]) {
+        difference() {
+            cube(10);
+            cylinder(r = 8, h = 30, center = true);
+        }
+    }
+}
+
+// Call mirror_copy twice, once using the default to
+// create a duplicate mirrored on X axis and
+// then mirror again on Y axis.
+mirror_copy([0, 1, 0])
+    mirror_copy()
+        object();
+</pre>
+<h2>Arrange parts on a spatial array</h2>
+<p>An operator to display a set of objects on an array.
+</p>
+<div class="thumb tright"><div class="thumbinner" style="width:222px;"><a class="image" href="./imgs/220px-Arranged_objects.png"><img alt="" class="thumbimage" data-file-height="430" data-file-width="677" decoding="async" height="140" src="./imgs/220px-Arranged_objects.png" width="220"/></a>  <div class="thumbcaption">OpenSCAD - An array of objects</div></div></div>
+<pre> // Arrange its children in a regular rectangular array
+ //      spacing - the space between children origins
+ //      n       - the number of children along x axis
+ module arrange(spacing=50, n=5) {
+    nparts = $children;
+    for(i=[0:1:n-1], j=[0:nparts/n])
+        if (i+n*j &lt; nparts)
+            translate([spacing*(i+1), spacing*j, 0]) 
+                children(i+n*j);
+ }
+
+ arrange(spacing=30,n=3) {
+    sphere(r=20,$fn=8);
+    sphere(r=20,$fn=10);
+    cube(30,center=true);
+    sphere(r=20,$fn=14);
+    sphere(r=20,$fn=16);
+    sphere(r=20,$fn=18);
+    cylinder(r=15,h=30);
+    sphere(r=20,$fn=22);
+ }
+</pre>
+<p>A handy operator to display a lot of parts of a project downloaded from Thingiverse.
+</p><p>Note: the following usage fails:
+</p>
+<pre> arrange() for(i=[8:16]) sphere(15, $fn=i);
+</pre>
+<p>because the <code>for</code> statement do an implicit union of the inside objects creating only one child.
+</p>
+<h2>Rounding polygons</h2>
+<p>Polygons may be rounded by the offset operator in several forms.
+</p>
+<div class="thumb tright"><div class="thumbinner" style="width:602px;"><a class="image" href="./imgs/600px-Rounding_polygons.png"><img alt="" class="thumbimage" data-file-height="363" data-file-width="989" decoding="async" height="220" src="./imgs/600px-Rounding_polygons.png" width="600"/></a>  <div class="thumbcaption">The roundings of a polygon by OpenSCAD operator offset()</div></div></div>
+<pre> p = [ [0,0], [10,0], [10,10], [5,5], [0,10]];
+
+ polygon(p);
+ // round pointed vertices and enlarge
+ translate([-15, 0])
+ offset(1,$fn=24) polygon(p);
+ // round concavities and shrink
+ translate([-30, 0])
+ offset(-1,$fn=24) polygon(p);
+ // round concavities and preserve polygon dimensions
+ translate([15, 0])
+ offset(-1,$fn=24) offset(1,$fn=24) polygon(p);
+ // round pointed vertices and preserve polygon dimensions
+ translate([30, 0])
+ offset(1,$fn=24) offset(-1,$fn=24) polygon(p);
+ // round all vertices and preserve polygon dimensions
+ translate([45, 0])
+ offset(-1,$fn=24) offset(1,$fn=24) 
+ offset(1,$fn=24) offset(-1,$fn=24) polygon(p);
+</pre>
+<h2>Filleting objects</h2>
+<p>Filleting is the 3D counterpart of the rounding of polygons. There is no offset() operators for 3D objects, but it may be coded using minkowski operator. 
+</p>
+<div class="thumb tright"><div class="thumbinner" style="width:222px;"><a class="image" href="./imgs/220px-Filleting_an_object.png"><img alt="" class="thumbimage" data-file-height="583" data-file-width="916" decoding="async" height="140" src="./imgs/220px-Filleting_an_object.png" width="220"/></a>  <div class="thumbcaption">OpenSCAD - Filleting an object</div></div></div>
+<pre> render()
+ difference(){
+     offset_3d(2) offset_3d(-2) // exterior fillets
+         offset_3d(-4) offset_3d(4) // interior fillets
+             basic_model();
+     // hole without fillet
+     translate([0,0,10]) 
+         cylinder(r=18,h=50);
+ }
+
+ module basic_model(){
+     cylinder(r=25,h=55);
+     cube([80,80,10], center=true);
+ }
+
+ module offset_3d(r=1, size=1e12) {
+     n = $fn==undef ? 12: $fn;
+     if(r==0) children();
+     else 
+         if( r&gt;0 )
+             minkowski(){
+                 children();
+                 sphere(r, $fn=n);
+             }
+         else {
+             size2 = size*[1,1,1];
+             size1 = size2*0.99;
+             difference(){
+                 cube(size2, center=true);
+                 minkowski(){
+                     difference(){
+                         cube(size1, center=true);
+                         children();
+                     }
+                     sphere(-r, $fn=n);
+                 }
+             }
+         }
+ }
+</pre>
+<p>Note that this is a very time consuming process. The minkowski operator adds vertices to the model so each new offset_3d takes longer than the previous one.
+</p>
+<h2>Computing a bounding box</h2>
+<p>There is no way to get the bounding box limits of an object with OpenSCAD codes. However, it is possible to compute its bounding box volume. Its concept is simple: hull() the projection of the model on each axis (1D sets) and minkowski() them. As there is no way to define a 1D set in OpenSCAD, the projections are approximated by a stick whose length is the size of the projection. 
+</p>
+<pre>module bbox() { 
+
+    // a 3D approx. of the children projection on X axis 
+    module xProjection() 
+        translate([0,1/2,-1/2]) 
+            linear_extrude(1) 
+                hull() 
+                    projection() 
+                        rotate([90,0,0]) 
+                            linear_extrude(1) 
+                                projection() children(); 
+  
+    // a bounding box with an offset of 1 in all axis
+    module bbx()  
+        minkowski() { 
+            xProjection() children(); // x axis
+            rotate(-90)               // y axis
+                xProjection() rotate(90) children(); 
+            rotate([0,-90,0])         // z axis
+                xProjection() rotate([0,90,0]) children(); 
+        } 
+    
+    // offset children() (a cube) by -1 in all axis
+    module shrink()
+      intersection() {
+        translate([ 1, 1, 1]) children();
+        translate([-1,-1,-1]) children();
+      }
+
+   shrink() bbx() children(); 
+}
+</pre>
+<div class="thumb tright"><div class="thumbinner" style="width:222px;"><a class="image" href="./imgs/220px-OpenSCAD_-_The_bounding_box_of_an_object.png"><img alt="" class="thumbimage" data-file-height="406" data-file-width="622" decoding="async" height="144" src="./imgs/220px-OpenSCAD_-_The_bounding_box_of_an_object.png" width="220"/></a>  <div class="thumbcaption">OpenSCAD - The bounding box of an object</div></div></div>
+<p>The image shows the (transparent) bounding box of a red model generated by the code:
+</p>
+<pre>module model()
+  color("red") 
+  union() {
+    sphere(10);
+    translate([15,10,5]) cube(10);
+  }
+
+model();
+%bbox() model();
+</pre>
+<p>The cubes in the offset3D operator code of the Filleting objects tip could well be replaced by the object bounding box dispensing the artificial argument size.
+</p>
+<div class="thumb tright"><div class="thumbinner" style="width:222px;"><a class="image" href="./imgs/220px-OpenSCAD_-_Text_bounding_box_manipulation.png"><img alt="" class="thumbimage" data-file-height="428" data-file-width="830" decoding="async" height="113" src="./imgs/220px-OpenSCAD_-_Text_bounding_box_manipulation.png" width="220"/></a>  <div class="thumbcaption">OpenSCAD - Text bounding box manipulation</div></div></div>
+<p>As an example of solving problems with this, with a little manipulation of the result, the bounding box can be used to augment features around arbitrary text without knowing the size of the text.  In this example a square base plate for the text is created with two holes inserted into it at the ends of the text, all having fixed margins.  This works by taking the projection of the bounding box, expanding it evenly, shrinking the y dimension to a sliver, and extending the x direction outward by a sliver, and subtracting off the expanded bounding box projection again, leaving two near point-like objects which can be expanded with offset into the holes.
+</p>
+<pre>my_string = "Demo text";
+
+module BasePlate(margin) {
+  minkowski() {
+    translate(-margin) square(2*margin);
+    projection() bbox() linear_extrude(1) children();
+  }
+}
+
+module TextThing() {
+  text(my_string, halign="center", valign="center");
+}
+
+
+hole_size = 3;
+margwidth = 2;
+linear_extrude(1)
+  difference() {
+    BasePlate([2*(hole_size+margwidth), margwidth]) TextThing();
+    offset(hole_size) {
+      difference() {
+        scale([1.001, 1])
+          resize([-1, 0.001])
+          BasePlate([hole_size+margwidth, margwidth]) TextThing();
+        BasePlate([hole_size+margwidth, margwidth]) TextThing();
+      }
+    }
+  }
+
+linear_extrude(2) TextThing();
+</pre>
+<h2>Data Heightmap</h2>
+<p>The builtin module surface() is able to create a 3D object that represents the heightmap of data in a matrix of numbers. However, the data matrix for surface() should be stored in an external text file. The following module does the exact heightmap of surface() for a data set generated by the user code.
+</p>
+<div class="thumb tright"><div class="thumbinner" style="width:222px;"><a class="image" href="./imgs/220px-OPENSCAD_SurfaceData_heightmap.png"><img alt="" class="thumbimage" data-file-height="413" data-file-width="708" decoding="async" height="128" src="./imgs/220px-OPENSCAD_SurfaceData_heightmap.png" width="220"/></a>  <div class="thumbcaption">OpenSCAD - A heightmap generated by surfaceData()</div></div></div>
+<pre>data = [ for(a=[0:10:360])
+          [ for(b=[0:10:360])
+              cos(a-b)+4*sin(a+b)+(a+b)/40 ]
+       ];
+
+surfaceData(data, center=true);
+cube();
+
+// operate like the builtin module surface() but
+// from a matrix of floats instead of a text file
+module surfaceData(M, center=false, convexity=10){
+  n = len(M);
+  m = len(M[0]);
+  miz  = min([for(Mi=M) min(Mi)]);
+  minz = miz&lt;0? miz-1 : -1;
+  ctr  = center ? [-(m-1)/2, -(n-1)/2, 0]: [0,0,0];
+  points = [ // original data points
+             for(i=[0:n-1])for(j=[0:m-1]) [j, i, M[i][j]] +ctr,
+             [   0,   0, minz ] + ctr, 
+             [ m-1,   0, minz ] + ctr, 
+             [ m-1, n-1, minz ] + ctr, 
+             [   0, n-1, minz ] + ctr,
+             // additional interpolated points at the center of the quads
+             // the points bellow with `med` set to 0 are not used by faces
+             for(i=[0:n-1])for(j=[0:m-1])
+               let( med = i==n-1 || j==m-1 ? 0:
+                          (M[i][j]+M[i+1][j]+M[i+1][j+1]+M[i][j+1])/4 )
+               [j+0.5, i+0.5, med] + ctr
+           ];
+  faces = [ // faces connecting data points to interpolated ones
+            for(i=[0:n-2])
+              for(j=[i*m:i*m+m-2]) 
+                each [ [   j+1,     j, j+n*m+4 ], 
+                       [     j,   j+m, j+n*m+4 ], 
+                       [   j+m, j+m+1, j+n*m+4 ], 
+                       [ j+m+1,   j+1, j+n*m+4 ] ] ,
+            // lateral and bottom faces
+            [ for(i=[0:m-1])           i, n*m+1,   n*m ], 
+            [ for(i=[m-1:-1:0]) -m+i+n*m, n*m+3, n*m+2 ], 
+            [ for(i=[n-1:-1:0])      i*m,   n*m, n*m+3 ], 
+            [ for(i=[0:n-1])     i*m+m-1, n*m+2, n*m+1 ],
+            [n*m, n*m+1, n*m+2, n*m+3 ]
+        ];
+  polyhedron(points, faces, convexity);
+}
+</pre>
+<h1>Strings</h1>
+<h2>Integer from Numeric String (Decimal or Hex)</h2>
+<p>Converts number in string format to an integer, (s2d - String 2 Decimal -  named before I added hex to it...) 
+</p><p>e.g. echo(s2d("314159")/100000); // shows ECHO: 3.14159
+</p>
+<pre>function s2d(h="0",base=10,i=-1) =
+// converts a string of hexa/or/decimal digits into a decimal 
+// integers only
+	(i == -1)
+	? s2d(h,base,i=len(h)-1)
+	: 	(i == 0)
+		? _chkBase(_d2n(h[0]),base)
+		: _chkBase(_d2n(h[i]),base) + base*s2d(h,base,i-1);
+
+function _chkBase(n,b) = 
+	(n&gt;=b)
+	? (0/0)		// 0/0=nan
+	: n;
+    
+
+function _d2n(digitStr) =
+// SINGLE string Digit 2 Number, decimal (0-9) or hex (0-F) - upper or lower A-F
+	(digitStr == undef 
+				|| len(digitStr) == undef 
+				|| len(digitStr) != 1)
+	? (0/0) // 0/0 = nan
+	: _d2nV()[search(digitStr,_d2nV(),1,0)[0]][1];
+
+function _d2nV()= 
+// Digit 2 Number Vector, use function instead of variable - no footprints
+  [	["0",0],["1",1],["2",2],["3",3],["4",4],
+		["5",5],["6",6],["7",7],["8",8],["9",9],
+		["a",10],["b",11],["c",12],
+		["d",13],["e",14],["f",15],
+		["A",10],["B",11],["C",12],
+		["D",13],["E",14],["F",15]
+	];
+</pre>
+<h1>Debug</h1>
+<h2>Debug Tap function</h2>
+<p>Similar to Ruby's Tap function. This function encapsulates the echo to console side-effect, if $_debug is true and returns the object. 
+</p><p>
+e.g. given $_debug is true; x = debugTap(2 * 2, "Solution is: "); // shows ECHO: Solution is: 4 </p><pre>function debugTap(o, s) = let(
+  nothing = [ for (i = [1:1]) if ($_debug) echo(str(s, ": ", o)) ]) o;
+
+// usage
+// note: parseArgsToString() just concats all the args and returns a pretty str
+
+$_debug = true;
+
+// doubles 'x'
+function foo(x) =
+  let(
+   fnName = "foo",
+   args = [x]
+ )
+ debugTap(x * x, str(fnName, parseArgsToString(args)));
+
+x = 2;
+y = foo(x);
+
+echo(str("x: ", x, " y: ", y));
+
+// console display:
+// ECHO: "foo(2): 4"
+// ECHO: "x: 2 y: 4"
+</pre>
+
+
+
+
+</div><footer class="mw-body" style="font-size:13px;color:darkgray;text-align:center;margin-bottom:-1px">
+	From the WikiBooks article <a href="https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Tips_and_Tricks#Stack_cylinders_on_top_of_each_other" style="color:black">Tips and Tricks</a> 
+	(provided under <a href="https://creativecommons.org/licenses/by-sa/3.0/" style="color:black">
+	CC-BY-SA-3.0</a>)</footer></body></html>
