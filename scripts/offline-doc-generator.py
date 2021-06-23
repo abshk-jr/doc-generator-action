@@ -172,8 +172,10 @@ def cleanSoup(soup):
 					tag.replaceWithChildren()
 				if('mathml' in cls):
 					tag.decompose()
-				if cls in ['toctext','mw-headline']:
+				if cls in ['toctext']:
 					tag.replaceWithChildren()
+				if cls in ['mw-headline']:
+					del tag['class']
 				if cls in ['mw-editsection','toctogglespan','noprint']:
 					tag.decompose()
 
