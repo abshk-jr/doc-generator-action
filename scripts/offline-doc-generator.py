@@ -8,6 +8,7 @@ https://summerofcode.withgoogle.com/projects/#6746958066089984
 import urllib.request, urllib.parse, urllib.error, urllib.request, urllib.error, urllib.parse, os, yaml
 from bs4 import BeautifulSoup as bs,Comment
 import shutil
+import pdfkit
 
 with open(os.path.join( os.path.dirname(__file__),'config.yml'),'r') as file:
 	config = yaml.safe_load(file)
@@ -36,6 +37,11 @@ if not os.path.exists(dir_docs): os.makedirs(dir_docs)
 if not os.path.exists(dir_imgs): os.makedirs(dir_imgs)
 if not os.path.exists(dir_maths): os.makedirs(dir_maths)	
 if not os.path.exists(dir_styles): os.makedirs(dir_styles)
+
+dir_pdfs = 'openscad_docs_pdf'
+if not os.path.exists(dir_pdfs): os.makedirs(dir_pdfs)
+dir_docpdfs = 'docs_pdf'
+if not os.path.exists(dir_docpdfs): os.makedirs(dir_docpdfs)	
 
 pages =[]
 pages += pages_for_exclusion
@@ -269,6 +275,20 @@ def getCSS():
 	csspath = os.path.join( dir_styles, 'style.css')
 	open( csspath, "w" , encoding="utf-8").write(css.body.text)
 
+def getPdf():
+	files=os.listdir(os.path.join( os.getcwd(), dir_docs))
+	for file in files:
+		if ".html" in file:
+			soup = bs( open(f'{os.path.join( os.getcwd(), dir_docs)}/{file}' , encoding="utf8") , 'html.parser' )
+			for a in soup.findAll('a'):
+				href= a.get('href')
+				if href:
+					if '.html' in href:
+						a['href']= href.replace('.html','.pdf')
+			open(f'{os.path.join( os.getcwd(), dir_pdfs)}/{file}', "w+", encoding="utf-8").write( str(soup) )
+	shutil.copytree(f'{os.path.join( os.getcwd(), dir_docs)}/imgs', f'{os.path.join( os.getcwd(), dir_pdfs)}/imgs')
+	shutil.copytree(f'{os.path.join( os.getcwd(), dir_docs)}/styles', f'{os.path.join( os.getcwd(), dir_pdfs)}/styles')
+
 
 	
 if(__name__ == '__main__'):
@@ -279,3 +299,15 @@ if(__name__ == '__main__'):
 	print("Total number of images generated is \t:\t", len(imgs))
 	print("Total number of math-images generated is:\t", len(maths))
 	shutil.make_archive('docs', 'zip', dir_docs)
+	
+	shutil.make_archive('pdf', 'zip', dir_docs)
+	
+	getPdf()
+	
+	options = {"enable-local-file-access": None , '--keep-relative-links': ''}
+	files=os.listdir(os.path.join( os.getcwd(), dir_docs))
+	for file in files:
+		if ".html" in file:
+			file_pdf = file.replace('.html','.pdf')
+			pdfkit.from_file(f'{os.path.join( os.getcwd(), dir_pdfs)}/{file}', f'{os.path.join( os.getcwd(), dir_docpdfs)}/{file_pdf}' , options=options)
+
