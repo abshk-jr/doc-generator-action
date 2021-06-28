@@ -300,8 +300,6 @@ if(__name__ == '__main__'):
 	print("Total number of math-images generated is:\t", len(maths))
 	shutil.make_archive('docs', 'zip', dir_docs)
 	
-	shutil.make_archive('pdf', 'zip', dir_docs)
-	
 	getPdf()
 	
 	options = {"enable-local-file-access": None , '--keep-relative-links': ''}
@@ -310,4 +308,7 @@ if(__name__ == '__main__'):
 		if ".html" in file:
 			file_pdf = file.replace('.html','.pdf')
 			pdfkit.from_file(f'{os.path.join( os.getcwd(), dir_pdfs)}/{file}', f'{os.path.join( os.getcwd(), dir_docpdfs)}/{file_pdf}' , options=options)
+				
+	shutil.make_archive('pdf', 'zip', dir_docpdfs)
+	
 
