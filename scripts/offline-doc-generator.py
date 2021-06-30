@@ -5,8 +5,8 @@ and the GSOC project details for the same are present at
 https://summerofcode.withgoogle.com/projects/#6746958066089984
 
 '''
-import urllib.request, urllib.parse, urllib.error, urllib.request, urllib.error, urllib.parse, os, yaml
-from bs4 import BeautifulSoup as bs,Comment
+import urllib.request, urllib.parse, os, yaml
+from bs4 import BeautifulSoup as bs,Comment, Doctype
 import shutil
 import pdfkit
 
@@ -37,18 +37,22 @@ if not os.path.exists(dir_docs): os.makedirs(dir_docs)
 if not os.path.exists(dir_imgs): os.makedirs(dir_imgs)
 if not os.path.exists(dir_maths): os.makedirs(dir_maths)	
 if not os.path.exists(dir_styles): os.makedirs(dir_styles)
-
+	
 dir_pdfs = 'openscad_docs_pdf'
 if not os.path.exists(dir_pdfs): os.makedirs(dir_pdfs)
 dir_docpdfs = 'docs_pdf'
-if not os.path.exists(dir_docpdfs): os.makedirs(dir_docpdfs)	
+if not os.path.exists(dir_docpdfs): os.makedirs(dir_docpdfs)
+dir_pdfimgs =  os.path.join( dir_pdfs, 'imgs')
+if not os.path.exists(dir_pdfimgs): os.makedirs(dir_pdfimgs)
+dir_pdfmaths =  os.path.join( dir_pdfs, 'imgs','maths')
+if not os.path.exists(dir_pdfmaths): os.makedirs(dir_pdfmaths)
 
 pages =[]
 pages += pages_for_exclusion
 imgs  =[]
 maths =[]
 
-def getUrl(url):
+def getParsedUrl(url):
 	'''
 	This function generates the complete url after getting urls form src
 	/wiki/OpenSCAD_User_Manual get converted to https://en.wikibooks.org/wiki/OpenSCAD_User_Manual
@@ -58,9 +62,9 @@ def getUrl(url):
 		url = 'https:'+url
 	elif not url.startswith( url_wiki ):
 		url = urllib.parse.urljoin( url_wiki, url[0]=="/" and url[1:] or url)
-	return url
+	return urllib.parse.urlparse(url)
 
-def getTags(soup):
+def getTags(soup,pdf):
 	'''
 	This function handles the different tags present in the HTML document
 	for example the image tags
@@ -71,17 +75,20 @@ def getTags(soup):
 		if href:
 			if href[0] != '#':
 				href = getUrl(href)
-			if (href.startswith('/wiki/OpenSCAD_User_Manual') or href.startswith(url_wiki + '/wiki/OpenSCAD_User_Manual')):
-				newhref = (href.replace('#', '.html#') if '#' in href else href+'.html').split('/')[-1]
-				
-				if 'Print_version.html' not in newhref:
-					getPages(url=href)
-					a['href']= newhref
+			if pdf:
+				a['href']= href
+			else:
+				if (href.startswith('/wiki/OpenSCAD_User_Manual') or href.startswith(url_wiki + '/wiki/OpenSCAD_User_Manual')):
+					newhref = (href.replace('#', '.html#') if '#' in href else href+'.html').split('/')[-1]
+
+					if 'Print_version.html' not in newhref:
+						getPages(url=href)
+						a['href']= newhref
 
 			if a.img :
-				getImages( a )
+				getImages( a,pdf )
 
-def getMaths(soup):
+def getMaths(soup,pdf):
 	'''
 	This function generates the image version of the math formulas
 	to be displayed in various HTML files, for example
@@ -94,40 +101,40 @@ def getMaths(soup):
 			for cls in img['class']:
 				if('math' in cls):
 					mathname = img['src'].split("/")[-1].split("\\")[-1] + '.svg'
-					savepath = os.path.join( dir_maths, mathname)
+					savepath = os.path.join( dir_maths, mathname) if not pdf else os.path.join( dir_pdfmaths, mathname)
 					if (not mathname in maths):
 						opener = urllib.request.build_opener()
 						opener.addheaders = [('User-Agent',user_agent_val)]
 						urllib.request.install_opener(opener)
 						urllib.request.urlretrieve( img['src'] , savepath )
 						maths.append( mathname )
-					linkurl = os.path.join('.','imgs\maths',mathname)
+					linkurl = os.path.join('.','imgs/maths',mathname).replace('\\','/')
 					img['src'] = linkurl
 					
 		except:
 			pass
 
-def getImages(tag):
+def getImages(tag,pdf):
 	'''
 	This function generates the images present the in HTML documents
 	and saves them to the directory /openscad_docs/imgs
 
 	'''
-	src = getUrl( tag.img['src'] )
-	imgname = src.split("/")[-1]
+	srcparse = getParsedUrl( tag.img['src'] )
+	imgname = srcparse.path.split("/")[-1]
 	imgname = imgname.replace('%','_')
-	imgpath = os.path.join( dir_imgs, imgname)
+	imgpath = os.path.join( dir_imgs, imgname) if not pdf else os.path.join( dir_pdfimgs, imgname)
 
 	#The following is to download the image if it hasn't alrady been downloaded
 	if not imgpath in imgs:
 		opener = urllib.request.build_opener()
 		opener.addheaders = [('User-Agent',user_agent_val)]
 		urllib.request.install_opener(opener)
-		urllib.request.urlretrieve(src , imgpath)
+		urllib.request.urlretrieve(srcparse.geturl() , imgpath)
 		imgs.append(imgpath)
 
 	del tag.img['srcset']
-	imgpath = os.path.join('.', 'imgs', imgname)
+	imgpath = os.path.join('.', 'imgs', imgname).replace('\\','/')
 	tag.img['src'] = imgpath
 	tag['href']= imgpath
 
@@ -138,18 +145,12 @@ def cleanSoup(soup):
 	'''
 
 	#The following deletes the Tags which aren't required in the User Manual
-	red_div_cls  = ["printfooter","catlinks","noprint","magnify"]
-	red_table_cls= ['noprint','ambox']
-	red_input_cls= ['toctogglecheckbox']
-	for cls in red_div_cls: 
-		for tag in soup.findAll('div',{'class':cls}):
-			tag.decompose()
-	for cls in red_table_cls: 
-		for tag in soup.findAll('table',{'class':cls}): 
-			tag.decompose()
-	for cls in red_input_cls: 
-		for tag in soup.findAll('input',{'class':cls}):
-			tag.decompose()
+	red_dict = {'div' : ["printfooter","catlinks","noprint","magnify"], 'table' : ['noprint','ambox'], 'input' : ['toctogglecheckbox']}
+	for tag,cls_list in red_dict.items():
+		for cls in cls_list: 
+			for tag in soup.findAll(tag,{'class':cls}):
+				tag.decompose()
+
 	for tag in soup.findAll('style'):
 		tag.decompose()
 
@@ -176,13 +177,11 @@ def cleanSoup(soup):
 			for cls in tag['class']:
 				if(len(cls) <= 2):
 					tag.replaceWithChildren()
-				if('mathml' in cls):
-					tag.decompose()
-				if cls in ['toctext']:
+				elif cls in ['toctext']:
 					tag.replaceWithChildren()
-				if cls in ['mw-headline']:
+				elif cls in ['mw-headline']:
 					del tag['class']
-				if cls in ['mw-editsection','toctogglespan','noprint']:
+				elif 'mathml' in cls or cls in ['mw-editsection','toctogglespan','noprint']:
 					tag.decompose()
 
 
@@ -206,16 +205,22 @@ def getFooter( url, name ):
 	return bs(footer,'html.parser')
 
 def getStyled(soup,title):
+	tag = Doctype('html')
+	soup.insert(0, tag)
+	soup.html['lang']='en'
+	meta_tag =  soup.new_tag('meta')
+	meta_tag['charset'] = 'UTF-8'
+	soup.head.insert(0,meta_tag)
 	css_tag = bs('<link rel="stylesheet" href="./styles/style.css">','html.parser')
 	soup.head.append(css_tag)
 	soup.body['class'] = 'mw-body'
-	soup.body['style']=['height:auto']
+	soup.body['style']=['height:auto;background-color:#ffffff']
 	del soup.body.div['class']
 	soup.body.div['id']='bodyContent'
 	h1_tag = bs(f'<h1 class="firstHeading" id="firstHeading">{title}</h1>','html.parser')
 	soup.body.insert(0,h1_tag)
 
-def getPages( url=url,folder=dir_docs ):
+def getPages( url=url,folder=dir_docs,pdf=False ):
 	'''
 	This is the main function of the program
 	which generates the HTML document from the given url
@@ -223,7 +228,6 @@ def getPages( url=url,folder=dir_docs ):
 	version of the page and save it under the directory /openscad_docs
 	
 	'''
-	url = getUrl(url)
 	if url.split("#")[0] not in pages:
 		pages.append( url.split("#")[0] )							#add the url to the `pages` list so that they don't get downloaded again
 		wiki_url = url
@@ -252,8 +256,8 @@ def getPages( url=url,folder=dir_docs ):
 
 		getStyled(soup,title.string)
 		cleanSoup(soup)
-		getMaths(soup)
-		getTags(soup)
+		getMaths(soup,pdf)
+		getTags(soup,pdf)
 
 		soup.body.append( getFooter( wiki_url, title.text ))
 
@@ -276,20 +280,8 @@ def getCSS():
 	open( csspath, "w" , encoding="utf-8").write(css.body.text)
 
 def getPdf():
-	files=os.listdir(os.path.join( os.getcwd(), dir_docs))
-	for file in files:
-		if ".html" in file:
-			soup = bs( open(f'{os.path.join( os.getcwd(), dir_docs)}/{file}' , encoding="utf8") , 'html.parser' )
-			for a in soup.findAll('a'):
-				href= a.get('href')
-				if href:
-					if '.html' in href:
-						a['href']= href.replace('.html','.pdf')
-			open(f'{os.path.join( os.getcwd(), dir_pdfs)}/{file}', "w+", encoding="utf-8").write( str(soup) )
-	shutil.copytree(f'{os.path.join( os.getcwd(), dir_docs)}/imgs', f'{os.path.join( os.getcwd(), dir_pdfs)}/imgs')
-	shutil.copytree(f'{os.path.join( os.getcwd(), dir_docs)}/styles', f'{os.path.join( os.getcwd(), dir_pdfs)}/styles')
-
-
+	for link in url_print:
+		getPages(link,folder=dir_pdfs,pdf=True)
 	
 if(__name__ == '__main__'):
 	print(f'Started Offline Generator.py\nNow downloading the User-Manual from {url}')
@@ -303,12 +295,11 @@ if(__name__ == '__main__'):
 	getPdf()
 	
 	options = {"enable-local-file-access": None , '--keep-relative-links': ''}
-	files=os.listdir(os.path.join( os.getcwd(), dir_docs))
+	files=os.listdir(os.path.join( os.getcwd(), dir_pdfs))
 	for file in files:
 		if ".html" in file:
 			file_pdf = file.replace('.html','.pdf')
+			file_pdf = file_pdf.replace('Print_version.pdf','OpenSCAD_User_Manual.pdf')
 			pdfkit.from_file(f'{os.path.join( os.getcwd(), dir_pdfs)}/{file}', f'{os.path.join( os.getcwd(), dir_docpdfs)}/{file_pdf}' , options=options)
 				
 	shutil.make_archive('pdf', 'zip', dir_docpdfs)
-	
-
