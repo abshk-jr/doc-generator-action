@@ -6,4 +6,6 @@ url_api : 'https://en.wikibooks.org/w/api.php?action=parse&format=xml&prop=text&
 
 pages_for_exclusion : ['https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Example/Strandbeest']
 
+url_print : ['https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Print_version','https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/The_OpenSCAD_Language']
+
 user_agent_val : 'Generator-for-Offline-Documentation (https://github.com/abshk-jr ; https://github.com/opencax/GSoC/issues/6 ; https://summerofcode.withgoogle.com/projects/#6746958066089984) urllib/3.9.0 [BeautifulSoup/4.9.0]'
