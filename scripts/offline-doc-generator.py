@@ -74,11 +74,11 @@ def getTags(soup,pdf):
 		href= a.get('href')
 		if href:
 			if href[0] != '#':
-				href = getUrl(href)
-			if pdf:
-				a['href']= href
-			else:
-				if (href.startswith('/wiki/OpenSCAD_User_Manual') or href.startswith(url_wiki + '/wiki/OpenSCAD_User_Manual')):
+				hrefparse = getParsedUrl(href)
+				hrefurl=hrefparse.geturl()
+				if pdf:
+					a['href']= href
+				elif (href.startswith('/wiki/OpenSCAD_User_Manual') or href.startswith(url_wiki + '/wiki/OpenSCAD_User_Manual')):
 					newhref = (href.replace('#', '.html#') if '#' in href else href+'.html').split('/')[-1]
 
 					if 'Print_version.html' not in newhref:
