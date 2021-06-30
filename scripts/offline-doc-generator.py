@@ -44,8 +44,6 @@ dir_docpdfs = 'docs_pdf'
 if not os.path.exists(dir_docpdfs): os.makedirs(dir_docpdfs)
 dir_pdfimgs =  os.path.join( dir_pdfs, 'imgs')
 if not os.path.exists(dir_pdfimgs): os.makedirs(dir_pdfimgs)
-dir_pdfmaths =  os.path.join( dir_pdfs, 'imgs','maths')
-if not os.path.exists(dir_pdfmaths): os.makedirs(dir_pdfmaths)
 
 pages =[]
 pages += pages_for_exclusion
@@ -88,7 +86,7 @@ def getTags(soup,pdf):
 			if a.img :
 				getImages( a,pdf )
 
-def getMaths(soup,pdf):
+def getMaths(soup):
 	'''
 	This function generates the image version of the math formulas
 	to be displayed in various HTML files, for example
@@ -101,7 +99,7 @@ def getMaths(soup,pdf):
 			for cls in img['class']:
 				if('math' in cls):
 					mathname = img['src'].split("/")[-1].split("\\")[-1] + '.svg'
-					savepath = os.path.join( dir_maths, mathname) if not pdf else os.path.join( dir_pdfmaths, mathname)
+					savepath = os.path.join( dir_maths, mathname)
 					if (not mathname in maths):
 						opener = urllib.request.build_opener()
 						opener.addheaders = [('User-Agent',user_agent_val)]
@@ -256,7 +254,7 @@ def getPages( url=url,folder=dir_docs,pdf=False ):
 
 		getStyled(soup,title.string)
 		cleanSoup(soup)
-		getMaths(soup,pdf)
+		getMaths(soup)
 		getTags(soup,pdf)
 
 		soup.body.append( getFooter( wiki_url, title.text ))
@@ -282,6 +280,8 @@ def getCSS():
 def getPdf():
 	for link in url_print:
 		getPages(link,folder=dir_pdfs,pdf=True)
+	shutil.copytree(f'{os.path.join( os.getcwd(), dir_docs)}/imgs/maths', f'{os.path.join( os.getcwd(), dir_pdfs)}/imgs/maths')
+	shutil.copytree(f'{os.path.join( os.getcwd(), dir_docs)}/styles', f'{os.path.join( os.getcwd(), dir_pdfs)}/styles')
 	
 if(__name__ == '__main__'):
 	print(f'Started Offline Generator.py\nNow downloading the User-Manual from {url}')
