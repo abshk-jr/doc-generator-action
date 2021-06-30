@@ -82,7 +82,7 @@ def getTags(soup,pdf):
 					newhref = (href.replace('#', '.html#') if '#' in href else href+'.html').split('/')[-1]
 
 					if 'Print_version.html' not in newhref:
-						getPages(url=href)
+						getPages(url=hrefurl)
 						a['href']= newhref
 
 			if a.img :
