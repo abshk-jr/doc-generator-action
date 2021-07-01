@@ -143,11 +143,14 @@ def cleanSoup(soup):
 	'''
 
 	#The following deletes the Tags which aren't required in the User Manual
-	red_dict = {'div' : ["printfooter","catlinks","noprint","magnify"], 'table' : ['noprint','ambox'], 'input' : ['toctogglecheckbox']}
+	red_dict = {'div' : ["printfooter","catlinks","noprint","magnify"], 'table' : ['noprint'], 'input' : ['toctogglecheckbox']}
 	for tag,cls_list in red_dict.items():
 		for cls in cls_list: 
 			for tag in soup.findAll(tag,{'class':cls}):
 				tag.decompose()
+
+	for tag in soup.findAll('table',{'class':'ambox'}):
+		tag.decompose()
 
 	for tag in soup.findAll('style'):
 		tag.decompose()
@@ -236,12 +239,14 @@ def getPages( url=url,folder=dir_docs,pdf=False ):
 		request.add_header('User-Agent',user_agent_val)
 		response = urllib.request.urlopen(request)
 		xml = response.read()
-		soup = bs(xml, 'lxml')
+		soup = bs(xml, 'html.parser')
 		soup = soup.text
 		soup = bs(soup,'html5lib')
 
 		name = url.split("=")[-1]
 		name = name.split("/")[-1].split('#')[0]					#to convert OpenSCAD_User_Manual/String_Functions#str to String_Functions
+
+		if pdf==True: name = 'OpenSCAD_User_Manual' if (name == 'Print_version') else name
 
 		title = soup.new_tag("title")								#to add title to the pages
 		title.string = name.replace("_" , " ")
@@ -279,7 +284,11 @@ def getCSS():
 
 def getPdf():
 	for link in url_print:
+		link
 		getPages(link,folder=dir_pdfs,pdf=True)
+
+	if os.path.exists(f'{os.path.join( os.getcwd(), dir_pdfs)}/imgs/maths'):shutil.rmtree(f'{os.path.join( os.getcwd(), dir_pdfs)}/imgs/maths')
+	if os.path.exists(f'{os.path.join( os.getcwd(), dir_pdfs)}/styles'):shutil.rmtree(f'{os.path.join( os.getcwd(), dir_pdfs)}/styles')
 	shutil.copytree(f'{os.path.join( os.getcwd(), dir_docs)}/imgs/maths', f'{os.path.join( os.getcwd(), dir_pdfs)}/imgs/maths')
 	shutil.copytree(f'{os.path.join( os.getcwd(), dir_docs)}/styles', f'{os.path.join( os.getcwd(), dir_pdfs)}/styles')
 	
@@ -299,7 +308,6 @@ if(__name__ == '__main__'):
 	for file in files:
 		if ".html" in file:
 			file_pdf = file.replace('.html','.pdf')
-			file_pdf = file_pdf.replace('Print_version.pdf','OpenSCAD_User_Manual.pdf')
 			pdfkit.from_file(f'{os.path.join( os.getcwd(), dir_pdfs)}/{file}', f'{os.path.join( os.getcwd(), dir_docpdfs)}/{file_pdf}' , options=options)
 				
 	shutil.make_archive('pdf', 'zip', dir_docpdfs)
