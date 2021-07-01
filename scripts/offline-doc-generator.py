@@ -284,7 +284,6 @@ def getCSS():
 
 def getPdf():
 	for link in url_print:
-		link
 		getPages(link,folder=dir_pdfs,pdf=True)
 
 	if os.path.exists(f'{os.path.join( os.getcwd(), dir_pdfs)}/imgs/maths'):shutil.rmtree(f'{os.path.join( os.getcwd(), dir_pdfs)}/imgs/maths')
