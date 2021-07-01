@@ -229,7 +229,7 @@ def getPages( url=url,folder=dir_docs,pdf=False ):
 	version of the page and save it under the directory /openscad_docs
 	
 	'''
-	if url.split("#")[0] not in pages:
+	if url.split("#")[0] not in pages or pdf:
 		pages.append( url.split("#")[0] )							#add the url to the `pages` list so that they don't get downloaded again
 		wiki_url = url
 		url = url.replace(url_wiki+'/wiki/', "")
