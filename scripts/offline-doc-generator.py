@@ -194,7 +194,6 @@ def cleanSoup(soup,pdf):
                 elif 'mathml' in cls or cls in ['mw-editsection','toctogglespan','noprint']:
                     tag.decompose()
 
-
         except:
             pass
 
@@ -310,10 +309,7 @@ def getCSS():
 def getPdf():
     for link in url_print:
         getPages(link,folder=dir_pdfs,pdf=True)
-
-    if os.path.exists(f'{os.path.join( os.getcwd(), dir_pdfs)}/imgs/maths'):shutil.rmtree(f'{os.path.join( os.getcwd(), dir_pdfs)}/imgs/maths')
     if os.path.exists(f'{os.path.join( os.getcwd(), dir_pdfs)}/styles'):shutil.rmtree(f'{os.path.join( os.getcwd(), dir_pdfs)}/styles')
-    shutil.copytree(f'{os.path.join( os.getcwd(), dir_docs)}/imgs/maths', f'{os.path.join( os.getcwd(), dir_pdfs)}/imgs/maths')
     shutil.copytree(f'{os.path.join( os.getcwd(), dir_docs)}/styles', f'{os.path.join( os.getcwd(), dir_pdfs)}/styles')
 
 
