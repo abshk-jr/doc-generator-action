@@ -109,14 +109,13 @@ def getMaths(soup,pdf):
                         urllib.request.install_opener(opener)
                         urllib.request.urlretrieve( img['src'] , savepath )
                         if pdf and platform.system() == 'Linux':
-                            maths.append( mathname )
                             cairosvg.svg2png(url=savepath, write_to=savepath_png)
                             os.remove(savepath)
-                            linkurl = os.path.join('.','imgs/maths',mathname).replace('\\','/').replace('.svg','.png')
-                        else:
-                            linkurl = os.path.join('.','imgs/maths',mathname).replace('\\','/')
                         maths.append( mathname )
-                    linkurl = os.path.join('.','imgs/maths',mathname).replace('\\','/')
+                    if pdf and platform.system() == 'Linux':
+                        linkurl = os.path.join('.','imgs/maths',mathname).replace('\\','/').replace('.svg','.png')
+                    else:
+                        linkurl = os.path.join('.','imgs/maths',mathname).replace('\\','/')
                     img['src'] = linkurl
                     
         except:
@@ -241,7 +240,7 @@ def getStyled(soup,title):
     css_tag = bs('<link rel="stylesheet" href="./styles/style.css">','html.parser')
     soup.head.append(css_tag)
     soup.body['class'] = 'mw-body'
-    soup.body['style']=['height:auto']
+    soup.body['style']=['height:auto;background-color:#ffffff']
     del soup.body.div['class']
     soup.body.div['id']='bodyContent'
     h1_tag = bs(f'<h1 class="firstHeading" id="firstHeading">{title}</h1>','html.parser')
